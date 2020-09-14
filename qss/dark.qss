@@ -1,0 +1,95 @@
+ Alime_TitleBar{
+     background-color: rgba(87,137,217,255);
+     max-height: 60px;
+     min-height: 60px;
+ }
+
+ QLabel#titleLabel{
+     font-size:20px;
+     color:white;
+     border-color: rgb(255,255,0);
+ }
+
+QPushButton{
+    background:transparent;
+    border:none;
+}
+
+Alime_TitleBar> QPushButton:hover{
+    background:rgba(255,255,255,50);
+}
+
+QWidget#leftContent{
+background-color: rgb(240,240,240);
+}
+
+QWidget#rightContent{
+background-color: rgb(246,246,246);
+}
+
+QPushButton#btnBoard{
+background-color: transparent;
+font-size:24px;
+color:rgb(87,137,217);
+}
+
+QPushButton#btnBoard:hover{
+background-color: rgba(87,137,217,50);
+border-left:8px solid rgba(87,137,217);
+}
+
+QLabel{
+font-size:16px;
+padding: 0px,0px,0px,0px;
+}
+
+QLabel#grayLabel{
+color: rgb(160,160,160);
+font-size:14px;
+padding: 0px,0px,0px,0px;
+}
+
+QPushButton#ItemPlay{
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/play.png);
+}
+
+QPushButton#ItemPlay:hover{
+image: url(:/images/play-blue.png);
+}
+
+QPushButton#ItemDelete{
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/close-gray.png);
+}
+
+QPushButton#ItemDelete:hover{
+image: url(:/images/close-blue.png);
+}
+
+QPushButton#ItemOpenFolde{
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/folder.png);
+}
+
+QPushButton#ItemOpenFolde:hover{
+image: url(:/images/folder-blue.png);
+}
+
+QLabel#itemIconLabel{
+min-width: 30px;
+max-width: 30px;
+image: url(:/images/zip.png);
+}
+
+
+

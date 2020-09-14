@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/close.png</file>
+        <file>images/max.png</file>
+        <file>images/reset.png</file>
+        <file>images/min.png</file>
+        <file>qss/dark.qss</file>
+        <file>images/microsoft.svg</file>
+        <file>images/zip.png</file>
+        <file>images/folder.png</file>
+        <file>images/folder-blue.png</file>
+        <file>images/play.png</file>
+        <file>images/play-blue.png</file>
+        <file>images/close-gray.png</file>
+        <file>images/close-blue.png</file>
+    </qresource>
+</RCC>
