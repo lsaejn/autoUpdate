@@ -35,7 +35,14 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* parent)
         
         QVBoxLayout* fileInfoLayout = new QVBoxLayout();
         fileInfoLayout->setSpacing(0);
-        QLabel* fileName = new QLabel("PkpmV5.1.1-package");
+//debug
+        static int num = 0;
+        std::string str = "fuck";
+        for (int i = 0; i != num; ++i)
+            str += str;
+        num++;
+        QLabel* fileName = new QLabel(("PkpmV5.1.1-package" + str).c_str());
+//
         //fileName->set
         QLabel* fileDownloadHeadway = new QLabel("2.25MB/44.78MB");
         fileDownloadHeadway->setObjectName("grayLabel");

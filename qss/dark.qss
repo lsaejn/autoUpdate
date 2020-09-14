@@ -91,5 +91,11 @@ max-width: 30px;
 image: url(:/images/zip.png);
 }
 
+QToolTip {
+    border: 1px solid rgb(90,137,218);
+    padding: 2px;
+    background-color: rgb(223,233,248);
+}
+
 
 
