@@ -108,5 +108,8 @@
     <ClInclude Include="Alime\ScopeGuard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AppVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

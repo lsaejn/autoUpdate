@@ -13,10 +13,10 @@ class Alime_ContentWidget : public QWidget
     Q_OBJECT
 public:
     Alime_ContentWidget(QWidget* parent = Q_NULLPTR);
-    QString GetTitle();
-    QString GetIcon();
-    int GetShadowWidth();
-    QSize GetWindowSize();
+    virtual QString GetTitle();
+    virtual QString GetIcon();
+    virtual int GetShadowWidth();
+    virtual QSize GetWindowSize();
     static ContentWidgetCreator creator_;
 };
 

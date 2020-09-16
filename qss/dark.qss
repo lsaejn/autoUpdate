@@ -1,3 +1,8 @@
+ Alime_WindowBase{
+ min-height:500px;
+ min-width: 800px;
+ }
+ 
  Alime_TitleBar{
      background-color: rgba(87,137,217,255);
      max-height: 60px;
@@ -42,6 +47,10 @@ border-left:8px solid rgba(87,137,217);
 QLabel{
 font-size:16px;
 padding: 0px,0px,0px,0px;
+}
+
+QLabel#versionTips{
+color: rgb(109,146,173);
 }
 
 QLabel#grayLabel{

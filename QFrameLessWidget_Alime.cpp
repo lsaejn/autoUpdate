@@ -17,6 +17,7 @@
 #include "DownloadInfoWidget.h"
 #include "QFrameLessWidget_Alime.h"
 #include "VersionFileFinder.h"
+#include "AppVersion.h"
 #include "thirdParty/nlohmann/json.hpp"
 
 CLASSREGISTER(QFrameLessWidget_Alime)
@@ -40,35 +41,55 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     leftContent_->setObjectName("leftContent");
 
     QVBoxLayout* leftLayout = new QVBoxLayout(leftContent_);
-    leftLayout->setMargin(0);
+    leftLayout->setMargin(0); 
+    {
+        QWidget* leftButtons = new QWidget(this);
+        leftLayout->addWidget(leftButtons);
+        QWidget* dummy = new QWidget(this);
+        leftLayout->addWidget(dummy);
+        leftLayout->setStretch(0, 1);
+        leftLayout->setStretch(1, 1);
+
+        QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
+        leftButtonLayout->setMargin(0);
+
+        QPushButton* btn01 = new QPushButton(u8"补丁包");
+        btn01->setObjectName("btnBoard");
+        btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        leftButtonLayout->addWidget(btn01);
+
+        QPushButton* btn02 = new QPushButton(u8"光盘");
+        btn02->setObjectName("btnBoard");
+        leftButtonLayout->addWidget(btn02);
+        btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+        QPushButton* btn03 = new QPushButton("click me");
+        btn03->setObjectName("btnBoard");
+        btn03->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        leftButtonLayout->addWidget(btn03);
+
+        QPushButton* btn04 = new QPushButton("click me");
+        btn04->setObjectName("btnBoard");
+        btn04->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        leftButtonLayout->addWidget(btn04);
+
+
+    }
     //leftContent->setFixedWidth(240);
 
     //整个右边就是vbox，加入布局是为了保持一定的灵活性，方便以后加入其他内容(竖条)。
     rightContent_->setObjectName("rightContent");
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
+
+    QLabel* versionTips = new QLabel(u8"未检查到当前版本, 请检查您的网络");
+    versionTips->setObjectName("versionTips");
+    QString version=GetLocalVersion();
+    if(!version.isEmpty())
+        versionTips->setText(u8"检查到当前版本:"+version);
+    vbox->addWidget(versionTips);
+
     downloadList_ = new QListWidget(this);
     vbox->addWidget(downloadList_);
-
-
-    QPushButton* btn01 = new QPushButton(u8"补丁包");
-    btn01->setObjectName("btnBoard");
-    btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    leftLayout->addWidget(btn01);
-
-    QPushButton* btn02 = new QPushButton(u8"光盘");
-    btn02->setObjectName("btnBoard");
-    leftLayout->addWidget(btn02);
-    btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    QPushButton* btn03 = new QPushButton("click me");
-    btn03->setObjectName("btnBoard");
-    btn03->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    leftLayout->addWidget(btn03);
-
-    QPushButton* btn04 = new QPushButton("click me");
-    btn04->setObjectName("btnBoard");
-    btn04->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    leftLayout->addWidget(btn04);
 }
 
 void QFrameLessWidget_Alime::ReadPkgFileInfo()
@@ -91,6 +112,11 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
         QString str = reply_data;
         InitDownloadList(str.toStdString());
     }
+}
+
+QString QFrameLessWidget_Alime::GetTitle()
+{
+    return u8"Pkpm升级程序";
 }
 
 //这个函数不允许出错

@@ -13,6 +13,7 @@ class QFrameLessWidget_Alime : public Alime_ContentWidget
 
 public:
     QFrameLessWidget_Alime(QWidget *parent = Q_NULLPTR);
+    virtual QString GetTitle() override;
 
 private:
     bool InitDownloadList(const std::string& pkgFileContent);

@@ -17,42 +17,46 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     bar_(nullptr),
     downloadSwitch_(nullptr),
     sizeDown_ (0),
-    totalSize_(_fileSize)
+    totalSize_(_fileSize),
+    downloadState_(DownloadState::Normal)
 {
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(0);
     mainLayout->addSpacing(5);
-
+    //mainLayout->setDirection(QBoxLayout::RightToLeft);
     //debug
     //setAttribute(Qt::WA_StyledBackground, true);
     //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
 
-    //压缩图标
+    //从右到左写
+    ///图标
     {
         QLabel* iconLabel = new QLabel(this);
         iconLabel->setObjectName("itemIconLabel");
         mainLayout->addWidget(iconLabel);
     }
-    //文件名，文件大小
+    ///文件名，文件大小
     {
         QWidget* fileInfo = new QWidget(this);
+        fileInfo->setMinimumWidth(400);
+        mainLayout->addWidget(fileInfo);
 
         QVBoxLayout* fileInfoLayout = new QVBoxLayout();
         fileInfoLayout->setSpacing(0);
+        fileInfo->setLayout(fileInfoLayout);
 
         fileName_ = new QLabel(_fileName);
+        fileInfoLayout->addWidget(fileName_);
 
         fileDownloadHeadway_ = new QLabel(MakeDownloadHeadway(0, _fileSize));
         fileDownloadHeadway_->setObjectName("grayLabel");
-        fileInfoLayout->addWidget(fileName_);
         fileInfoLayout->addWidget(fileDownloadHeadway_);
-        fileInfo->setLayout(fileInfoLayout);
-        mainLayout->addWidget(fileInfo);
     }
 
     mainLayout->addStretch(1);
+    
 
-    //时间估计
+    ///时间估计
     {
         leftTimeEstimated_ = new QLabel(u8"--");
         leftTimeEstimated_->setObjectName("grayLabel");
@@ -61,7 +65,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         mainLayout->addSpacing(10);
     }
 
-    //下载进度+下载速度/状态
+    ///下载进度+下载速度/状态
     {
         QWidget* stateBox = new QWidget(this);
         QVBoxLayout* downloadStateBox = new QVBoxLayout();
@@ -77,6 +81,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     }
     mainLayout->addSpacing(20);
 
+    /// 按钮
     {
         downloadSwitch_ = new QPushButton(this);
         downloadSwitch_->setObjectName("ItemPlay");
@@ -227,6 +232,7 @@ void DownloadInfoWidget::httpFinished()
         qDebug("文件大小错误, 可能是上一次没有删除文件");
     }
     leftTimeEstimated_->setText("--");
+    UpdatePlayButton();
 }
 
 void DownloadInfoWidget::httpReadyRead()

@@ -11,18 +11,12 @@
 /*
 我看出来了，gui程序很难做到逻辑分割...
 */
-
-
 class QLabel;
 class QProgressBar;
 class QPushButton;
 class QFile;
 class QFileInfo;
-//class QNetworkAccessManager;
-//class QNetworkRequest;
-//class QNetworkReply;
-//class QNetworkAccessManager;
-//items
+
 class DownloadInfoWidget : public QWidget
 {
     Q_OBJECT
@@ -39,7 +33,15 @@ public:
     enum WebFileType
     {
         Exe = 0,//补丁
-        Iso =1//光盘
+        Iso =1,//光盘
+        Other
+    };
+
+    enum DownloadState
+    {
+        Normal,
+        Stopped,
+        Paused
     };
 
 private:
@@ -59,7 +61,7 @@ private:
     uint64_t GetLocalFileSize(const QString &s);//我们没有办法检查文件有效性
 
 private:
-    QLabel* fileDownloadHeadway_;
+    QLabel* fileDownloadHeadway_;//以位子显示的下载进度
     QLabel* leftTimeEstimated_;
     QLabel* state_;
     QProgressBar* bar_;
@@ -72,5 +74,6 @@ private:
     std::unique_ptr<QFile> file_;
     QNetworkAccessManager qnam;
     QNetworkReply* reply;
+    DownloadState downloadState_;
     bool stopped_;
 };

@@ -131,6 +131,7 @@
     <ClInclude Include="Alime\time\Duration.h" />
     <ClInclude Include="Alime\time\GetTimeOfDay.h" />
     <ClInclude Include="Alime\time\Timestamp.h" />
+    <ClInclude Include="AppVersion.h" />
     <ClInclude Include="QssLoader.h" />
     <ClInclude Include="string_utility.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />
