@@ -1,117 +1,32 @@
-#include "QFrameLessWidget_Alime.h"
 #include <QLayout>
 #include <QPushButton>
 #include <QListWidget>
 #include <QLabel>
-#include <QProgressBar>
+
 #include<QMessageBox>
+#include "QtNetwork/qnetworkaccessmanager.h"
+#include "QtNetwork/qnetworkrequest.h"
+#include "QtNetwork/qnetworkreply.h"
+//#include "QtNetwork/qurl.h"
+//#include <QNetworkAccessManager>
+//#include <QNetworkRequest>
+//#include <QNetworkReply>
+#include <QUrl>
+#include <QApplication>
+
+#include "DownloadInfoWidget.h"
+#include "QFrameLessWidget_Alime.h"
+#include "VersionFileFinder.h"
+#include "thirdParty/nlohmann/json.hpp"
 
 CLASSREGISTER(QFrameLessWidget_Alime)
 
-
-//我们不使用grid，以便做精细布局
-DownloadInfoWidget::DownloadInfoWidget(QWidget* parent)
-    :QWidget(parent)
-{
-    QHBoxLayout* mainLayout = new QHBoxLayout(this);
-    mainLayout->setMargin(0);
-    mainLayout->addSpacing(5);
-    //setAttribute(Qt::WA_StyledBackground, true);
-    //debug
-    //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
-    //压缩图标
-    {
-        QLabel* iconLabel = new QLabel(this);
-        iconLabel->setObjectName("itemIconLabel");
-        //QPixmap pixmap = QPixmap::fromImage(QImage(":/images/zip.png")); //新建一个image对象
-        //QSize sss = iconLabel->size();
-        //QPixmap fitpixmap = pixmap.scaled(sss.width(), sss.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        //iconLabel->setPixmap(fitpixmap); //将图片放入label，使用setPixmap,注意指针*img
-        mainLayout->addWidget(iconLabel);
-    }
-    //文件名，文件大小
-    {
-        QWidget* fileInfo = new QWidget(this);
-        
-        QVBoxLayout* fileInfoLayout = new QVBoxLayout();
-        fileInfoLayout->setSpacing(0);
-//debug
-        static int num = 0;
-        std::string str = "fuck";
-        for (int i = 0; i != num; ++i)
-            str += str;
-        num++;
-        QLabel* fileName = new QLabel(("PkpmV5.1.1-package" + str).c_str());
-//
-        //fileName->set
-        QLabel* fileDownloadHeadway = new QLabel("2.25MB/44.78MB");
-        fileDownloadHeadway->setObjectName("grayLabel");
-        fileInfoLayout->addWidget(fileName);
-        fileInfoLayout->addWidget(fileDownloadHeadway);
-        fileInfo->setLayout(fileInfoLayout);
-        mainLayout->addWidget(fileInfo);
-    }
-
-    mainLayout->addStretch(1);
-
-    //时间估计
-    {
-        QLabel* leftTimeEstimated = new QLabel(u8"剩余00:10:33");
-        leftTimeEstimated->setObjectName("grayLabel");
-        leftTimeEstimated->setFixedWidth(100);
-        mainLayout->addWidget(leftTimeEstimated);
-        mainLayout->addSpacing(10);
-    }
-
-    //下载进度+下载速度/状态
-    {
-        QWidget* stateBox = new QWidget(this);
-        QVBoxLayout* downloadStateBox = new QVBoxLayout();
-        QProgressBar* bar = new QProgressBar(this);
-        downloadStateBox->addWidget(bar);
-        bar->setFixedWidth(240);
-        QLabel* state = new QLabel(u8"暂停中....");
-        state->setObjectName("grayLabel");
-        downloadStateBox->addWidget(state);
-        stateBox->setLayout(downloadStateBox);
-        mainLayout->addWidget(stateBox);
-    }
-    mainLayout->addSpacing(20);
-
-    {
-        QPushButton* downloadSwitch = new QPushButton(this);
-        downloadSwitch->setObjectName("ItemPlay");
-        downloadSwitch->setToolTip(u8"开始");
-
-        QPushButton* deleteLocalFile = new QPushButton(this);
-        deleteLocalFile->setObjectName("ItemDelete");
-        deleteLocalFile->setToolTip(u8"取消下载");
-
-        QPushButton* openFolder = new QPushButton(this);
-        openFolder->setObjectName("ItemOpenFolde");
-        openFolder->setToolTip(u8"打开所在文件夹");
-
-        mainLayout->addWidget(downloadSwitch);
-        mainLayout->addSpacing(15);
-        mainLayout->addWidget(deleteLocalFile);
-        mainLayout->addSpacing(15);
-        mainLayout->addWidget(openFolder);
-        mainLayout->addSpacing(15);
-    }
-
-
-}
-
-DownloadInfoWidget::~DownloadInfoWidget()
-{
-
-}
-
-
-
-QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget *parent)
+QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     : Alime_ContentWidget(parent)
 {
+    {
+        ReadPkgFileInfo();
+    }
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
     rightContent_ = new QWidget(this);
@@ -123,13 +38,16 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget *parent)
     contentLayout->setStretch(1, 4);
 
     leftContent_->setObjectName("leftContent");
-    //leftContent->setFixedWidth(240);
-
-    rightContent_->setObjectName("rightContent");
-
 
     QVBoxLayout* leftLayout = new QVBoxLayout(leftContent_);
     leftLayout->setMargin(0);
+    //leftContent->setFixedWidth(240);
+
+    //整个右边就是vbox，加入布局是为了保持一定的灵活性，方便以后加入其他内容(竖条)。
+    rightContent_->setObjectName("rightContent");
+    QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
+    downloadList_ = new QListWidget(this);
+    vbox->addWidget(downloadList_);
 
 
     QPushButton* btn01 = new QPushButton(u8"补丁包");
@@ -142,7 +60,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget *parent)
     leftLayout->addWidget(btn02);
     btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    QPushButton* btn03= new QPushButton("click me");
+    QPushButton* btn03 = new QPushButton("click me");
     btn03->setObjectName("btnBoard");
     btn03->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     leftLayout->addWidget(btn03);
@@ -151,26 +69,81 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget *parent)
     btn04->setObjectName("btnBoard");
     btn04->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     leftLayout->addWidget(btn04);
-
-    InitDownloadList();
 }
 
-bool QFrameLessWidget_Alime::InitDownloadList()
+void QFrameLessWidget_Alime::ReadPkgFileInfo()
 {
+    QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &QFrameLessWidget_Alime::QueryInfoFinish);
+    qDebug() << manager->supportedSchemes();
+    manager->get(QNetworkRequest(QUrl("http://update.pkpm.cn/PKPM2010/Info/pkpmSoft/packageInfo.json")));
+}
 
-    QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
+void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
+{
+    auto ret=reply->error();
+    if (ret != QNetworkReply::NoError)
     {
-        downloadList_ = new QListWidget(this);
-        vbox->addWidget(downloadList_);
+        qDebug() << "Error Happened";
+    }
+    else {
+        const QByteArray reply_data = reply->readAll();
+        QString str = reply_data;
+        InitDownloadList(str.toStdString());
+    }
+}
 
-        for (int i = 0; i != 3; ++i)
+//这个函数不允许出错
+bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
+{
+    //得到本地程序最新版本号
+    auto versionFiles=FindSpecificFiles::FindVersionFiles(QApplication::applicationDirPath().toLocal8Bit().data() , "V", "ini");
+    //本地文件被fuck了
+    if (versionFiles.size() == 0)
+    {
+        //fix me
+        return false;
+    }
+    std::sort(versionFiles.begin(), versionFiles.end(), AscendingOrder());
+    
+    std::string mainVersion="V";
+    mainVersion.push_back(versionFiles.back().front());
+   
+    std::vector<std::string> keys;
+    nlohmann::json json= nlohmann::json::parse(str);
+    //找到主版本
+    if (json.find(mainVersion) != json.end())
+    {
+        for (auto iter = json[mainVersion].begin(); iter != json[mainVersion].end(); ++iter)
         {
-            QListWidgetItem* item = new QListWidgetItem();
-            QSize size = item->sizeHint();
-            item->setSizeHint(QSize(size.width(), 70));
-            downloadList_->addItem(item);
-            auto fuckWid = new DownloadInfoWidget(this);
-            downloadList_->setItemWidget(item, fuckWid);
+            QNetworkAccessManager manager;
+            std::string key = iter.key();
+            if (string_utility::startsWith(key.c_str(), "V")) {
+                key = key.substr(1);
+            }
+            if (AscendingOrder()(versionFiles.back(), key))
+            {
+                keys.push_back(iter.key());
+                std::string webUrl = json[mainVersion][iter.key()];
+                
+                QString url = ("http://update.pkpm.cn/PKPM2010/Info/pkpmSoft/" + webUrl).c_str();
+                QEventLoop loop;
+                QNetworkReply* reply = manager.head(QNetworkRequest(url));
+                //我们阻塞当前线程
+                connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+                loop.exec();
+                QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+                int pkgSize=var.toInt();
+
+                QListWidgetItem* item = new QListWidgetItem();
+                QSize preferSize = item->sizeHint();
+                item->setSizeHint(QSize(preferSize.width(), 70));
+                downloadList_->addItem(item);
+                auto index=url.lastIndexOf("/");
+                auto itemWidget = new DownloadInfoWidget(this, url.mid(index+1) /*QString(iter.key().c_str())*/, pkgSize, url);
+                downloadList_->setItemWidget(item, itemWidget);
+            }
+                
         }
     }
     return true;

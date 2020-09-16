@@ -43,12 +43,18 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>5.14.2</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;widgets;network</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
@@ -89,10 +95,13 @@
     <QtRcc Include="QFrameLessWidget_Alime.qrc" />
     <QtUic Include="QFrameLessWidget_Alime.ui" />
     <QtMoc Include="QFrameLessWidget_Alime.h" />
+    <ClCompile Include="Alime\time\Duration.cpp" />
+    <ClCompile Include="Alime\time\TimeStamp.cpp" />
     <ClCompile Include="Alime_ContentWidget.cpp" />
     <ClCompile Include="Alime_TitleBar.cpp" />
     <ClCompile Include="Alime_TransparentWidget.cpp" />
     <ClCompile Include="Alime_WindowBase.cpp" />
+    <ClCompile Include="DownloadInfoWidget.cpp" />
     <ClCompile Include="QFrameLessWidget_Alime.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
@@ -117,7 +126,15 @@
     <QtMoc Include="Alime_ContentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="DownloadInfoWidget.h" />
+    <ClInclude Include="Alime\ScopeGuard.h" />
+    <ClInclude Include="Alime\time\Duration.h" />
+    <ClInclude Include="Alime\time\GetTimeOfDay.h" />
+    <ClInclude Include="Alime\time\Timestamp.h" />
     <ClInclude Include="QssLoader.h" />
+    <ClInclude Include="string_utility.h" />
+    <ClInclude Include="thirdParty\nlohmann\json.hpp" />
+    <ClInclude Include="VersionFileFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

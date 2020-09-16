@@ -5,6 +5,8 @@
 
 class DownloadInfoWidget;
 class QListWidget;
+class QNetworkReply;
+
 class QFrameLessWidget_Alime : public Alime_ContentWidget
 {
     Q_OBJECT
@@ -13,18 +15,10 @@ public:
     QFrameLessWidget_Alime(QWidget *parent = Q_NULLPTR);
 
 private:
-    bool InitDownloadList();
+    bool InitDownloadList(const std::string& pkgFileContent);
+    void ReadPkgFileInfo();
+    void QueryInfoFinish(QNetworkReply* reply);
     QListWidget* downloadList_;
     QWidget* leftContent_;
     QWidget* rightContent_;
-};
-
-
-class DownloadInfoWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    DownloadInfoWidget(QWidget* parent = Q_NULLPTR);
-    ~DownloadInfoWidget();
 };

@@ -13,5 +13,7 @@
         <file>images/play-blue.png</file>
         <file>images/close-gray.png</file>
         <file>images/close-blue.png</file>
+        <file>images/pause.png</file>
+        <file>images/pause-blue.png</file>
     </qresource>
 </RCC>

@@ -25,6 +25,7 @@ background-color: rgb(240,240,240);
 
 QWidget#rightContent{
 background-color: rgb(246,246,246);
+border-left:2px solid rgba(160,160,160,70);
 }
 
 QPushButton#btnBoard{
@@ -61,6 +62,18 @@ QPushButton#ItemPlay:hover{
 image: url(:/images/play-blue.png);
 }
 
+QPushButton#ItemPlayPause{
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/pause.png);
+}
+
+QPushButton#ItemPlayPause:hover{
+image: url(:/images/pause-blue.png);
+}
+
 QPushButton#ItemDelete{
 min-width: 22px;
 max-width: 22px;
@@ -95,6 +108,17 @@ QToolTip {
     border: 1px solid rgb(90,137,218);
     padding: 2px;
     background-color: rgb(223,233,248);
+}
+
+QProgressBar{
+        border: none;
+        color: black;
+        text-align: center;
+        background: rgb(229,230,234);
+}
+QProgressBar::chunk {
+        border: none;
+        background: rgb(6, 168, 255);
 }
 
 

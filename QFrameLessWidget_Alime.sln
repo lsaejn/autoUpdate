@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QFrameLessWidget_Alime", "QFrameLessWidget_Alime.vcxproj", "{BD685145-F3D1-4615-BBEB-063E8484610F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "http", "..\http\http.vcxproj", "{32AA29BF-1D95-3972-B794-8B130F5E58B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{BD685145-F3D1-4615-BBEB-063E8484610F}.Debug|x86.Build.0 = Debug|Win32
 		{BD685145-F3D1-4615-BBEB-063E8484610F}.Release|x86.ActiveCfg = Release|Win32
 		{BD685145-F3D1-4615-BBEB-063E8484610F}.Release|x86.Build.0 = Release|Win32
+		{32AA29BF-1D95-3972-B794-8B130F5E58B1}.Debug|x86.ActiveCfg = Debug|Win32
+		{32AA29BF-1D95-3972-B794-8B130F5E58B1}.Debug|x86.Build.0 = Debug|Win32
+		{32AA29BF-1D95-3972-B794-8B130F5E58B1}.Release|x86.ActiveCfg = Release|Win32
+		{32AA29BF-1D95-3972-B794-8B130F5E58B1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
