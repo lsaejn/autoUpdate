@@ -1,5 +1,5 @@
  Alime_WindowBase{
- min-height:500px;
+ min-height:600px;
  min-width: 800px;
  }
  
@@ -95,16 +95,16 @@ QPushButton#ItemDelete:hover{
 image: url(:/images/close-blue.png);
 }
 
-QPushButton#ItemOpenFolde{
+QPushButton#ItemSetup{
 min-width: 22px;
 max-width: 22px;
 min-height:22px;
 max-height:22px;
-image: url(:/images/folder.png);
+image: url(:/images/setup.png);
 }
 
-QPushButton#ItemOpenFolde:hover{
-image: url(:/images/folder-blue.png);
+QPushButton#ItemItemSetup:hover{
+image: url(:/images/setup-blue.png);
 }
 
 QLabel#itemIconLabel{
@@ -116,7 +116,7 @@ image: url(:/images/zip.png);
 QToolTip {
     border: 1px solid rgb(90,137,218);
     padding: 2px;
-    background-color: rgb(223,233,248);
+    background-color: rgb(250,250,248);
 }
 
 QProgressBar{
@@ -128,6 +128,11 @@ QProgressBar{
 QProgressBar::chunk {
         border: none;
         background: rgb(6, 168, 255);
+}
+
+QListWidget#patchPkgList{
+background: rgba(6, 168, 255,0);
+border:none;
 }
 
 

@@ -101,7 +101,12 @@
     <ClCompile Include="Alime_TitleBar.cpp" />
     <ClCompile Include="Alime_TransparentWidget.cpp" />
     <ClCompile Include="Alime_WindowBase.cpp" />
-    <ClCompile Include="DownloadInfoWidget.cpp" />
+    <ClCompile Include="DownloadInfoWidget.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="QFrameLessWidget_Alime.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>

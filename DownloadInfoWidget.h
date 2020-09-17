@@ -77,3 +77,5 @@ private:
     DownloadState downloadState_;
     bool stopped_;
 };
+
+

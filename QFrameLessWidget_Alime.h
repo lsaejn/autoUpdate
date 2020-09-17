@@ -7,6 +7,11 @@ class DownloadInfoWidget;
 class QListWidget;
 class QNetworkReply;
 
+/*
+如果不需要水平分割的标题栏
+继承Alime_ContentWidget这个类就可以了
+*/
+
 class QFrameLessWidget_Alime : public Alime_ContentWidget
 {
     Q_OBJECT

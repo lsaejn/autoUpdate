@@ -52,6 +52,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
         QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
         leftButtonLayout->setMargin(0);
+        leftButtonLayout->addSpacing(20);
 
         QPushButton* btn01 = new QPushButton(u8"补丁包");
         btn01->setObjectName("btnBoard");
@@ -85,10 +86,11 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     versionTips->setObjectName("versionTips");
     QString version=GetLocalVersion();
     if(!version.isEmpty())
-        versionTips->setText(u8"检查到当前版本:"+version);
+        versionTips->setText(u8"检查到当前版本:"+version+"   "+u8"找到以下可升级版本");
     vbox->addWidget(versionTips);
 
     downloadList_ = new QListWidget(this);
+    downloadList_->setObjectName("patchPkgList");
     vbox->addWidget(downloadList_);
 }
 

@@ -6,6 +6,11 @@
 
 #include <QMessageBox>
 #include <QDir>
+#include <QMenu>
+
+
+
+
 
 //我们不使用grid，以便做精细布局
 DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, uint64_t _fileSize, const QString& _url)
@@ -20,12 +25,27 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     totalSize_(_fileSize),
     downloadState_(DownloadState::Normal)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    QMenu* lableMenu = new QMenu(this);
+    //lableMenu->
+    lableMenu->addAction(u8"开始");
+    lableMenu->addSeparator();
+    lableMenu->addAction(u8"删除");
+    lableMenu->addSeparator();
+    lableMenu->addAction(u8"暂停");
+    connect(this, &QWidget::customContextMenuRequested, [=](const QPoint& pos)
+        {
+            qDebug() << pos;//参数pos用来传递右键点击时的鼠标的坐标，这个坐标一般是相对于控件左上角而言的
+            lableMenu->exec(QCursor::pos());
+        });
+
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(0);
     mainLayout->addSpacing(5);
-    //mainLayout->setDirection(QBoxLayout::RightToLeft);
+    mainLayout->setSpacing(0);
+
     //debug
-    //setAttribute(Qt::WA_StyledBackground, true);
+    setAttribute(Qt::WA_StyledBackground, true);
     //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
 
     //从右到左写
@@ -54,29 +74,37 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     }
 
     mainLayout->addStretch(1);
-    
 
-    ///时间估计
-    {
-        leftTimeEstimated_ = new QLabel(u8"--");
-        leftTimeEstimated_->setObjectName("grayLabel");
-        leftTimeEstimated_->setFixedWidth(80);
-        mainLayout->addWidget(leftTimeEstimated_);
-        mainLayout->addSpacing(10);
-    }
-
-    ///下载进度+下载速度/状态
+    ///下载进度+下载速度/状态+时间估计
     {
         QWidget* stateBox = new QWidget(this);
-        QVBoxLayout* downloadStateBox = new QVBoxLayout();
+
+        QVBoxLayout* downloadStateBox = new QVBoxLayout(stateBox);
         bar_ = new QProgressBar(this);
-        downloadStateBox->addWidget(bar_);
         bar_->setFixedWidth(240);
         bar_->setRange(0, 100);
-        state_ = new QLabel(u8"暂停中....");
-        state_->setObjectName("grayLabel");
-        downloadStateBox->addWidget(state_);
-        stateBox->setLayout(downloadStateBox);
+        downloadStateBox->addWidget(bar_);
+
+
+        //downloadStateBox->addWidget(state_);
+
+        {
+            //bug 我不知道这么做为甚么不生效
+            QWidget* stateSubBox = new QWidget();
+            QHBoxLayout* subBox = new QHBoxLayout(stateSubBox);
+            subBox->setMargin(0);
+            state_ = new QLabel(u8"暂停中....");
+            state_->setObjectName("grayLabel");
+            subBox->addWidget(state_);
+
+            leftTimeEstimated_ = new QLabel(u8"--");
+            leftTimeEstimated_->setObjectName("grayLabel");
+            leftTimeEstimated_->setFixedWidth(60);
+            subBox->addWidget(leftTimeEstimated_);
+
+            downloadStateBox->addWidget(stateSubBox);
+        }
+
         mainLayout->addWidget(stateBox);
     }
     mainLayout->addSpacing(20);
@@ -100,8 +128,8 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         connect(deleteLocalFile, &QPushButton::clicked, this,&DownloadInfoWidget::CancelDownloadTask);
 
         QPushButton* openFolder = new QPushButton(this);
-        openFolder->setObjectName("ItemOpenFolde");
-        openFolder->setToolTip(u8"打开所在文件夹");
+        openFolder->setObjectName("ItemSetup");
+        openFolder->setToolTip(u8"开始安装");
         connect(openFolder, &QPushButton::clicked, this, &DownloadInfoWidget::OpenDownloadFolder);
 
         mainLayout->addWidget(downloadSwitch_);

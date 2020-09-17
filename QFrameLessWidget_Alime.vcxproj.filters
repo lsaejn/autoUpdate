@@ -53,13 +53,13 @@
     <ClCompile Include="QFrameLessWidget_Alime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DownloadInfoWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Alime\time\Duration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Alime\time\TimeStamp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DownloadInfoWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

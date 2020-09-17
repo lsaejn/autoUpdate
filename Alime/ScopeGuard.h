@@ -8,10 +8,10 @@
 
 
 /*
-modified from folly-scopeGuard.h
+modified from folly/scopeGuard.h
 */
 
-//假设F 和 A都在_RawVals里，Tuple类型为std::Tuple<F, A...>
+//TupleTy类型为std::Tuple<F, A...>
 template <class TupleTy, size_t... indices>
 auto _Invoke(void* _RawVals) noexcept
 {
@@ -61,6 +61,7 @@ auto catch_exception(TryFunc&& t, CatchFunc&& c, CatchArg&&... a) -> typename st
 //catch all
 //t :functor
 //c :functor
+//困难在于返回值类型限制了t和c
 template <typename Try, typename Catch, typename... CatchA>
 auto catch_exception(Try&& t, Catch&& c, CatchA&&... a) -> typename std::common_type<
     decltype(static_cast<Try&&>(t)()),
