@@ -62,6 +62,9 @@
     <ClCompile Include="DownloadInfoWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AppUtility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -93,9 +96,6 @@
     <ClInclude Include="VersionFileFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="string_utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Alime\time\Duration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -109,6 +109,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AppVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="String_utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AppUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

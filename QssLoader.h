@@ -6,14 +6,14 @@
 class QssLoader
 {
 public:
-	QssLoader(const QString& name, QApplication& app)
+	QssLoader(const QString& name, QApplication& app, const QString& fontName= "Microsoft YaHei", size_t fontSize=8)
 	{
-		QFile qssfile(":/qss/dark.qss");
+		QFile qssfile(name);
 		qssfile.open(QFile::ReadOnly);
 		app.setStyleSheet(qssfile.readAll());
 
-		QFont font("Microsoft YaHei");
-		font.setPointSize(8);
+		QFont font(fontName);
+		font.setPointSize(fontSize);
 		app.setFont(font);
 	}
 

@@ -41,7 +41,7 @@ color:rgb(87,137,217);
 
 QPushButton#btnBoard:hover{
 background-color: rgba(87,137,217,50);
-border-left:8px solid rgba(87,137,217);
+border-left:8px solid rgb(87,137,217);
 }
 
 QLabel{

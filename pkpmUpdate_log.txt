@@ -1,0 +1,13 @@
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 15] [2020-09-17 16:41:26] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 16] [2020-09-17 16:41:26] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 17] [2020-09-17 16:41:27] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 97] [2020-09-17 16:41:28] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: text\qcssparser.cpp 771] [2020-09-17 16:41:28] QCssParser::parseColorValue: Specified color with alpha value but no alpha given: 'rgba 87,137,217'
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 15] [2020-09-17 16:42:48] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 16] [2020-09-17 16:42:48] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 17] [2020-09-17 16:42:48] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 97] [2020-09-17 16:42:48] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:08:34] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:08:34] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:08:34] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 97] [2020-09-17 17:08:34] ("ftp", "file", "qrc", "http", "https", "data")

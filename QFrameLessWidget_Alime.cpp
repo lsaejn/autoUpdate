@@ -2,17 +2,13 @@
 #include <QPushButton>
 #include <QListWidget>
 #include <QLabel>
+#include <QMessageBox>
+#include <QUrl>
+#include <QApplication>
 
-#include<QMessageBox>
 #include "QtNetwork/qnetworkaccessmanager.h"
 #include "QtNetwork/qnetworkrequest.h"
 #include "QtNetwork/qnetworkreply.h"
-//#include "QtNetwork/qurl.h"
-//#include <QNetworkAccessManager>
-//#include <QNetworkRequest>
-//#include <QNetworkReply>
-#include <QUrl>
-#include <QApplication>
 
 #include "DownloadInfoWidget.h"
 #include "QFrameLessWidget_Alime.h"
@@ -82,12 +78,12 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     rightContent_->setObjectName("rightContent");
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
 
-    QLabel* versionTips = new QLabel(u8"未检查到当前版本, 请检查您的网络");
-    versionTips->setObjectName("versionTips");
+    versionTips_ = new QLabel(u8"未检查到当前版本, 请检查您的网络");
+    versionTips_->setObjectName("versionTips");
     QString version=GetLocalVersion();
     if(!version.isEmpty())
-        versionTips->setText(u8"检查到当前版本:"+version+"   "+u8"找到以下可升级版本");
-    vbox->addWidget(versionTips);
+        versionTips_->setText(u8"检查到当前版本:"+version+"   "+u8"找到以下可升级版本");
+    vbox->addWidget(versionTips_);
 
     downloadList_ = new QListWidget(this);
     downloadList_->setObjectName("patchPkgList");
@@ -108,10 +104,14 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
     if (ret != QNetworkReply::NoError)
     {
         qDebug() << "Error Happened";
+        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
+                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法检查到程序升级信息，请检查网络");
+        ShowVersionTipsInfo(strHTML);
     }
-    else {
+    else
+    {
         const QByteArray reply_data = reply->readAll();
-        QString str = reply_data;
+        QString str(reply_data);
         InitDownloadList(str.toStdString());
     }
 }
@@ -175,4 +175,9 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
         }
     }
     return true;
+}
+
+void QFrameLessWidget_Alime::ShowVersionTipsInfo(const QString& str)
+{
+    versionTips_->setText(str);
 }

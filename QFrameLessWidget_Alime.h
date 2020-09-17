@@ -6,6 +6,7 @@
 class DownloadInfoWidget;
 class QListWidget;
 class QNetworkReply;
+class QLabel;
 
 /*
 如果不需要水平分割的标题栏
@@ -21,10 +22,16 @@ public:
     virtual QString GetTitle() override;
 
 private:
-    bool InitDownloadList(const std::string& pkgFileContent);
     void ReadPkgFileInfo();
+    void ReadInstallationCDInfo();
+    void ShowVersionTipsInfo(const QString&);
     void QueryInfoFinish(QNetworkReply* reply);
+    bool InitDownloadList(const std::string& pkgFileContent);
+
+private:
     QListWidget* downloadList_;
+    QListWidget* isoFileList;
     QWidget* leftContent_;
     QWidget* rightContent_;
+    QLabel* versionTips_;
 };

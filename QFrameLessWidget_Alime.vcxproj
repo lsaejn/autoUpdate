@@ -101,6 +101,7 @@
     <ClCompile Include="Alime_TitleBar.cpp" />
     <ClCompile Include="Alime_TransparentWidget.cpp" />
     <ClCompile Include="Alime_WindowBase.cpp" />
+    <ClCompile Include="AppUtility.cpp" />
     <ClCompile Include="DownloadInfoWidget.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
@@ -136,9 +137,10 @@
     <ClInclude Include="Alime\time\Duration.h" />
     <ClInclude Include="Alime\time\GetTimeOfDay.h" />
     <ClInclude Include="Alime\time\Timestamp.h" />
+    <ClInclude Include="AppUtility.h" />
     <ClInclude Include="AppVersion.h" />
     <ClInclude Include="QssLoader.h" />
-    <ClInclude Include="string_utility.h" />
+    <ClInclude Include="String_utility.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />
     <ClInclude Include="VersionFileFinder.h" />
   </ItemGroup>

@@ -1,15 +1,13 @@
 #include "DownloadInfoWidget.h"
+#include "Alime/ScopeGuard.h"
+
 #include <QLayout>
 #include <QPushbutton>
 #include <QLabel>
 #include <QProgressBar>
-
 #include <QMessageBox>
 #include <QDir>
 #include <QMenu>
-
-
-
 
 
 //我们不使用grid，以便做精细布局
@@ -85,11 +83,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         bar_->setRange(0, 100);
         downloadStateBox->addWidget(bar_);
 
-
-        //downloadStateBox->addWidget(state_);
-
         {
-            //bug 我不知道这么做为甚么不生效
             QWidget* stateSubBox = new QWidget();
             QHBoxLayout* subBox = new QHBoxLayout(stateSubBox);
             subBox->setMargin(0);
@@ -212,7 +206,7 @@ bool DownloadInfoWidget::StartDownloadTask()
     StartRequest(newUrl);
 }
 
-//用信号是因为下载将会丢到另一个线程
+//用信号是因为下载将来会丢到单独的线程
 void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
 {
     QUrl url = requestedUrl;
@@ -227,12 +221,9 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     connect(this, &DownloadInfoWidget::notify_sizeInfo, fileDownloadHeadway_, &QLabel::setText);
     connect(this, &DownloadInfoWidget::notify_stateLabel, state_, &QLabel::setText);
     connect(this, &DownloadInfoWidget::notify_timeLabel, leftTimeEstimated_, &QLabel::setText);
-    //connect(reply, &QNetworkReply::finished, progressDialog, &ProgressDialog::hide);
-    //TD_Alloc_4.02src_10.dll
-    //statusLabel->setText(tr("Downloading %1...").arg(url.toString()));
 }
 
-#include "Alime/ScopeGuard.h"
+
 void DownloadInfoWidget::httpFinished()
 {
     ALIME_SCOPE_EXIT{
@@ -347,8 +338,6 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
     QString result = QString::number(speed);
     result += " KB/s";
     emit notify_stateLabel(result);
-
-
 
     //fix me, 估计剩余时间
     int secondLeftEstimated = (bytesTotal - bytesReceived) / (increment / secondElepsed);
