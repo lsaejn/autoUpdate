@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QUrl>
 #include <QApplication>
+#include <QStackedWidget>
+#include <QButtonGroup>
 
 #include "QtNetwork/qnetworkaccessmanager.h"
 #include "QtNetwork/qnetworkrequest.h"
@@ -48,17 +50,20 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
         QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
         leftButtonLayout->setMargin(0);
+        leftButtonLayout->setSpacing(0);
         leftButtonLayout->addSpacing(20);
 
         QPushButton* btn01 = new QPushButton(u8"补丁包");
         btn01->setObjectName("btnBoard");
         btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         leftButtonLayout->addWidget(btn01);
+        btn01->setCheckable(true);
 
         QPushButton* btn02 = new QPushButton(u8"光盘");
         btn02->setObjectName("btnBoard");
         leftButtonLayout->addWidget(btn02);
         btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        btn02->setCheckable(true);
 
         QPushButton* btn03 = new QPushButton("click me");
         btn03->setObjectName("btnBoard");
@@ -70,7 +75,8 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
         btn04->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         leftButtonLayout->addWidget(btn04);
 
-
+        QButtonGroup* group = new QButtonGroup(this);
+        group->addButton(btn01); group->addButton(btn02); group->addButton(btn03); group->addButton(btn04);
     }
     //leftContent->setFixedWidth(240);
 
@@ -80,14 +86,20 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     versionTips_ = new QLabel(u8"未检查到当前版本, 请检查您的网络");
     versionTips_->setObjectName("versionTips");
-    QString version=GetLocalVersion();
+    LocalVersionFile finder;
+    finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
+    QString version= finder.GetLocalVersion().c_str();
     if(!version.isEmpty())
         versionTips_->setText(u8"检查到当前版本:"+version+"   "+u8"找到以下可升级版本");
     vbox->addWidget(versionTips_);
 
-    downloadList_ = new QListWidget(this);
-    downloadList_->setObjectName("patchPkgList");
-    vbox->addWidget(downloadList_);
+    updatePkgList_ = new QListWidget(this);
+    updatePkgList_->setObjectName("patchPkgList");
+
+
+    stackWidget_ = new QStackedWidget(this);
+    stackWidget_->addWidget(updatePkgList_);
+    vbox->addWidget(stackWidget_);
 }
 
 void QFrameLessWidget_Alime::ReadPkgFileInfo()
@@ -166,10 +178,10 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
                 QListWidgetItem* item = new QListWidgetItem();
                 QSize preferSize = item->sizeHint();
                 item->setSizeHint(QSize(preferSize.width(), 70));
-                downloadList_->addItem(item);
+                updatePkgList_->addItem(item);
                 auto index=url.lastIndexOf("/");
                 auto itemWidget = new DownloadInfoWidget(this, url.mid(index+1) /*QString(iter.key().c_str())*/, pkgSize, url);
-                downloadList_->setItemWidget(item, itemWidget);
+                updatePkgList_->setItemWidget(item, itemWidget);
             }
                 
         }

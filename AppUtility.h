@@ -12,3 +12,5 @@ void SetLogLevel(int);
 
 bool IsInstanceOn();
 
+std::string GetExeFolder();
+

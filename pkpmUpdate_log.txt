@@ -11,3 +11,185 @@
 [Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:08:34] off
 [Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:08:34] mother
 [Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 97] [2020-09-17 17:08:34] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:48:41] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:48:41] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:48:41] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 97] [2020-09-17 17:48:41] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:50:28] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:50:28] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:50:28] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 99] [2020-09-17 17:50:28] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:53:52] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:53:52] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:53:52] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 101] [2020-09-17 17:53:52] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:54:11] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:54:11] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:54:11] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 102] [2020-09-17 17:54:11] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:56:08] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:56:08] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:56:08] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 104] [2020-09-17 17:56:08] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:56:43] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:56:43] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:56:43] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 104] [2020-09-17 17:56:43] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:57:56] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:57:56] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:57:56] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 104] [2020-09-17 17:57:56] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:58:44] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:58:44] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:58:44] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 104] [2020-09-17 17:58:44] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 17:58:58] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 17:58:58] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 17:58:58] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 104] [2020-09-17 17:58:58] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 18:00:45] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 18:00:45] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 18:00:45] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 106] [2020-09-17 18:00:46] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-17 18:01:09] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-17 18:01:09] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-17 18:01:09] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 106] [2020-09-17 18:01:09] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 10:37:27] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 10:37:27] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 10:37:27] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 106] [2020-09-18 10:37:27] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 10:38:08] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 10:38:08] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 10:38:08] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 106] [2020-09-18 10:38:08] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-18 10:38:24] QPoint(255,42)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-18 10:38:32] QPoint(258,43)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:06:22] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:06:22] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:06:22] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 108] [2020-09-18 16:06:22] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:08:13] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:08:13] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:08:13] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 108] [2020-09-18 16:08:13] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:09:18] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:09:18] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:09:18] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 108] [2020-09-18 16:09:18] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:09:30] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:09:30] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:09:30] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 108] [2020-09-18 16:09:30] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:10:09] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:10:09] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:10:09] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:10:09] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:10:26] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:10:26] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:10:26] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:10:26] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:11:26] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:11:26] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:11:26] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:11:26] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:12:12] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:12:12] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:12:12] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:12:12] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:12:35] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:12:35] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:12:35] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:12:35] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:12:47] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:12:47] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:12:47] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:12:47] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:13:34] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:13:34] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:13:34] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:13:34] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:14:03] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:14:03] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:14:03] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:14:03] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:14:28] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:14:28] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:14:28] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:14:28] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:40:45] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:40:45] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:40:45] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:40:45] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:48:26] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:48:26] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:48:26] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:48:26] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:49:02] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:49:02] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:49:02] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:49:02] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:53:24] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:53:24] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:53:24] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:53:24] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:53:39] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:53:39] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:53:39] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:53:39] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:54:16] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:54:16] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:54:16] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:54:16] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:55:47] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:55:47] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:55:47] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:55:47] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:56:42] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:56:42] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:56:42] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:56:42] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:56:58] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:56:58] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:56:58] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:56:59] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:57:18] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:57:18] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:57:18] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:57:18] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:57:36] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:57:36] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:57:36] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:57:36] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:58:17] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:58:17] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:58:17] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:58:17] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:58:39] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:58:39] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:58:39] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:58:39] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 16:58:50] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 16:58:50] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 16:58:50] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 16:58:50] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 17:26:17] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:26:17] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:26:17] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:26:17] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 17:26:50] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:26:50] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:26:50] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:26:50] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 17:27:01] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:27:01] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:27:01] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:27:01] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 17:27:19] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:27:19] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:27:19] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:27:19] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 17:30:03] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:30:03] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:30:03] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:30:03] ("ftp", "file", "qrc", "http", "https", "data")

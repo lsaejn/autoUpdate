@@ -3,8 +3,6 @@
 #include <QFile>
 #include <QTextStream>
 
-
-
 #include "AppUtility.h"
 
 int g_LogLevel = 0;
@@ -68,4 +66,21 @@ bool IsInstanceOn()
         return false;
     }
     return true;
+}
+
+std::string GetExeFolder()
+{
+    char buffer[1024*8];
+    GetModuleFileNameA(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
+    int pos = -1;
+    int index = 0;
+    while (buffer[index])
+    {
+        if (buffer[index] == '\\' || buffer[index] == '/')
+        {
+            pos = index;
+        }
+        index++;
+    }
+    return std::string(buffer, pos + 1);
 }

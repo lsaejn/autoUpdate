@@ -342,3 +342,4 @@ healthchecksdb
 /TD_Alloc_4.02src_10.dll
 /TD_AcisBuilder_4.02src_10.dll
 /packageInfo.json
+*.txt

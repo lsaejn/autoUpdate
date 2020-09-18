@@ -7,6 +7,7 @@ class DownloadInfoWidget;
 class QListWidget;
 class QNetworkReply;
 class QLabel;
+class QStackedWidget;
 
 /*
 如果不需要水平分割的标题栏
@@ -29,8 +30,9 @@ private:
     bool InitDownloadList(const std::string& pkgFileContent);
 
 private:
-    QListWidget* downloadList_;
+    QListWidget* updatePkgList_;
     QListWidget* isoFileList;
+    QStackedWidget* stackWidget_;
     QWidget* leftContent_;
     QWidget* rightContent_;
     QLabel* versionTips_;
