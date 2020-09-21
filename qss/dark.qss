@@ -1,8 +1,6 @@
  Alime_WindowBase{
  min-height:600px;
  min-width: 900px;
- max-height:600px;
-  max-width: 900px;
  }
  
  Alime_TitleBar{
@@ -140,6 +138,23 @@ QListWidget#patchPkgList{
 background: rgba(6, 168, 255,0);
 border:none;
 }
+
+QMenu {
+    icon-size: 12px;
+}
+
+QMenu::item
+{
+    background: transparent;
+    padding:2px 16px;
+}
+
+QMenu::item:selected {
+    border-color: darkblue;
+    background: rgba(100, 100, 100, 80);
+}
+
+
 
 
 

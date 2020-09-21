@@ -1,7 +1,9 @@
 #include <mutex>
+
 #include <QDateTime>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 
 #include "AppUtility.h"
 
@@ -9,7 +11,7 @@ int g_LogLevel = 0;
 HANDLE g_handle = INVALID_HANDLE_VALUE;
 
 //我们不考虑效率，因为这个程序是我第一个qt程序，主要是玩的开心
-//这一次我执着面对, 任性的沉醉...
+
 std::mutex g_mutex;
 
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg)
@@ -83,4 +85,22 @@ std::string GetExeFolder()
         index++;
     }
     return std::string(buffer, pos + 1);
+}
+
+/*
+exe会被放在update文件夹. 下载的文件被放在update/download/下
+*/
+QString GetDownloadFolder()
+{
+    QString appDirectory = QDir::currentPath();
+    bool ret = !appDirectory.isEmpty() && QFileInfo(appDirectory).isDir();
+    if (ret)
+    {
+        qCritical() << "error happened in GetDownloadFolder due to limited read access priviledge?";
+        std::abort();
+    }
+    else
+    {
+        return appDirectory + "download";
+    }
 }

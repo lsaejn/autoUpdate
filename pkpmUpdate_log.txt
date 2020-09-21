@@ -193,3 +193,178 @@
 [Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:30:03] off
 [Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:30:03] mother
 [Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:30:03] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 30] [2020-09-18 17:42:32] fuck
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 31] [2020-09-18 17:42:32] off
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\main.cpp 32] [2020-09-18 17:42:32] mother
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-18 17:42:32] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 244] [2020-09-18 17:43:07] ????????????????, ????????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 12:25:08] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 12:28:43] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 12:56:53] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 269] [2020-09-21 12:59:53] ?????????/?????§Ø?
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:53:23] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:53:25] QPoint(235,36)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:57:14] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:15] QMenu(0x6010460)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:15] QMenu(0x6011348)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:15] QMenu(0x61db3d0)  does not have a property named  "iconSize"
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:57:16] QPoint(122,30)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:57:26] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:26] QMenu(0x4e2f5f8)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:26] QMenu(0x6b557b0)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:27] QMenu(0x6c9a6c8)  does not have a property named  "iconSize"
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:57:27] QPoint(149,22)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:57:38] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:39] QMenu(0x5340a58)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:39] QMenu(0x533e3d0)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:39] QMenu(0x7181ab0)  does not have a property named  "iconSize"
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:57:39] QPoint(270,24)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:57:58] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:59] QMenu(0x5285940)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:59] QMenu(0x52878c0)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:57:59] QMenu(0x7026c20)  does not have a property named  "iconSize"
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:57:59] QPoint(156,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:58:11] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:58:12] QMenu(0x510fdf0)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:58:12] QMenu(0x510d7f8)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:58:12] QMenu(0x6e41290)  does not have a property named  "iconSize"
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:58:13] QPoint(91,36)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:59:28] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:59:28] QMenu(0x611f4d8)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:59:28] QMenu(0x7abd278)  does not have a property named  "iconSize"
+[Warning: styles\qstylesheetstyle.cpp 2595] [2020-09-21 13:59:28] QMenu(0x7abf288)  does not have a property named  "iconSize"
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:59:29] QPoint(155,41)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 13:59:55] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 13:59:57] QPoint(111,43)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:00:39] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:00:40] QPoint(141,34)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:00:53] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:00:54] QPoint(125,31)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:01:07] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:01:08] QPoint(166,33)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:01:42] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:01:43] QPoint(167,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:01:48] QPoint(175,48)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:02:04] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:02:06] QPoint(184,37)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:02:09] QPoint(149,32)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:02:20] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:02:21] QPoint(137,28)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:06:34] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:06:36] QPoint(166,36)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:07:19] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:07:20] QPoint(89,33)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:07:34] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:07:35] QPoint(195,30)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:07:57] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:07:59] QPoint(203,36)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:08:53] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:08:54] QPoint(101,25)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:09:32] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:09:33] QPoint(180,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:12:48] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:12:48] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:12:50] QPoint(169,37)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:13:11] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:13:11] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:13:13] QPoint(200,38)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:13:24] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:13:24] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:13:26] QPoint(189,36)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:15:00] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:15:00] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:15:01] QPoint(167,51)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:15:14] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:15:14] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:15:18] QPoint(182,32)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:18:06] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:18:06] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:18:07] QPoint(168,31)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:18:24] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:18:24] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:18:25] QPoint(134,39)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:18:57] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:18:57] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:18:58] QPoint(159,35)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:19:31] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:19:31] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:19:32] QPoint(167,34)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:19:58] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:19:58] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:19:59] QPoint(191,11)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:20:27] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:20:27] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:20:29] QPoint(175,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:20:58] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:20:58] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:20:59] QPoint(392,22)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:21:00] QPoint(222,31)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:21:09] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:21:09] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:21:11] QPoint(219,48)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:21:42] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:21:42] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:21:43] QPoint(250,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:21:52] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:21:52] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:21:54] QPoint(196,47)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:22:12] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:22:12] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:22:13] QPoint(230,41)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:22:27] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: styles\qstylesheetstyle.cpp 1625] [2020-09-21 14:22:27] Could not parse application stylesheet
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:22:28] QPoint(181,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:23:07] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:23:09] QPoint(181,39)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:23:35] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:23:36] QPoint(145,37)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:23:46] QPoint(202,53)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:23:56] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:23:57] QPoint(242,52)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:24:17] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:24:18] QPoint(232,32)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:24:23] QPoint(181,38)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:25:47] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:25:49] QPoint(271,35)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:26:06] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:26:07] QPoint(227,30)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:31:10] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:31:11] QPoint(165,30)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:31:53] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:31:55] QPoint(148,54)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:32:07] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:32:08] QPoint(132,25)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:32:39] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:32:41] QPoint(151,45)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:32:55] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:32:56] QPoint(162,43)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:33:07] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:33:09] QPoint(191,39)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:33:17] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:33:18] QPoint(171,43)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:33:27] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:33:29] QPoint(152,36)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:33:35] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:33:36] QPoint(140,21)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:33:48] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:33:49] QPoint(130,39)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:34:15] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:34:16] QPoint(176,43)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:34:29] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:34:30] QPoint(223,28)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:35:01] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:35:03] QPoint(177,30)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:35:51] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:35:57] QPoint(224,37)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:36:13] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:36:14] QPoint(205,28)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:36:23] QPoint(178,53)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:36:43] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:36:45] QPoint(230,39)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:37:49] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 36] [2020-09-21 14:37:50] QPoint(145,40)
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:41:16] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:42:54] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:45:52] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:48:06] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-21 14:49:35] ("ftp", "file", "qrc", "http", "https", "data")

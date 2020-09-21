@@ -21,20 +21,30 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     downloadSwitch_(nullptr),
     sizeDown_ (0),
     totalSize_(_fileSize),
-    downloadState_(DownloadState::Normal)
+    downloadState_(DownloadState::NotStarted)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     QMenu* lableMenu = new QMenu(this);
-    //lableMenu->
-    lableMenu->addAction(u8"开始");
-    lableMenu->addSeparator();
-    lableMenu->addAction(u8"删除");
+
+    lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
     lableMenu->addSeparator();
     lableMenu->addAction(u8"暂停");
-    connect(this, &QWidget::customContextMenuRequested, [=](const QPoint& pos)
-        {
-            qDebug() << pos;//参数pos用来传递右键点击时的鼠标的坐标，这个坐标一般是相对于控件左上角而言的
+    lableMenu->addSeparator();
+    lableMenu->addAction(u8"删除");
+    connect(this, &QWidget::customContextMenuRequested, [=](const QPoint& pos){
             lableMenu->exec(QCursor::pos());
+        });
+    connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
+        QString str=action->text();
+        if (str == u8"开始") {
+            StartDownloadTask();
+        }
+        else if (str == u8"暂停") {
+            PauseDownloadTask();
+        }
+        else {
+            CancelDownloadTask();
+        }
         });
 
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
@@ -46,7 +56,6 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     setAttribute(Qt::WA_StyledBackground, true);
     //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
 
-    //从右到左写
     ///图标
     {
         QLabel* iconLabel = new QLabel(this);
@@ -114,7 +123,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         pauseSwitch_->setObjectName("ItemPlayPause");
         pauseSwitch_->setToolTip(u8"暂停");
         pauseSwitch_->hide();
-        connect(pauseSwitch_, &QPushButton::clicked, this, &DownloadInfoWidget::CancelDownloadTask);
+        connect(pauseSwitch_, &QPushButton::clicked, this, &DownloadInfoWidget::PauseDownloadTask);
 
         QPushButton* deleteLocalFile = new QPushButton(this);
         deleteLocalFile->setObjectName("ItemDelete");
@@ -160,32 +169,42 @@ std::unique_ptr<QFile> openFileForWrite(const QString& fileName)
 bool DownloadInfoWidget::StartDownloadTask()
 {
     if (url_.isEmpty())
+    {
+        qCritical() << "empty url";
         return false;//fix me, 提示无法下载
-
+    }
+        
+    //for for file protocol
     const QUrl newUrl = QUrl::fromUserInput(url_);
-    if (!newUrl.isValid()) {
-        QMessageBox::information(this, tr("Error"),
-            tr("Invalid URL: %1: %2").arg(url_, newUrl.errorString()));
-        return false;;
+    if (!newUrl.isValid())
+    {
+        qCritical() << QString("Invalid URL: %1: %2").arg(url_, newUrl.errorString());
+        return false;
     }
 
     QString fileName = newUrl.fileName();
     if (fileName.isEmpty())
     {
-        QMessageBox::information(this, tr("Error"),
-            tr("Invalid URL: %1: %2").arg(url_, newUrl.errorString()));
-        return false;;
+        qCritical() << QString("Invalid URL: %1: %2").arg(url_, newUrl.errorString());
+        return false;
     }
+
+    //fix me
     QString downloadDirectory = QDir::currentPath();
     bool useDirectory = !downloadDirectory.isEmpty() && QFileInfo(downloadDirectory).isDir();
     if (useDirectory)
         fileName.prepend(downloadDirectory + '/');
-    if (QFile::exists(fileName)) {
+
+
+    if (QFile::exists(fileName))
+    {
+        QFileInfo fileInfo(fileName);
+        fileInfo.size();
+
+        //qDebug()<<
+
         if (QMessageBox::question(this, tr("Overwrite Existing File"),
-            tr("There already exists a file called %1%2."
-                " Overwrite?")
-            .arg(fileName,
-                useDirectory
+            tr("There already exists a file called %1%2." " Overwrite?").arg(fileName,useDirectory
                 ? QString()
                 : QStringLiteral(" in the current directory")),
             QMessageBox::Yes | QMessageBox::No,
@@ -200,22 +219,20 @@ bool DownloadInfoWidget::StartDownloadTask()
     if (!file_)
         return false;
 
-    //downloadButton->setEnabled(false);
-
-    // schedule the request
     StartRequest(newUrl);
 }
 
 //用信号是因为下载将来会丢到单独的线程
 void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
 {
+    UpdatePlayButton(false);
     QUrl url = requestedUrl;
     //httpRequestAborted = false;
 
-    reply = qnam.get(QNetworkRequest(url));
-    connect(reply, &QNetworkReply::finished, this, &DownloadInfoWidget::httpFinished);
-    connect(reply, &QIODevice::readyRead, this, &DownloadInfoWidget::httpReadyRead);
-    connect(reply, &QNetworkReply::downloadProgress, this, &DownloadInfoWidget::UpdateChildWidgets);
+    reply_ = QNAManager_.get(QNetworkRequest(url));
+    connect(reply_, &QNetworkReply::finished, this, &DownloadInfoWidget::httpFinished);
+    connect(reply_, &QIODevice::readyRead, this, &DownloadInfoWidget::httpReadyRead);
+    connect(reply_, &QNetworkReply::downloadProgress, this, &DownloadInfoWidget::UpdateChildWidgets);
     
     connect(this, &DownloadInfoWidget::notify_progressInfo, bar_, &QProgressBar::setValue);
     connect(this, &DownloadInfoWidget::notify_sizeInfo, fileDownloadHeadway_, &QLabel::setText);
@@ -227,8 +244,8 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
 void DownloadInfoWidget::httpFinished()
 {
     ALIME_SCOPE_EXIT{
-            reply->deleteLater();
-            reply = nullptr;
+            reply_->deleteLater();
+            reply_ = nullptr;
     };
     file_->flush();
     file_->close();
@@ -237,14 +254,27 @@ void DownloadInfoWidget::httpFinished()
         state_->setText(u8"已完成");
         QMessageBox::information(NULL, "Tip", QString(u8"是否立即安装"));
     }
-    else if (sizeDown_ < totalSize_ || reply->error())
+    else if (sizeDown_ < totalSize_ )
     {
-        if (reply->error())
-        {
-            qDebug("可能是发生了重定向, 或者对端关闭连接");
+        if (reply_->error())
+        { 
+            if (DownloadState::Paused== downloadState_)
+            {
+                state_->setText(u8"下载暂停");
+                qDebug("用户中断/取消了下载");
+            }
+            else if(DownloadState::Canceled == downloadState_)
+            {
+                state_->setText(u8"下载取消");
+                qDebug("用户中断/取消了下载"); 
+            }
+            else
+            {
+                downloadState_ = DownloadState::Interrupted;
+                state_->setText(u8"下载出错");
+                qDebug("对端关闭连接/网络中断");
+            }
         }
-        if(!stopped_)
-            state_->setText(u8"下载中断");
     }
     else
     {
@@ -257,8 +287,7 @@ void DownloadInfoWidget::httpFinished()
 void DownloadInfoWidget::httpReadyRead()
 {
     if (file_)
-        file_->write(reply->readAll());
-    UpdatePlayButton(false);
+        file_->write(reply_->readAll());
 }
 
 #include "Alime/time/Timestamp.h"
@@ -280,8 +309,17 @@ bool DownloadInfoWidget::isTimeToUpdate(double& second)
 bool DownloadInfoWidget::CancelDownloadTask()
 {
     state_->setText(u8"下载取消");
-    stopped_ = true;
-    reply->abort();
+    downloadState_ = DownloadState::NotStarted;
+    reply_->abort();
+    UpdatePlayButton(true);
+    return true;
+}
+
+bool DownloadInfoWidget::PauseDownloadTask()
+{
+    state_->setText(u8"下载暂停");
+    downloadState_ = DownloadState::Paused;
+    reply_->abort();
     UpdatePlayButton(true);
     return true;
 }

@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
         return -1;
     }
         
-    qDebug() << "fuck";
-    qWarning() << "off";
-    qCritical() << "mother";
+    //qDebug() << "fuck";
+    //qWarning() << "off";
+    //qCritical() << "mother";
     //qFatal() << "fucker";
     Alime_TransparentWidget w;
     w.show();
