@@ -16,6 +16,11 @@ class QPushButton;
 class QFile;
 class QFileInfo;
 
+/*
+需要StateManager+FileManager
+*/
+
+
 class DownloadInfoWidget : public QWidget
 {
     Q_OBJECT
@@ -27,7 +32,7 @@ signals:
     void notify_timeLabel(QString);
 public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName, uint64_t fileSize, const QString& url);
-    ~DownloadInfoWidget();
+    ~DownloadInfoWidget()=default;
 
     enum WebFileType
     {
@@ -60,27 +65,33 @@ private:
     QString MakeDownloadHeadway(int64_t reader, int64_t total);
     QString MakeDurationToString(int seconds);
 
+    void LoadingProgressForBreakPoint();
     void UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTotal);
     void UpdatePlayButton(bool stopped=true);
     bool IsFileExist();
     uint64_t GetLocalFileSize(const QString &s);//我们没有办法检查文件有效性
+    std::unique_ptr<QFile> openFileForWrite(const QString& fileName);
 
 private:
     QString url_;
-    QLabel* state_;
+    QString fileName_;
+    QString localFilePath_;
+
+    QLabel* downloadStatusLabel_;
     QLabel* leftTimeEstimated_;
     QLabel* fileDownloadHeadway_;
-    QProgressBar* bar_;
-    QPushButton* pauseSwitch_;
-    QPushButton* downloadSwitch_;
-    
-    QLabel* fileName_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
-    uint64_t sizeDown_;
+    QProgressBar* progressBar_;
+    QPushButton* pauseButton_;
+    QPushButton* downloadButton_;
+    QLabel* fileNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
+
+    uint64_t BytesDown_;
     uint64_t totalSize_;
     std::unique_ptr<QFile> file_;
     QNetworkAccessManager QNAManager_;
     QNetworkReply* reply_;
     DownloadState downloadState_;
+    bool isBreakPointTranSupported_=true;
 };
 
 

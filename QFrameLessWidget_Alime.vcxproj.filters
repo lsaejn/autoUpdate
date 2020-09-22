@@ -117,5 +117,8 @@
     <ClInclude Include="AppUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Md5Checker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

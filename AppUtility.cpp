@@ -94,13 +94,17 @@ QString GetDownloadFolder()
 {
     QString appDirectory = QDir::currentPath();
     bool ret = !appDirectory.isEmpty() && QFileInfo(appDirectory).isDir();
-    if (ret)
+    if (!ret)
     {
         qCritical() << "error happened in GetDownloadFolder due to limited read access priviledge?";
         std::abort();
     }
     else
     {
-        return appDirectory + "download";
+#ifdef _DEBUG
+        return appDirectory + "/";
+#else
+        return appDirectory + "download/";
+#endif // DEBUG
     }
 }
