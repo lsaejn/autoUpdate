@@ -22,7 +22,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     downloadStatusLabel_(nullptr),
     progressBar_(nullptr),
     downloadButton_(nullptr),
-    BytesDown_ (0),
+    bytesDown_ (0),
     totalSize_(_fileSize),
     downloadState_(DownloadState::NotStarted),
     fileName_ (_fileName),
@@ -172,8 +172,7 @@ bool DownloadInfoWidget::StartDownloadTask()
     {
         qCritical() << "empty url";
         return false;//fix me, 提示无法下载
-    }
-        
+    }  
     //for for file protocol
     const QUrl newUrl = QUrl::fromUserInput(url_);
     if (!newUrl.isValid())
@@ -190,8 +189,6 @@ bool DownloadInfoWidget::StartDownloadTask()
     }
 
     //fix me
-
-
     if (QFile::exists(localFilePath_))
     {
         QFileInfo fileInfo(localFilePath_);
@@ -219,11 +216,19 @@ bool DownloadInfoWidget::StartDownloadTask()
         }
     }
 
+    LoadingProgressForBreakPoint();
+
     file_ = openFileForWrite(localFilePath_);
     if (!file_)
+    {
+        QMessageBox::information(this, u8"无法打开文件",
+            u8"文件可能被占用，无法写入",
+            QMessageBox::Yes);
         return false;
-
+    }
+           
     StartRequest(newUrl);
+    return true;
 }
 
 //用信号是因为下载将来会丢到单独的线程
@@ -233,14 +238,13 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     QUrl url = requestedUrl;
 
     QNetworkRequest request(url);
-    reply_ = QNAManager_.get(request);
-
     // 如果支持断点续传，则设置请求头信息
     if (isBreakPointTranSupported_)
     {
-        QString strRange = QString("bytes=%1-").arg(BytesDown_);
+        QString strRange = QString("bytes=%1-").arg(bytesDown_);
         request.setRawHeader("Range", strRange.toLatin1());
     }
+    reply_ = QNAManager_.get(QNetworkRequest(request));
 
 
 
@@ -265,12 +269,12 @@ void DownloadInfoWidget::httpFinished()
             reply_ = nullptr;
     };
 
-    if (BytesDown_ == totalSize_)
+    if (bytesDown_ == totalSize_)
     {
         downloadStatusLabel_->setText(u8"已完成");
         QMessageBox::information(NULL, "Tip", QString(u8"是否立即安装"));
     }
-    else if (BytesDown_ < totalSize_ )
+    else if (bytesDown_ < totalSize_ )
     {
         if (reply_->error())
         { 
@@ -303,7 +307,13 @@ void DownloadInfoWidget::httpFinished()
 void DownloadInfoWidget::httpReadyRead()
 {
     if (file_)
+    {
         file_->write(reply_->readAll());
+    }
+    else
+    {
+        qWarning() << "ilegal file_ handle";
+    }
 }
 
 bool DownloadInfoWidget::isTimeToUpdate(double& second)
@@ -345,13 +355,10 @@ bool DownloadInfoWidget::OpenDownloadFolder()
 
 QString DownloadInfoWidget::MakeDownloadHeadway()
 {
-    return MakeDownloadHeadway(BytesDown_, totalSize_);
+    return MakeDownloadHeadway(bytesDown_, totalSize_);
 }
 
-double ToMByte(int sizeInBit)
-{
-    return sizeInBit * 1.0 / (1024 * 1024);
-}
+
 
 QString DownloadInfoWidget::MakeDownloadHeadway(int64_t readed, int64_t total)
 {
@@ -382,11 +389,13 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
             return;
     }
 
-    double v = bytesReceived * 1.0 / bytesTotal * 100;
+    const qint64 size_lastDownloadTask = totalSize_ - bytesTotal;
+
+    double v = (bytesReceived+ size_lastDownloadTask) * 1.0 / (totalSize_) * 100;
     emit notify_progressInfo(v);
 
-    uint64_t increment = bytesReceived - BytesDown_;
-    int speed = increment / 1024 / secondElepsed;//kb/s
+    uint64_t increment = bytesReceived+ size_lastDownloadTask - bytesDown_;
+    int speed = increment / 1024 / secondElepsed;
     QString result = QString::number(speed);
     result += " KB/s";
     emit notify_stateLabel(result);
@@ -394,8 +403,8 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
     //fix me, 估计剩余时间
     int secondLeftEstimated = (bytesTotal - bytesReceived) / (increment / secondElepsed);
     emit notify_timeLabel(MakeDurationToString(secondLeftEstimated));
-    BytesDown_ = bytesReceived;
-    totalSize_ = bytesTotal;
+
+    bytesDown_ = bytesReceived + size_lastDownloadTask;
     emit notify_sizeInfo(MakeDownloadHeadway());
 }
 
@@ -419,17 +428,33 @@ void DownloadInfoWidget::LoadingProgressForBreakPoint()
     QFileInfo fileInfo(localFilePath_);
     if (!fileInfo.exists())
     {
-        BytesDown_ = 0;
+        bytesDown_ = 0;
         return;
     }
     else
     {
-        BytesDown_=fileInfo.size();
-        fileDownloadHeadway_->setText(MakeDownloadHeadway());
-        double v = BytesDown_ * 1.0 / totalSize_ * 100;
-        progressBar_->setValue(v);
-        if(BytesDown_== totalSize_)
+        bytesDown_=fileInfo.size();
+        if (bytesDown_ > totalSize_)
+        {
+            qWarning() << "bad file size";
+            downloadStatusLabel_->setText(u8"文件大小错误，建议重新下载");
+            QFile f(localFilePath_);
+            f.open(QIODevice::WriteOnly);
+            f.remove();
+            f.close();
+        }
+        else if (bytesDown_ == totalSize_)
+        {
             downloadStatusLabel_->setText(u8"已完成");
+            fileDownloadHeadway_->setText(MakeDownloadHeadway());
+            progressBar_->setValue(100);
+        }
+        else
+        {
+            fileDownloadHeadway_->setText(MakeDownloadHeadway());
+            double v = bytesDown_ * 1.0 / totalSize_ * 100;
+            progressBar_->setValue(v);
+        }
     }
     //file_.reset()
 }

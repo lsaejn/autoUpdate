@@ -406,3 +406,56 @@
 [Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 09:18:11] ("ftp", "file", "qrc", "http", "https", "data")
 [Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 09:19:53] ("ftp", "file", "qrc", "http", "https", "data")
 [Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 09:20:17] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 09:38:54] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 430] [2020-09-22 09:38:56] bad file size
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 430] [2020-09-22 09:38:57] bad file size
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 09:43:04] ("ftp", "file", "qrc", "http", "https", "data")
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 430] [2020-09-22 09:43:07] bad file size
+[Warning: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 430] [2020-09-22 09:43:07] bad file size
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 280] [2020-09-22 09:43:29] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 09:46:26] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:23:30] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:25:20] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:28:13] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:30:10] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:41:32] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:41:43] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:41:55] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:42:00] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:42:29] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:42:38] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:42:45] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 213] [2020-09-22 10:43:24] invalid local file size, should not larger than targetSize
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:44:07] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:45:01] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:45:25] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:45:36] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:45:49] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:46:03] ("ftp", "file", "qrc", "http", "https", "data")
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 10:53:07] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 10:53:13] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:53:26] ("ftp", "file", "qrc", "http", "https", "data")
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 10:53:29] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 10:54:13] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:54:24] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 276] [2020-09-22 10:58:12] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 11:13:52] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 277] [2020-09-22 11:14:00] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 277] [2020-09-22 11:14:46] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 11:18:16] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 277] [2020-09-22 11:18:21] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 11:22:25] ("ftp", "file", "qrc", "http", "https", "data")
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 279] [2020-09-22 11:24:09] ????ж?/?????????
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:24:37] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:24:41] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:24:49] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:25:00] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 279] [2020-09-22 11:25:12] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 279] [2020-09-22 11:25:43] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 279] [2020-09-22 11:26:11] ????ж?/?????????
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 279] [2020-09-22 11:26:41] ????ж?/?????????
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:27:05] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:27:08] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:27:33] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."
+[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 109] [2020-09-22 11:31:24] ("ftp", "file", "qrc", "http", "https", "data")
+[Critical: D:\AutoUpate\QFrameLessWidget_Alime\DownloadInfoWidget.cpp 162] [2020-09-22 11:31:29] "Unable to open/save the file D:\\AutoUpate\\QFrameLessWidget_Alime\\TD_Alloc_4.02src_10.dll: 另一个程序正在使用此文件，进程无法访问。."

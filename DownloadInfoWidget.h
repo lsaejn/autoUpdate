@@ -85,13 +85,20 @@ private:
     QPushButton* downloadButton_;
     QLabel* fileNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
 
-    uint64_t BytesDown_;
-    uint64_t totalSize_;
+    uint64_t bytesDown_;
+    uint64_t totalSize_;//始终代表整个文件大小，而非本次需下载的总大小
+
     std::unique_ptr<QFile> file_;
     QNetworkAccessManager QNAManager_;
     QNetworkReply* reply_;
     DownloadState downloadState_;
     bool isBreakPointTranSupported_=true;
+
+
+    struct stateManager
+    {
+        void Notify();
+    };
 };
 
 

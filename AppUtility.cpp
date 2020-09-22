@@ -108,3 +108,8 @@ QString GetDownloadFolder()
 #endif // DEBUG
     }
 }
+
+double ToMByte(int sizeInBit)
+{
+    return sizeInBit * 1.0 / (1024 * 1024);
+}

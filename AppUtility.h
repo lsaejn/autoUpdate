@@ -12,3 +12,4 @@ void SetLogLevel(int);
 std::string GetExeFolder();
 QString GetDownloadFolder();
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+double ToMByte(int sizeInBit);
