@@ -18,6 +18,9 @@ class QFileInfo;
 
 /*
 需要StateManager+FileManager
+来管理控件
+downloadState_ 
+downloadStatusLabel_
 */
 
 
@@ -34,19 +37,22 @@ public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName, uint64_t fileSize, const QString& url);
     ~DownloadInfoWidget()=default;
 
-    enum WebFileType
+    enum class WebFileType
     {
         Exe = 0,//补丁
         Iso =1,//光盘
         Other
     };
 
-    enum DownloadState
+    //调试用,时间比较吃紧，我们改成单线程跑状态机
+    enum class DownloadState
     {
         NotStarted,
-        Interrupted,
-        Canceled,
+        Downloading,
         Paused,
+        Cancel,
+        Interrupted,
+        Error,
         Finished
     };
 
@@ -54,12 +60,13 @@ private:
     bool StartDownloadTask();
     bool CancelDownloadTask();
     bool PauseDownloadTask();
-    bool OpenDownloadFolder();
+    bool DoSetup();
     
     void httpFinished();
     void httpReadyRead();
     void StartRequest(const QUrl& url);
     bool isTimeToUpdate(double& second);
+    void UpdateUiAccordingWithState();
 
     QString MakeDownloadHeadway();
     QString MakeDownloadHeadway(int64_t reader, int64_t total);
@@ -68,8 +75,6 @@ private:
     void LoadingProgressForBreakPoint();
     void UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTotal);
     void UpdatePlayButton(bool stopped=true);
-    bool IsFileExist();
-    uint64_t GetLocalFileSize(const QString &s);//我们没有办法检查文件有效性
     std::unique_ptr<QFile> openFileForWrite(const QString& fileName);
 
 private:
@@ -77,28 +82,24 @@ private:
     QString fileName_;
     QString localFilePath_;
 
-    QLabel* downloadStatusLabel_;
+    QLabel* fileNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
     QLabel* leftTimeEstimated_;
+    QLabel* downloadStatusLabel_;
     QLabel* fileDownloadHeadway_;
+
     QProgressBar* progressBar_;
     QPushButton* pauseButton_;
     QPushButton* downloadButton_;
-    QLabel* fileNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
-
+    
     uint64_t bytesDown_;
     uint64_t totalSize_;//始终代表整个文件大小，而非本次需下载的总大小
-
-    std::unique_ptr<QFile> file_;
-    QNetworkAccessManager QNAManager_;
+ 
     QNetworkReply* reply_;
+    std::unique_ptr<QFile> file_;
     DownloadState downloadState_;
-    bool isBreakPointTranSupported_=true;
+    bool isBreakPointTranSupported_;
+    QNetworkAccessManager QNAManager_;
 
-
-    struct stateManager
-    {
-        void Notify();
-    };
 };
 
 

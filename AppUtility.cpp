@@ -4,46 +4,43 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+#include <QApplication>
+#include <QMessageBox>
 
 #include "AppUtility.h"
+#include "ConfigFileRW.h"
 
-int g_LogLevel = 0;
 HANDLE g_handle = INVALID_HANDLE_VALUE;
-
-//我们不考虑效率，因为这个程序是我第一个qt程序，主要是玩的开心
-
 std::mutex g_mutex;
 
+//不考虑效率
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     std::lock_guard lock(g_mutex);
 
-    if (type < g_LogLevel)
+    if (type < ConfigFileReadWriter::Instance().GetLogLevel())
         return;
 
     QString text;
     switch (type)
     {
-    case QtDebugMsg:
+    case QtDebugMsg://开发
         text = QString("Debug:");
         break;
-    case QtWarningMsg:
+    case QtWarningMsg://测试
         text = QString("Warning:");
         break;
-    case QtCriticalMsg:
+    case QtCriticalMsg://用户
         text = QString("Critical:");
         break;
-    case QtFatalMsg:
-        text = QString("Fatal:");
     }
-
     QString context_info = QString("%1 %2").arg(QString(context.file)).arg(context.line);
     QString current_date = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     QString message = QString("[%1 %2] [%3] %4").arg(text).arg(context_info).arg(current_date).arg(msg);
 
-    QFile file("pkpmUpdate_log.txt");
+    //低效
+    QFile file(ConfigFileReadWriter::Instance().GetLogFilePath());
     file.open(QIODevice::WriteOnly | QIODevice::Append);
-    //now who's the joke of ....
     if (file.size() > 50 * 1024 * 1024)
         file.resize(0);
 
@@ -53,10 +50,17 @@ void Logging(QtMsgType type, const QMessageLogContext& context, const QString& m
     file.close();
 }
 
-void SetLogLevel(int level)
+size_t ToLogLevel(const std::string& level)
 {
-    std::lock_guard lock(g_mutex);
-    g_LogLevel = level;
+    if (level == "Debug")
+        return 0;
+    else if (level == "Warning")
+        return 1;
+    else if (level == "Critical")
+        return 2;
+    else if (level == "None")//
+        return 3;
+    return 0;
 }
 
 bool IsInstanceOn()
@@ -92,8 +96,8 @@ exe会被放在update文件夹. 下载的文件被放在update/download/下
 */
 QString GetDownloadFolder()
 {
-    QString appDirectory = QDir::currentPath();
-    bool ret = !appDirectory.isEmpty() && QFileInfo(appDirectory).isDir();
+    QString appDirectory = ConfigFileReadWriter::Instance().GetDownloadFolder();
+    bool ret = !appDirectory.isEmpty() || !QFileInfo(appDirectory).isDir();
     if (!ret)
     {
         qCritical() << "error happened in GetDownloadFolder due to limited read access priviledge?";
@@ -101,15 +105,28 @@ QString GetDownloadFolder()
     }
     else
     {
-#ifdef _DEBUG
-        return appDirectory + "/";
-#else
-        return appDirectory + "download/";
-#endif // DEBUG
+        return appDirectory;
     }
 }
 
 double ToMByte(int sizeInBit)
 {
     return sizeInBit * 1.0 / (1024 * 1024);
+}
+
+void ShowWarningBox(const QString& title, const QString& waring, const QString& btnText)
+{
+    QMessageBox warningBox(QMessageBox::Warning, title, waring);
+    warningBox.setStandardButtons(QMessageBox::Ok);
+    warningBox.setButtonText(QMessageBox::Ok, btnText);
+    warningBox.exec();
+}
+
+bool ShowQuestionBox(const QString& title, const QString& info, const QString& yesText, const QString& noText)
+{
+    QMessageBox infoBox(QMessageBox::Question, title, info);
+    infoBox.setStandardButtons(QMessageBox::Yes| QMessageBox::No);
+    infoBox.setButtonText(QMessageBox::Yes, yesText);
+    infoBox.setButtonText(QMessageBox::No, noText);
+    return infoBox.exec()== QMessageBox::Yes;
 }

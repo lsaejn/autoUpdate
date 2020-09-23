@@ -107,8 +107,20 @@ max-height:22px;
 image: url(:/images/setup.png);
 }
 
-QPushButton#ItemItemSetup:hover{
+QPushButton#ItemSetup:hover{
 image: url(:/images/setup-blue.png);
+}
+
+QLabel#exeIconLabel{
+min-width: 30px;
+max-width: 30px;
+image: url(:/images/exe.png);
+}
+
+QLabel#isoIconLabel{
+min-width: 30px;
+max-width: 30px;
+image: url(:/images/iso.png);
 }
 
 QLabel#itemIconLabel{

@@ -16,6 +16,7 @@
 #include "QFrameLessWidget_Alime.h"
 #include "VersionFileFinder.h"
 #include "AppVersion.h"
+#include "ConfigFileRW.h"
 #include "thirdParty/nlohmann/json.hpp"
 
 CLASSREGISTER(QFrameLessWidget_Alime)
@@ -58,6 +59,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
         btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         leftButtonLayout->addWidget(btn01);
         btn01->setCheckable(true);
+        btn01->setChecked(true);
 
         QPushButton* btn02 = new QPushButton(u8"光盘");
         btn02->setObjectName("btnBoard");
@@ -84,18 +86,28 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     rightContent_->setObjectName("rightContent");
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
 
-    versionTips_ = new QLabel(u8"未检查到当前版本, 请检查您的网络");
+    versionTips_ = new QLabel();
     versionTips_->setObjectName("versionTips");
+
+
     LocalVersionFile finder;
     finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
     QString version= finder.GetLocalVersion().c_str();
-    if(!version.isEmpty())
-        versionTips_->setText(u8"检查到当前版本:"+version+"   "+u8"找到以下可升级版本");
+    if (!version.isEmpty())
+    {
+        versionTips_->setText(u8"检查到当前版本:" + version + "   " + u8"找到以下可升级版本");
+    }
+    else
+    {
+        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
+                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询当前版本信息, 请从官网下载");
+        ShowVersionTipsInfo(strHTML);
+    }
+
     vbox->addWidget(versionTips_);
 
     updatePkgList_ = new QListWidget(this);
     updatePkgList_->setObjectName("patchPkgList");
-
 
     stackWidget_ = new QStackedWidget(this);
     stackWidget_->addWidget(updatePkgList_);
@@ -106,8 +118,8 @@ void QFrameLessWidget_Alime::ReadPkgFileInfo()
 {
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &QFrameLessWidget_Alime::QueryInfoFinish);
-    qDebug() << manager->supportedSchemes();
-    manager->get(QNetworkRequest(QUrl("http://update.pkpm.cn/PKPM2010/Info/pkpmSoft/packageInfo.json")));
+    //qDebug() << manager->supportedSchemes();
+    manager->get(QNetworkRequest(QUrl(ConfigFileReadWriter::Instance().GetUrlOfUpdateInfoFile())));
 }
 
 void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
@@ -115,7 +127,7 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
     auto ret=reply->error();
     if (ret != QNetworkReply::NoError)
     {
-        qDebug() << "Error Happened";
+        qWarning() << "Error Happened";
         QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
                             <body><font id=\"f\">%1</font></body></html>").arg(u8"无法检查到程序升级信息，请检查网络");
         ShowVersionTipsInfo(strHTML);
@@ -136,22 +148,23 @@ QString QFrameLessWidget_Alime::GetTitle()
 //这个函数不允许出错
 bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 {
-    //得到本地程序最新版本号
     auto versionFiles=FindSpecificFiles::FindVersionFiles(QApplication::applicationDirPath().toLocal8Bit().data() , "V", "ini");
-    //本地文件被fuck了
     if (versionFiles.size() == 0)
     {
-        //fix me
+        qWarning() << u8"无法找到版本信息文件";
         return false;
     }
     std::sort(versionFiles.begin(), versionFiles.end(), AscendingOrder());
     
+    //第一次沟通的结果是更新包针对大版本
+    //比如V5,应该做到更新包5.a.y 可以将5.a.x版本升级到V5.a.y
+    //这个部分还需要再讨论
     std::string mainVersion="V";
     mainVersion.push_back(versionFiles.back().front());
    
     std::vector<std::string> keys;
+
     nlohmann::json json= nlohmann::json::parse(str);
-    //找到主版本
     if (json.find(mainVersion) != json.end())
     {
         for (auto iter = json[mainVersion].begin(); iter != json[mainVersion].end(); ++iter)
@@ -166,7 +179,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
                 keys.push_back(iter.key());
                 std::string webUrl = json[mainVersion][iter.key()];
                 
-                QString url = ("http://update.pkpm.cn/PKPM2010/Info/pkpmSoft/" + webUrl).c_str();
+                QString url = ConfigFileReadWriter::Instance().GetUrlOfPkgRootFolder() + webUrl.c_str();
                 QEventLoop loop;
                 QNetworkReply* reply = manager.head(QNetworkRequest(url));
                 //我们阻塞当前线程
@@ -186,6 +199,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
                 
         }
     }
+
     return true;
 }
 

@@ -23,7 +23,7 @@ namespace Alime
 	Timestamp Timestamp::Now()
 	{
 
-#if  ALIME_HAS_NOT_CPP11_OR_HIGHER
+#if  ALIME_USE_CPP11_OR_HIGHER
 		return Timestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 #else
 		return Timestamp(static_cast<int64_t>(utcmicrosecond() * Duration::kMicrosecond));

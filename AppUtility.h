@@ -4,12 +4,18 @@
 #include <QDebug>
 #include "windows.h"
 
-extern int g_LogLevel;
 extern HANDLE g_handle;
 
 bool IsInstanceOn();
-void SetLogLevel(int);
+size_t ToLogLevel(const std::string& level);
 std::string GetExeFolder();
 QString GetDownloadFolder();
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg);
 double ToMByte(int sizeInBit);
+
+void ShowWarningBox(const QString& title, const QString& waring, const QString& btnText);
+bool ShowQuestionBox(const QString& title, const QString& info, const QString& yesText, const QString& noText);
+
+#define CHECK_CONNECT_ERROR(expr) \
+if(!expr) \
+qDebug()<<"connect failed"
