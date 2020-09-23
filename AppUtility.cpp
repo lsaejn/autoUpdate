@@ -33,6 +33,9 @@ void Logging(QtMsgType type, const QMessageLogContext& context, const QString& m
     case QtCriticalMsg://”√ªß
         text = QString("Critical:");
         break;
+    case QtFatalMsg:
+        text = QString("Fatal:");
+        break;
     }
     QString context_info = QString("%1 %2").arg(QString(context.file)).arg(context.line);
     QString current_date = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");

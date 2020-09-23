@@ -88,6 +88,9 @@
     <QtMoc Include="DownloadInfoWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="TaskThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="qss\dark.qss" />

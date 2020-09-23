@@ -145,6 +145,7 @@
     <ClInclude Include="Md5Checker.h" />
     <ClInclude Include="QssLoader.h" />
     <ClInclude Include="String_utility.h" />
+    <QtMoc Include="TaskThread.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />
     <ClInclude Include="VersionFileFinder.h" />
   </ItemGroup>

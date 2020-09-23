@@ -416,20 +416,57 @@ bool DownloadInfoWidget::PauseDownloadTask()
 }
 
 #include <QProcess>
+#include <QEventLoop>
+#include <QThread>
+#include "TaskThread.h"
 bool DownloadInfoWidget::DoSetup()
 {
-    //localFilePath_
-    //程序路径
-    QString path(localFilePath_);
-    QStringList arguments;
+    TaskThread *t=new TaskThread(this, [=]() {
+        QString path(localFilePath_);
+        path = "D:\\test app\\Setup.exe";
+        std::wstring u16AppPath = path.toStdWString();
 
-    arguments << "/c" << "shutdown" << "-s" << "-t" << "3000";
+        SHELLEXECUTEINFO ShExecInfo = { 0 };
+        ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+        ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+        ShExecInfo.hwnd = NULL;
+        ShExecInfo.lpVerb = L"open";
+        ShExecInfo.lpFile = u16AppPath.c_str();
+        ShExecInfo.lpParameters = L"-PATH=\"D:\\PKPMV3 TEST\"";
+        ShExecInfo.lpDirectory = NULL;
+        ShExecInfo.nShow = SW_NORMAL;
+        ShExecInfo.hInstApp = NULL;
 
-    //new一个进程对象
-    QProcess* process = new QProcess(this);
+        ShellExecuteExW(&ShExecInfo);
+        if (ShExecInfo.hProcess)
+        {
+            DWORD ret = WAIT_FAILED;
+            if (WAIT_OBJECT_0 == WaitForSingleObject(ShExecInfo.hProcess, INFINITE))
+            {
+                qDebug() << "setup finished ";
+            }
+            else
+            {
+                qWarning() << "WaitForSingleObject error, error code is: " << GetLastError();
+            }
+            CloseHandle(ShExecInfo.hProcess);
+        }
+        else
+        {
+            qDebug() << "failed to create process";
+        }
+        });
 
-    //启动并设置参数
-    process->start(path, arguments);
+    connect(t, &TaskThread::started, []() {
+        int x = 3;
+        x++;
+        });
+    connect(t, &TaskThread::finished, []() {
+        int x = 3;
+        x++;
+        });
+    connect(t, &TaskThread::finished, t, &QObject::deleteLater);
+    t->start();
     return true;
 }
 
