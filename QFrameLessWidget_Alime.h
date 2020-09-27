@@ -29,16 +29,25 @@ private:
     void ShowVersionTipsInfo(const QString&);
     void QueryInfoFinish(QNetworkReply* reply);
     bool InitDownloadList(const std::string& pkgFileContent);
+
     bool ReadLocalVersion();
-    void ReadInstallationCDInfo(const nlohmann::json& info);
+    //QWidget* MakeNewListItem();
+    
+    std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
+
+    bool AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent, 
+        uint64_t _fileSize, const QString& _url);
+
     void ReadFixPacksInfo(const nlohmann::json& info);
     void ReadUpdatePacksInfo(const nlohmann::json& info);
+    void ReadInstallationCDInfo(const nlohmann::json& info);
     
 
 private:
     QStackedWidget* stackWidget_;
     QListWidget* updatePkgList_;
-    QListWidget* isoFileList;
+    QListWidget* isoFileList_;
+    QListWidget* fixPkgList_;
 
     QWidget* leftContent_;
     QWidget* rightContent_;

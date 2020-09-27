@@ -261,7 +261,7 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     if (isBreakPointTranSupported_)
     {
         QString strRange = QString("bytes=%1-").arg(bytesDown_);
-        qDebug() << bytesDown_;
+        qDebug() << "StartRequest"<<bytesDown_;
         request.setRawHeader("Range", strRange.toLatin1());
     }
     reply_ = QNAManager_.get(QNetworkRequest(request));
@@ -479,8 +479,6 @@ QString DownloadInfoWidget::MakeDownloadHeadway()
 {
     return MakeDownloadHeadway(bytesDown_, totalSize_);
 }
-
-
 
 QString DownloadInfoWidget::MakeDownloadHeadway(int64_t readed, int64_t total)
 {

@@ -9,6 +9,7 @@
 #include "QtNetwork/qnetworkrequest.h"
 
 #include <atomic>
+#include <memory>
 
 class QLabel;
 class QProgressBar;

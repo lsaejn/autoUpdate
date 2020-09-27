@@ -66,7 +66,7 @@
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>5.14.2</QtInstall>
+    <QtInstall>5.6.3</QtInstall>
     <QtModules>core;gui;widgets;network</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
@@ -106,6 +106,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SetupImageWidget.cpp" />
     <ClCompile Include="String_utility.cpp" />
     <QtRcc Include="QFrameLessWidget_Alime.qrc" />
     <QtUic Include="QFrameLessWidget_Alime.ui" />
@@ -158,6 +159,7 @@
     <ClInclude Include="ConfigFileRW.h" />
     <ClInclude Include="Md5Checker.h" />
     <ClInclude Include="QssLoader.h" />
+    <QtMoc Include="SetupImageWidget.h" />
     <ClInclude Include="String_utility.h" />
     <QtMoc Include="TaskThread.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />

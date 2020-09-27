@@ -17,9 +17,8 @@
 #include "VersionFileFinder.h"
 #include "AppVersion.h"
 #include "ConfigFileRW.h"
+#include "SetupImageWidget.h"
 
-
-//!
 CLASSREGISTER(QFrameLessWidget_Alime)
 
 QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
@@ -42,41 +41,44 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     QVBoxLayout* leftLayout = new QVBoxLayout(leftContent_);
     leftLayout->setMargin(0); 
-    {
-        QWidget* leftButtons = new QWidget(this);
-        leftLayout->addWidget(leftButtons);
-        QWidget* dummy = new QWidget(this);
-        leftLayout->addWidget(dummy);
-        leftLayout->setStretch(0, 1);
-        leftLayout->setStretch(1, 1);
+    
+    QWidget* leftButtons = new QWidget(this);
+    leftLayout->addWidget(leftButtons);
+    QWidget* dummy = new QWidget(this);
+    leftLayout->addWidget(dummy);
+    leftLayout->setStretch(0, 1);
+    leftLayout->setStretch(1, 1);
 
-        QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
-        leftButtonLayout->setMargin(0);
-        leftButtonLayout->setSpacing(0);
-        leftButtonLayout->addSpacing(20);
+    ///add left button
+    QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
+    leftButtonLayout->setMargin(0);
+    leftButtonLayout->setSpacing(0);
+    leftButtonLayout->addSpacing(20);
 
-        QPushButton* btn01 = new QPushButton(u8"补丁包");
-        btn01->setObjectName("btnBoard");
-        btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        leftButtonLayout->addWidget(btn01);
-        btn01->setCheckable(true);
-        btn01->setChecked(true);
+    QPushButton* btn01 = new QPushButton(u8"升级包");
+    btn01->setObjectName("btnBoard");
+    btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    btn01->setCheckable(true);
+    btn01->setChecked(true);
+    leftButtonLayout->addWidget(btn01);
 
-        QPushButton* btn02 = new QPushButton(u8"光盘");
-        btn02->setObjectName("btnBoard");
-        leftButtonLayout->addWidget(btn02);
-        btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        btn02->setCheckable(true);
+    QPushButton* btn02 = new QPushButton(u8"补丁包");
+    btn02->setObjectName("btnBoard");
+    btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    btn02->setCheckable(true);
+    leftButtonLayout->addWidget(btn02);
 
-        QPushButton* btn03 = new QPushButton(u8"升级包");
-        btn03->setObjectName("btnBoard");
-        btn03->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        leftButtonLayout->addWidget(btn03);
-        btn03->setCheckable(true);
+    QPushButton* btn03 = new QPushButton(u8"最新版光盘");
+    btn03->setObjectName("btnBoard");
+    btn03->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    btn03->setCheckable(true);
+    leftButtonLayout->addWidget(btn03);
 
-        QButtonGroup* group = new QButtonGroup(this);
-        group->addButton(btn01); group->addButton(btn02); group->addButton(btn03);
-    }
+    QButtonGroup* group = new QButtonGroup(this);
+    group->addButton(btn01,0);
+    group->addButton(btn02,1);
+    group->addButton(btn03,2);
+    
     //leftContent->setFixedWidth(240);
 
     //整个右边就是vbox，加入布局是为了保持一定的灵活性，方便以后加入其他内容(竖条)。
@@ -85,7 +87,6 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     versionTips_ = new QLabel();
     versionTips_->setObjectName("versionTips");
-
 
     LocalVersionFile finder;
     finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
@@ -104,10 +105,19 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     vbox->addWidget(versionTips_);
 
     updatePkgList_ = new QListWidget(this);
-    updatePkgList_->setObjectName("patchPkgList");
+    updatePkgList_->setObjectName("updatePkgList");
+    fixPkgList_ = new QListWidget(this);
+    fixPkgList_->setObjectName("fixPkgList");
 
     stackWidget_ = new QStackedWidget(this);
     stackWidget_->addWidget(updatePkgList_);
+    stackWidget_->addWidget(fixPkgList_);
+    stackWidget_->addWidget(new SetupImageWidget(this));
+
+    //不使用ID是担心可能要调整顺序 0.0
+    connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
+        stackWidget_, &QStackedWidget::setCurrentIndex);
+
     vbox->addWidget(stackWidget_);
 }
 
@@ -157,12 +167,13 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
         mainVersionLocal_ = "V";
         mainVersionLocal_.push_back(versionFiles.back().front());
     }
+    return true;
 }
 
 //这个函数不允许出错
 bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 {
-    if (ReadLocalVersion())
+    if (!ReadLocalVersion())
     {
         //fix me, show info "无法读取本地版本信息"
         return false;
@@ -171,7 +182,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
     //ReadFixPacksInfo(const std::string & info);
     nlohmann::json json = nlohmann::json::parse(str);
     ReadUpdatePacksInfo(json);
-   
+    ReadFixPacksInfo(json);
 
 
     return true;
@@ -182,8 +193,77 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo(const nlohmann::json& json)
 
 }
 
-void QFrameLessWidget_Alime::ReadFixPacksInfo(const nlohmann::json& json)
+bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent,
+    uint64_t _fileSize, const QString& _url)
 {
+    QListWidgetItem* item = new QListWidgetItem();
+    QSize preferSize = item->sizeHint();
+    item->setSizeHint(QSize(preferSize.width(), 70));
+    target->addItem(item);
+    auto index = _url.lastIndexOf("/");
+    auto itemWidget = new DownloadInfoWidget(this, _url.mid(index + 1), _fileSize, _url);
+    target->setItemWidget(item, itemWidget);
+    return true;
+}
+
+//copy了代码，带来不好的味道。
+//需要测试
+void QFrameLessWidget_Alime::ReadFixPacksInfo(const nlohmann::json& info)
+{
+    const nlohmann::json& json = info["FixPacks"];
+
+    if (!versionLocal_.empty() && json.find(versionLocal_) != json.end())
+    {
+        nlohmann::json array = info["FixPacks"][versionLocal_];
+        QNetworkAccessManager manager;//网上的意思是最多5个请求
+        for (int i = 0; i != array.size(); ++i)
+        {
+            auto str=array[i].get<std::string>();
+            QString url = ConfigFileReadWriter::Instance().GetUrlOfFixPackFolder() + str.c_str();
+            QEventLoop loop;
+            QNetworkReply* reply = manager.head(QNetworkRequest(url));
+            connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+            loop.exec();
+
+            QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+            if (reply->error())
+            {
+                qDebug() << reply->errorString();
+                reply->deleteLater();
+                continue;
+            }
+            reply->deleteLater();
+
+            int pkgSize = var.toInt();
+            AddNewItemAndWidgetToList(fixPkgList_, this, pkgSize, url);
+        }
+    }
+
+}
+
+std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nlohmann::json& json)
+{
+    std::vector<std::string> keys;
+    if (!mainVersionLocal_.empty()&&json.find(mainVersionLocal_) != json.end())
+    {
+        for (auto iter = json[mainVersionLocal_].begin(); iter != json[mainVersionLocal_].end(); ++iter)
+        {
+            std::string key = iter.key();
+            //秉承某领导“错了也要能正常工作”的原则
+            if (string_utility::startsWith(key.c_str(), "V"))
+            {
+                key = key.substr(1);
+            }
+            if (AscendingOrder()(versionLocal_.substr(1), key))
+            {
+                keys.push_back(iter.key());
+            }
+        }
+        return keys;
+    }
+    else {
+        return {};
+    }
 
 }
 
@@ -192,58 +272,35 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo(const nlohmann::json& info)
     //
     const nlohmann::json& json = info["UpdatePacks"];
 
-    std::vector<std::string> keys;
-
-    //考虑到这里低素质的维护人员可能连顺序都会写错,我还得TMD帮你排序
-    if (json.find(mainVersionLocal_) != json.end())
+    std::vector<std::string> keys = GetFilteredVersionKeys(json);
+    QNetworkAccessManager manager;
+    for (const auto& key : keys)
     {
-        QNetworkAccessManager manager;
-        for (auto iter = json[mainVersionLocal_].begin(); iter != json[mainVersionLocal_].end(); ++iter)
-        { 
-            std::string key = iter.key();
-            //秉承某领导“错了也要能正常工作”的原则
-            if (string_utility::startsWith(key.c_str(), "V"))
-            {
-                key = key.substr(1);
-            }
+        std::string webUrl = json[mainVersionLocal_][key];
+        QString url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
+        QEventLoop loop;
+        QNetworkReply* reply = manager.head(QNetworkRequest(url));
+        //我们阻塞当前线程,初始化stackWidget内容
+        connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+        loop.exec();
 
-            if (AscendingOrder()(versionLocal_.substr(1), key))
-            {
-                keys.push_back(iter.key());
-                std::string webUrl = json[mainVersionLocal_][iter.key()];
-                QString url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
-                QEventLoop loop;
-                QNetworkReply* reply = manager.head(QNetworkRequest(url));
-                //我们阻塞当前线程,初始化stackWidget内容
-                connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
-                loop.exec();
-
-                QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
-                if (reply->error())
-                {
-                    qDebug() << reply->errorString();
-                    reply->deleteLater();
-                    continue;
-                }
-                int pkgSize = var.toInt();
-
-                QListWidgetItem* item = new QListWidgetItem();
-                QSize preferSize = item->sizeHint();
-                item->setSizeHint(QSize(preferSize.width(), 70));
-                updatePkgList_->addItem(item);
-                auto index = url.lastIndexOf("/");
-                auto itemWidget = new DownloadInfoWidget(this, url.mid(index + 1), pkgSize, url);
-                updatePkgList_->setItemWidget(item, itemWidget);
-            }
-            else
-            {
-                qWarning() << "may some error was raised, config file was error or bad version";
-            }
+        QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+        if (reply->error())
+        {
+            qDebug() << reply->errorString();
+            reply->deleteLater();
+            continue;
         }
-    }
-    else
-    {
-        //找不到当前大版本~~牛逼
+        reply->deleteLater();
+
+        int pkgSize = var.toInt();
+        QListWidgetItem* item = new QListWidgetItem();
+        QSize preferSize = item->sizeHint();
+        item->setSizeHint(QSize(preferSize.width(), 70));
+        updatePkgList_->addItem(item);
+        auto index = url.lastIndexOf("/");
+        auto itemWidget = new DownloadInfoWidget(this, url.mid(index + 1), pkgSize, url);
+        updatePkgList_->setItemWidget(item, itemWidget);
     }
 }
 
