@@ -93,6 +93,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     QString version= finder.GetLocalVersion().c_str();
     if (!version.isEmpty())
     {
+        ////fix me
         versionTips_->setText(u8"检查到当前版本:" + version + "   " + u8"找到以下可升级版本");
     }
     else
@@ -117,6 +118,14 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     //不使用ID是担心可能要调整顺序 0.0
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
         stackWidget_, &QStackedWidget::setCurrentIndex);
+    connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
+        [=]() {
+            LocalVersionFile finder;
+            //fix me
+            finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
+            QString version = finder.GetLocalVersion().c_str();
+            versionTips_->setText(u8"检查到当前版本:" + version);
+        });
 
     vbox->addWidget(stackWidget_);
 }

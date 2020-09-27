@@ -146,7 +146,12 @@ QProgressBar::chunk {
         background: rgb(6, 168, 255);
 }
 
-QListWidget#patchPkgList{
+QListWidget#updatePkgList{
+background: rgba(6, 168, 255,0);
+border:none;
+}
+
+QListWidget#fixPkgList{
 background: rgba(6, 168, 255,0);
 border:none;
 }
