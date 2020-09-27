@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
     auto& ins = ConfigFileReadWriter::Instance();
     QssLoader loder(":/qss/dark.qss", app);
 
+    CreateFolderForApp();
     qInstallMessageHandler(Logging);
+
 
     ALIME_SCOPE_EXIT{
         if (g_handle != INVALID_HANDLE_VALUE)
@@ -28,11 +30,7 @@ int main(int argc, char *argv[])
         QMessageBox::critical(NULL, u8"重复打开", u8"程序正在运行");
         return -1;
     }
-        
-    //qDebug() << "fuck";
-    //qWarning() << "off";
-    //qCritical() << "mother";
-    //qFatal() << "fucker";
+       
     Alime_TransparentWidget w;
     w.show();
     return app.exec();

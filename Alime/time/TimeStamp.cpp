@@ -13,7 +13,8 @@ namespace Alime
 	Timestamp::Timestamp(int64_t nanoseconds)
 		: ns_(nanoseconds) {}
 
-	bool Timestamp::IsEpoch() const {
+	bool Timestamp::IsEpoch() const 
+	{
 		return ns_ == 0;
 	}
 
@@ -30,64 +31,77 @@ namespace Alime
 #endif
 	}
 
-	void Timestamp::Add(Duration d) {
+	void Timestamp::Add(Duration d)
+	{
 		ns_ += d.toNanoseconds();
 	}
 
-	void Timestamp::To(struct timeval* t) const {
+	void Timestamp::To(struct timeval* t) const
+	{
 		t->tv_sec = static_cast<long>(ns_ / Duration::kSecond);
 		t->tv_usec = static_cast<long>(ns_ % Duration::kSecond) / static_cast<long>(Duration::kMicrosecond);
 	}
 
-	struct timeval Timestamp::TimeVal() const {
+	struct timeval Timestamp::TimeVal() const
+	{
 		struct timeval t;
 		To(&t);
 		return t;
 	}
 
-	int64_t Timestamp::Unix() const {
+	int64_t Timestamp::Unix() const
+	{
 		return ns_ / Duration::kSecond;
 	}
 
-	int64_t Timestamp::UnixNano() const {
+	int64_t Timestamp::UnixNano() const
+	{
 		return ns_;
 	}
 
-	int64_t Timestamp::UnixMicro() const {
+	int64_t Timestamp::UnixMicro() const
+	{
 		return ns_ / Duration::kMicrosecond;
 	}
 
-	bool Timestamp::operator< (const Timestamp& rhs) const {
+	bool Timestamp::operator< (const Timestamp& rhs) const
+	{
 		return ns_ < rhs.ns_;
 	}
 
-	bool Timestamp::operator==(const Timestamp& rhs) const {
+	bool Timestamp::operator==(const Timestamp& rhs) const
+	{
 		return ns_ == rhs.ns_;
 	}
 
-	Timestamp Timestamp::operator+=(const Duration& rhs) {
+	Timestamp Timestamp::operator+=(const Duration& rhs)
+	{
 		ns_ += rhs.toNanoseconds();
 		return *this;
 	}
 
-	Timestamp Timestamp::operator+(const Duration& rhs) const {
+	Timestamp Timestamp::operator+(const Duration& rhs) const
+	{
 		Timestamp temp(*this);
 		temp += rhs;
 		return temp;
 	}
 
-	Timestamp Timestamp::operator-=(const Duration& rhs) {
+	Timestamp Timestamp::operator-=(const Duration& rhs)
+	{
 		ns_ -= rhs.toNanoseconds();
 		return *this;
 	}
 
-	Timestamp Timestamp::operator-(const Duration& rhs) const {
+	Timestamp Timestamp::operator-(const Duration& rhs) const
+	{
 		Timestamp temp(*this);
 		temp -= rhs;
 		return temp;
 	}
 
-	Duration Timestamp::operator-(const Timestamp& rhs) const {
+	Duration Timestamp::operator-(const Timestamp& rhs) const
+	{
 		int64_t ns = ns_ - rhs.ns_;
 		return Duration(ns);
 	}

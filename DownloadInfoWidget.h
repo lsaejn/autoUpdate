@@ -23,7 +23,7 @@ downloadState_
 downloadStatusLabel_
 */
 
-
+//Widget as a item in QListWidget
 class DownloadInfoWidget : public QWidget
 {
     Q_OBJECT
@@ -66,7 +66,8 @@ private:
     void httpReadyRead();
     void StartRequest(const QUrl& url);
     bool isTimeToUpdate(double& second);
-    void UpdateUiAccordingWithState();
+    void UpdateUiAccordingToState();
+    bool CheckVersionFileAfterSetup();
 
     QString MakeDownloadHeadway();
     QString MakeDownloadHeadway(int64_t reader, int64_t total);

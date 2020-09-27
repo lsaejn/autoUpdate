@@ -17,5 +17,7 @@
         <file>images/pause-blue.png</file>
         <file>images/setup.png</file>
         <file>images/setup-blue.png</file>
+        <file>images/exe.png</file>
+        <file>images/iso.png</file>
     </qresource>
 </RCC>

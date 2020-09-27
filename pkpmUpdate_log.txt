@@ -1,5 +1,0 @@
-[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 118] [2020-09-22 15:32:33] Error Happened
-[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 129] [2020-09-22 15:34:49] Error Happened
-[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 129] [2020-09-22 15:34:57] Error Happened
-[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 129] [2020-09-22 15:35:37] Error Happened
-[Debug: D:\AutoUpate\QFrameLessWidget_Alime\QFrameLessWidget_Alime.cpp 120] [2020-09-22 15:51:13] ("ftp", "file", "qrc", "http", "https", "data")

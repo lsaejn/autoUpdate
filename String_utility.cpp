@@ -2,7 +2,7 @@
 
 namespace string_utility
 {
-	std::vector<std::string> string_split(const std::string& s, std::string&& c)
+	std::vector<std::string> string_split(const std::string& s, const std::string& c)
 	{
 		std::vector<std::string> result;
 		size_t len = s.length();
@@ -22,13 +22,13 @@ namespace string_utility
 
 	bool startsWith(const char* src, const char* des)
 	{
-		return (strlen(des) <= strlen(src)) &&
-			(!memcmp(src, des, strlen(des)));
+		return (std::strlen(des) <= std::strlen(src)) &&
+			(!std::memcmp(src, des, std::strlen(des)));
 	}
 
 	bool endsWith(const char* src, const char* des)
 	{
-		int offset = strlen(src) - strlen(des);
+		int offset = std::strlen(src) - std::strlen(des);
 		return  offset >= 0
 			&& startsWith(src + offset, des);
 	}

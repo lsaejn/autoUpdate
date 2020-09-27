@@ -15,6 +15,7 @@ double ToMByte(int sizeInBit);
 
 void ShowWarningBox(const QString& title, const QString& waring, const QString& btnText);
 bool ShowQuestionBox(const QString& title, const QString& info, const QString& yesText, const QString& noText);
+void CreateFolderForApp();
 
 #define CHECK_CONNECT_ERROR(expr) \
 if(!expr) \

@@ -1,7 +1,7 @@
 #include "Alime_ContentWidget.h"
 
-ContentWidgetCreator Alime_ContentWidget::creator_;
 
+ContentWidgetCreator Alime_ContentWidget::creator_;
 
 Alime_ContentWidget::Alime_ContentWidget(QWidget* parent)
 	:QWidget(parent)

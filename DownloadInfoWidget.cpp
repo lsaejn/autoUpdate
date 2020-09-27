@@ -241,7 +241,7 @@ bool DownloadInfoWidget::StartDownloadTask()
     file_ = openFileForWrite(localFilePath_);
     if (!file_)
     {
-        ShowWarningBox(u8"无法打开文件", u8"文件可能被占用，无法写入", "确定");
+        ShowWarningBox(u8"无法打开文件", u8"文件可能被占用，无法写入", u8"确定");
         return false;
     }
            
@@ -457,15 +457,20 @@ bool DownloadInfoWidget::DoSetup()
         }
         });
 
-    connect(t, &TaskThread::started, []() {
-        int x = 3;
-        x++;
-        });
-    connect(t, &TaskThread::finished, []() {
-        int x = 3;
-        x++;
-        });
-    connect(t, &TaskThread::finished, t, &QObject::deleteLater);
+    CHECK_CONNECT_ERROR(connect(t, &TaskThread::started, []() {
+        qDebug() << "succeed to create process ";
+        }));
+    CHECK_CONNECT_ERROR(connect(t, &TaskThread::finished, [=]() {
+        bool ret = CheckVersionFileAfterSetup();
+        if (!ret)
+        {
+            qDebug() << "VersionFile error";
+        }
+        else {
+            //update Ui here
+        }
+        }));
+    CHECK_CONNECT_ERROR(connect(t, &TaskThread::finished, t, &QObject::deleteLater));
     t->start();
     return true;
 }
@@ -602,7 +607,13 @@ void DownloadInfoWidget::LoadingProgressForBreakPoint()
     //file_.reset()
 }
 
-void DownloadInfoWidget::UpdateUiAccordingWithState()
+void DownloadInfoWidget::UpdateUiAccordingToState()
 {
+    //我懒得写
+}
 
+bool DownloadInfoWidget::CheckVersionFileAfterSetup()
+{
+    //让你妈给你买棺材
+    return true;
 }

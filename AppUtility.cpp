@@ -16,7 +16,7 @@ std::mutex g_mutex;
 //²»¿¼ÂÇÐ§ÂÊ
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
-    std::lock_guard lock(g_mutex);
+    std::lock_guard<std::mutex> lock(g_mutex);
 
     if (type < ConfigFileReadWriter::Instance().GetLogLevel())
         return;
@@ -132,4 +132,30 @@ bool ShowQuestionBox(const QString& title, const QString& info, const QString& y
     infoBox.setButtonText(QMessageBox::Yes, yesText);
     infoBox.setButtonText(QMessageBox::No, noText);
     return infoBox.exec()== QMessageBox::Yes;
+}
+
+void CreateFolderForApp()
+{
+    QString downloadDir = ConfigFileReadWriter::Instance().GetDownloadFolder();
+    QDir dirInfo;
+    if (!dirInfo.exists(downloadDir))
+    {
+        bool ret=dirInfo.mkdir(downloadDir);
+        if (!ret)
+        {
+            auto filePath = downloadDir.mid(0, downloadDir.length() - 1);
+            QFileInfo f(filePath);
+            if (f.exists() && f.isFile())
+            {
+                if (!QFile::remove(filePath))
+                {
+                    //what the fuck?
+                }
+            }
+            dirInfo.mkdir(downloadDir);
+        }
+    }      
+    QString logDir = downloadDir + "../log/";
+    if (!dirInfo.exists(logDir))
+        dirInfo.mkdir(logDir);
 }

@@ -10,6 +10,8 @@ public:
 	QString GetDownloadFolder() const;
 	QString GetUrlOfUpdateInfoFile() const;
 	QString GetUrlOfPkgRootFolder() const;
+	QString GetUrlOfFixPackFolder() const;
+	QString GetUrlOfUpdatePackFolder() const;
 
 	size_t GetLogLevel() const;
 	size_t GetLogFileRollSize() const;
@@ -20,10 +22,11 @@ public:
 private:
 	ConfigFileReadWriter();
 	~ConfigFileReadWriter();
-	void Init();
-	void SaveToFile();
 	ConfigFileReadWriter(const ConfigFileReadWriter&)=delete;
 	void operator=(const ConfigFileReadWriter&) = delete;
+
+	void Init();
+	void SaveToFile();
 private:
 	size_t logLever_;
 	size_t maxTaskNum_;
@@ -32,6 +35,8 @@ private:
 	QString downloadDir_;
 	QString updateInfoUrl_;
 	QString pkgRootFolder_;
+	QString fixPackFolder_;
+	QString updatePackFolder_;
 	nlohmann::json json_;
 };
 

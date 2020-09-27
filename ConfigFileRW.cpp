@@ -64,9 +64,10 @@ void ConfigFileReadWriter::SetDownloadFolder()
 
 void ConfigFileReadWriter::Init()
 {
-	try {
+	try
+	{
 		std::string folder = GetExeFolder();
-		std::string filePath= folder + "updateInfo.json";
+		std::string filePath= folder + "config.json";
 		std::ifstream ifs(filePath);
 		ifs >> json_;
 		
@@ -78,6 +79,8 @@ void ConfigFileReadWriter::Init()
 		maxTaskNum_ = json_["maxTaskNum"].get<size_t>();
 		logFileRollSize_= json_["logFileRollSize"].get<size_t>();
 		pkgRootFolder_= json_["pkgRootFolder"].get<std::string>().c_str();
+		fixPackFolder_ = pkgRootFolder_+json_["fixPackFolder"].get<std::string>().c_str();
+		updatePackFolder_= pkgRootFolder_+json_["updatePackFolder"].get<std::string>().c_str();
 	}
 	catch (...)
 	{
@@ -88,5 +91,16 @@ void ConfigFileReadWriter::Init()
 
 void ConfigFileReadWriter::SaveToFile()
 {
+	auto ctn=json_.dump();
+	//fix me
+}
 
+QString ConfigFileReadWriter::GetUrlOfFixPackFolder() const
+{
+	return fixPackFolder_;
+}
+
+QString ConfigFileReadWriter::GetUrlOfUpdatePackFolder() const
+{
+	return updatePackFolder_;
 }

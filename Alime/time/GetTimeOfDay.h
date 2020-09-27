@@ -1,6 +1,7 @@
 /*
 Fix me.
-this source code is a supplement to windows, ...need to move
+this source code is a supplement to windows, supporting a portable function
+gettimeofday whose accuracy is 100 nanoseconds ...need to move
 it to the directory "portability" and modify the macro.
 un...like this?
 #include "Alime/portability.h"

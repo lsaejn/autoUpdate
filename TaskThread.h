@@ -3,12 +3,14 @@
 #include <functional>
 #include "AppUtility.h"
 
-using TaskFunc = std::function<void()>;
+
 
 class TaskThread : public QThread
 {
     Q_OBJECT
 public:
+    using TaskFunc = std::function<void()>;
+
     TaskThread(QObject* parent, TaskFunc t)
         :QThread(parent),
         func_(std::move(t))
