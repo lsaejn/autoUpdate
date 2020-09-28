@@ -18,7 +18,7 @@ void Logging(QtMsgType type, const QMessageLogContext& context, const QString& m
 {
     std::lock_guard<std::mutex> lock(g_mutex);
 
-    if (type < ConfigFileReadWriter::Instance().GetLogLevel())
+    if (static_cast<size_t>(type) < ConfigFileReadWriter::Instance().GetLogLevel())
         return;
 
     QString text;

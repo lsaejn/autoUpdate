@@ -27,7 +27,7 @@ public:
 		{
 			auto fullPath=iter.getPath();
 			int index = -1;
-			for (int i = 0; i != fullPath.size(); ++i)
+			for (size_t i = 0; i != fullPath.size(); ++i)
 			{
 				if (fullPath[i] == L'\\' || fullPath[i] == L'/')
 				{

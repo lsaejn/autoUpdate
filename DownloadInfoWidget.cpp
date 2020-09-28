@@ -44,7 +44,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         lableMenu->addSeparator();
         lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"É¾³ý");
         CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested, 
-            [=](const QPoint& pos) {
+            [=](const QPoint& /*pos*/) {
                 lableMenu->exec(QCursor::pos());
             }));
         CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
@@ -472,7 +472,7 @@ bool DownloadInfoWidget::DoSetup()
         ShellExecuteExW(&ShExecInfo);
         if (ShExecInfo.hProcess)
         {
-            DWORD ret = WAIT_FAILED;
+            //DWORD ret = WAIT_FAILED;
             if (WAIT_OBJECT_0 == WaitForSingleObject(ShExecInfo.hProcess, INFINITE))
             {
                 qDebug() << "setup finished ";

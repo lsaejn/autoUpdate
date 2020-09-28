@@ -94,8 +94,8 @@ private:
     QPushButton* pauseButton_;
     QPushButton* downloadButton_;
     
-    uint64_t totalSize_;//始终代表文件完整大小，而非本次任务大小
-    uint64_t bytesDown_;
+    qint64 totalSize_;//始终代表文件完整大小，而非本次任务大小
+    qint64 bytesDown_;
     
     QNetworkReply* reply_;
     std::unique_ptr<QFile> file_;

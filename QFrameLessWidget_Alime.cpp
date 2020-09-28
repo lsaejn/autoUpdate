@@ -204,12 +204,12 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
     return true;
 }
 
-void QFrameLessWidget_Alime::ReadInstallationCDInfo(const nlohmann::json& json)
+void QFrameLessWidget_Alime::ReadInstallationCDInfo(const nlohmann::json&/* json*/)
 {
 
 }
 
-bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent,
+bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
     uint64_t _fileSize, const QString& _url)
 {
     QListWidgetItem* item = new QListWidgetItem();
@@ -232,7 +232,7 @@ void QFrameLessWidget_Alime::ReadFixPacksInfo()
     {
         nlohmann::json array = json_["FixPacks"][versionLocal_];
         QNetworkAccessManager manager;//网上的意思是最多5个请求
-        for (int i = 0; i != array.size(); ++i)
+        for (size_t i = 0; i != array.size(); ++i)
         {
             auto str=array[i].get<std::string>();
             QString url = ConfigFileReadWriter::Instance().GetUrlOfFixPackFolder() + str.c_str();

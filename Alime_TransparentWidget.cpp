@@ -29,11 +29,9 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
     box->setMargin(5);
 }
 
-bool Alime_TransparentWidget::nativeEvent(const QByteArray& eventType, void* message, long* result)
+bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void* message, long* result)
 {
     MSG* msg = (MSG*)message;
-    auto w=width();
-    auto h = height();
     switch (msg->message)
     {
     case WM_NCHITTEST:

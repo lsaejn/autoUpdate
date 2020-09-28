@@ -64,9 +64,9 @@ namespace Alime
 
         static std::wstring GetAppFullPathByPid(DWORD processID)
         {
-            HMODULE hMods[1024] = { 0 };
-            DWORD cbNeeded = 0;
-            unsigned int i = 0;
+            //HMODULE hMods[1024] = { 0 };
+            //DWORD cbNeeded = 0;
+            //unsigned int i = 0;
             HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
                 FALSE, processID);
             if(!hProcess)

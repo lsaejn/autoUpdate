@@ -25,7 +25,7 @@ un...like this?
 #ifndef H_GETTIMEOFDAY
 #define H_GETTIMEOFDAY
 
-inline int gettimeofday(struct timeval* tp, void* tzp) {
+inline int gettimeofday(struct timeval* tp, void* /*tzp*/) {
 	uint64_t  intervals;
 	FILETIME  ft;
 

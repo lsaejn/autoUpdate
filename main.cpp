@@ -13,7 +13,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    auto& ins = ConfigFileReadWriter::Instance();
+    //auto& ins = ConfigFileReadWriter::Instance();
     QssLoader loder(":/qss/dark.qss", app);
 
     CreateFolderForApp();
