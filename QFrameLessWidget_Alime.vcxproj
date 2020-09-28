@@ -144,6 +144,7 @@
     <QtMoc Include="Alime_TransparentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="images\microsoft.svg" />
     <None Include="qss\dark.qss" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +168,40 @@
     <QtMoc Include="TaskThread.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />
     <ClInclude Include="VersionFileFinder.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\close-128.png" />
+    <Image Include="images\close-blue.png" />
+    <Image Include="images\close-gray.png" />
+    <Image Include="images\close.png" />
+    <Image Include="images\deskop-gray.png" />
+    <Image Include="images\deskop.png" />
+    <Image Include="images\exe.png" />
+    <Image Include="images\folder-blue.png" />
+    <Image Include="images\folder.png" />
+    <Image Include="images\iso.png" />
+    <Image Include="images\max-128.png" />
+    <Image Include="images\max.png" />
+    <Image Include="images\menu.png" />
+    <Image Include="images\min-128.png" />
+    <Image Include="images\min.png" />
+    <Image Include="images\my_doc-gray.png" />
+    <Image Include="images\my_doc.png" />
+    <Image Include="images\newFolder.png" />
+    <Image Include="images\pause-blue.png" />
+    <Image Include="images\pause.png" />
+    <Image Include="images\pc-gray.png" />
+    <Image Include="images\pc.png" />
+    <Image Include="images\play-blue.png" />
+    <Image Include="images\play.png" />
+    <Image Include="images\reset.png" />
+    <Image Include="images\restore-128.png" />
+    <Image Include="images\search-hover.png" />
+    <Image Include="images\search.png" />
+    <Image Include="images\setup-blue.png" />
+    <Image Include="images\setup.png" />
+    <Image Include="images\upLayer.png" />
+    <Image Include="images\zip.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

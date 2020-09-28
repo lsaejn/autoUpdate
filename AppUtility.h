@@ -10,7 +10,10 @@ bool IsInstanceOn();
 size_t ToLogLevel(const std::string& level);
 std::string GetExeFolder();
 QString GetDownloadFolder();
+QString GetFolderPart(const QString&);
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+
+void OpenLocalPath(const QString&);
 
 double ToMByte(int sizeInBit);
 double ToKByte(int sizeInBit);

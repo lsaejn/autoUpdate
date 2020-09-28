@@ -5,6 +5,7 @@
 #include <QPushbutton>
 #include <QProgressBar>
 #include <QMessageBox>
+#include <QProcess>
 
 #include <thread>
 
@@ -36,27 +37,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     //右键菜单
-    {
-        QMenu* lableMenu = new QMenu(this);
-        lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
-        lableMenu->addSeparator();
-        lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
-        lableMenu->addSeparator();
-        lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除");
-        CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested, 
-            [=](const QPoint& /*pos*/) {
-                lableMenu->exec(QCursor::pos());
-            }));
-        CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
-            QString str = action->text();
-            if (str == u8"开始")
-                StartDownloadTask();
-            else if (str == u8"暂停")
-                PauseDownloadTask();
-            else if (str == u8"删除")
-                CancelDownloadTask();
-            }));
-    }
+    AddMenuItems();
 
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(0);
@@ -656,4 +637,33 @@ bool DownloadInfoWidget::CheckVersionFileAfterSetup()
 {
     //让你妈给你买棺材
     return true;
+}
+
+void DownloadInfoWidget::AddMenuItems()
+{
+    QMenu* lableMenu = new QMenu(this);
+    lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
+    lableMenu->addSeparator();
+    lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
+    lableMenu->addSeparator();
+    lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除");
+    lableMenu->addSeparator();
+    lableMenu->addAction(QIcon(":/images/folder.png"), u8"打开文件夹");
+    CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested,
+        [=](const QPoint& /*pos*/) {
+            lableMenu->exec(QCursor::pos());
+        }));
+    (connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
+        QString str = action->text();
+        if (str == u8"开始")
+            StartDownloadTask();
+        else if (str == u8"暂停")
+            PauseDownloadTask();
+        else if (str == u8"删除")
+            CancelDownloadTask();
+        else if (str == u8"打开文件夹")
+        {
+            OpenLocalPath(localFilePath_);
+        }
+        }));
 }

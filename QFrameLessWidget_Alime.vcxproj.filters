@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="qss\dark.qss" />
+    <None Include="images\microsoft.svg" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QssLoader.h">
@@ -144,5 +145,103 @@
     <ClInclude Include="Alime\processIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\close.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\close-128.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\close-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\close-gray.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\deskop.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\deskop-gray.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\exe.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\folder.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\folder-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\iso.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\max.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\max-128.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\menu.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\min.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\min-128.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\my_doc.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\my_doc-gray.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\newFolder.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\pause.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\pause-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\pc.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\pc-gray.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\play.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\play-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\reset.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\restore-128.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\search.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\search-hover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\setup.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\setup-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\upLayer.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\zip.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

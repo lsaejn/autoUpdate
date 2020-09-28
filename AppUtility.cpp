@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QApplication>
 #include <QMessageBox>
+#include <QProcess>
 
 #include "AppUtility.h"
 #include "ConfigFileRW.h"
@@ -112,6 +113,18 @@ QString GetDownloadFolder()
     }
 }
 
+QString GetFolderPart(const QString& path)
+{
+    QString result;
+    size_t index = 0;
+    for (size_t i = 0; i != path.size(); ++i)
+    {
+        if (path[i] == '/' || path[i] == '\\')
+            index = i;
+    }
+    return path.mid(0, index + 1);
+}
+
 double ToMByte(int sizeInBit)
 {
     return sizeInBit * 1.0 / (1024 * 1024);
@@ -163,4 +176,23 @@ void CreateFolderForApp()
     QString logDir = downloadDir + "../log/";
     if (!dirInfo.exists(logDir))
         dirInfo.mkdir(logDir);
+}
+
+void OpenLocalPath(const QString& path)
+{
+    QString filePath = path;
+    QProcess process;
+    QString cmd;
+    if (!QFile::exists(path))
+    {
+        filePath = GetFolderPart(path);
+        filePath.replace("/", "\\"); // 只能识别 "\"
+        cmd = QString("explorer.exe /open,\"%1\"").arg(filePath);
+    }
+    else
+    {
+        filePath.replace("/", "\\");
+        QString cmd = QString("explorer.exe /select,\"%1\"").arg(filePath);
+    }
+    process.startDetached(cmd);
 }

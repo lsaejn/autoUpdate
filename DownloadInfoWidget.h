@@ -65,6 +65,7 @@ private:
     bool DoSetup();
     void httpFinished();
     void httpReadyRead();
+    void AddMenuItems();
     void UpdateUiAccordingToState();
     bool CheckVersionFileAfterSetup();
     void StartRequest(const QUrl& url);
