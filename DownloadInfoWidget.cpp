@@ -1,20 +1,22 @@
+#include <QDir>
+#include <QLabel>
+#include <QMenu>
+#include <QLayout>
+#include <QPushbutton>
+#include <QProgressBar>
+#include <QMessageBox>
+
+#include <thread>
+
 #include "DownloadInfoWidget.h"
 #include "Alime/ScopeGuard.h"
 #include "Alime/time/Timestamp.h"
 #include "Alime/time/Duration.h"
 #include "AppUtility.h"
 
-#include <QLayout>
-#include <QPushbutton>
-#include <QLabel>
-#include <QProgressBar>
-#include <QMessageBox>
-#include <QDir>
-#include <QMenu>
-#include <thread>
-
 
 //我们不使用grid，以便做精细布局
+//子widget的parent我设得有点随意，这可能导致一些内存占用问题，我不确定
 DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, uint64_t _fileSize, const QString& _url)
     :QWidget(_parent),
     url_(_url),
@@ -30,36 +32,38 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     reply_(nullptr),
     isBreakPointTranSupported_(true)
 {
-    //fix me, downloadDirectory测试后删除
     localFilePath_ = GetDownloadFolder()+fileName_;
     setContextMenuPolicy(Qt::CustomContextMenu);
-    QMenu* lableMenu = new QMenu(this);
 
-    lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
-    lableMenu->addSeparator();
-    lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
-    lableMenu->addSeparator();
-    lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除");
-    CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested, [=](const QPoint& pos) {
-        lableMenu->exec(QCursor::pos());
-        }));
-        //if(!ret)
-    CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
-        QString str = action->text();
-        if (str == u8"开始")
-            StartDownloadTask();
-        else if (str == u8"暂停")
-            PauseDownloadTask();
-        else if (str == u8"删除")
-            CancelDownloadTask();
-        }));
+    //右键菜单
+    {
+        QMenu* lableMenu = new QMenu(this);
+        lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
+        lableMenu->addSeparator();
+        lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
+        lableMenu->addSeparator();
+        lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除");
+        CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested, 
+            [=](const QPoint& pos) {
+                lableMenu->exec(QCursor::pos());
+            }));
+        CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
+            QString str = action->text();
+            if (str == u8"开始")
+                StartDownloadTask();
+            else if (str == u8"暂停")
+                PauseDownloadTask();
+            else if (str == u8"删除")
+                CancelDownloadTask();
+            }));
+    }
 
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(0);
     mainLayout->addSpacing(5);
     mainLayout->setSpacing(0);
 
-    //debug
+    //debug 调试用
     setAttribute(Qt::WA_StyledBackground, true);
     //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
 
@@ -419,23 +423,34 @@ bool DownloadInfoWidget::PauseDownloadTask()
 #include <QEventLoop>
 #include <QThread>
 #include "TaskThread.h"
+#include "SetupHelper.h"
+
 bool DownloadInfoWidget::DoSetup()
 {
+    ProcessManager checker;
+    checker.SetAppName(L"PKPMMAIN.EXE");
+    checker.ShutDownExistingApp();
+
     TaskThread *t=new TaskThread(this, [=]() {
         QString path(localFilePath_);
+        //fix me, test
         path = "D:\\test app\\Setup.exe";
         std::wstring u16AppPath = path.toStdWString();
+
+ /*       wchar_t buffer[256] = { 0 };
+        for(int i=0; i!=)*/
 
         SHELLEXECUTEINFO ShExecInfo = { 0 };
         ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
         ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
         ShExecInfo.hwnd = NULL;
         ShExecInfo.lpVerb = L"open";
+        ShExecInfo.hInstApp = NULL;
         ShExecInfo.lpFile = u16AppPath.c_str();
         ShExecInfo.lpParameters = L"-PATH=\"D:\\PKPMV3 TEST\"";
         ShExecInfo.lpDirectory = NULL;
         ShExecInfo.nShow = SW_NORMAL;
-        ShExecInfo.hInstApp = NULL;
+        
 
         ShellExecuteExW(&ShExecInfo);
         if (ShExecInfo.hProcess)
@@ -482,10 +497,20 @@ QString DownloadInfoWidget::MakeDownloadHeadway()
 
 QString DownloadInfoWidget::MakeDownloadHeadway(int64_t readed, int64_t total)
 {
-    QString result = QString::number(ToMByte(readed), 'f', 2);
-    result += "MB/";
-    result += QString::number(ToMByte(total), 'f', 2) + "MB";
-    return result;
+    if (total < 10456)
+    {
+        QString result = QString::number(ToKByte(readed), 'f', 2);
+        result += "KB/";
+        result += QString::number(ToKByte(total), 'f', 2) + "KB";
+        return result;
+    }
+    else{
+        QString result = QString::number(ToMByte(readed), 'f', 2);
+        result += "MB/";
+        result += QString::number(ToMByte(total), 'f', 2) + "MB";
+        return result;
+    }
+    
 }
 
 QString DownloadInfoWidget::MakeDurationToString(int second)

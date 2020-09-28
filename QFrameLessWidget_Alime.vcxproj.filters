@@ -138,5 +138,11 @@
     <ClInclude Include="ConfigFileRW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SetupHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Alime\processIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

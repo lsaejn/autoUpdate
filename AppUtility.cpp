@@ -117,6 +117,11 @@ double ToMByte(int sizeInBit)
     return sizeInBit * 1.0 / (1024 * 1024);
 }
 
+double ToKByte(int sizeInBit)
+{
+    return sizeInBit * 1.0 / (1024);
+}
+
 void ShowWarningBox(const QString& title, const QString& waring, const QString& btnText)
 {
     QMessageBox warningBox(QMessageBox::Warning, title, waring);

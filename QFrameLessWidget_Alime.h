@@ -38,8 +38,8 @@ private:
     bool AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent, 
         uint64_t _fileSize, const QString& _url);
 
-    void ReadFixPacksInfo(const nlohmann::json& info);
-    void ReadUpdatePacksInfo(const nlohmann::json& info);
+    void ReadFixPacksInfo();
+    void ReadUpdatePacksInfo();
     void ReadInstallationCDInfo(const nlohmann::json& info);
     
 
@@ -54,4 +54,6 @@ private:
     QLabel* versionTips_;
     std::string mainVersionLocal_;
     std::string versionLocal_;
+
+    nlohmann::json json_;//网络文件对应的json
 };

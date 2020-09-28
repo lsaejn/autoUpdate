@@ -26,6 +26,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 {
     {
         ReadPkgFileInfo();
+        ReadLocalVersion();
     }
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
@@ -42,13 +43,14 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     QVBoxLayout* leftLayout = new QVBoxLayout(leftContent_);
     leftLayout->setMargin(0); 
     
-    QWidget* leftButtons = new QWidget(this);
+    QWidget* leftButtons = new QWidget(this);//按钮在左上
     leftLayout->addWidget(leftButtons);
-    QWidget* dummy = new QWidget(this);
+    QWidget* dummy = new QWidget(this);//下面放一个占位
     leftLayout->addWidget(dummy);
-    leftLayout->setStretch(0, 1);
-    leftLayout->setStretch(1, 1);
+    leftLayout->setStretch(0, 2);
+    leftLayout->setStretch(1, 3);
 
+    ///add left
     ///add left button
     QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
     leftButtonLayout->setMargin(0);
@@ -88,13 +90,10 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     versionTips_ = new QLabel();
     versionTips_->setObjectName("versionTips");
 
-    LocalVersionFile finder;
-    finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
-    QString version= finder.GetLocalVersion().c_str();
-    if (!version.isEmpty())
+    if (!versionLocal_.empty())
     {
         ////fix me
-        versionTips_->setText(u8"检查到当前版本:" + version + "   " + u8"找到以下可升级版本");
+        versionTips_->setText((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下可升级版本").c_str());
     }
     else
     {
@@ -121,10 +120,15 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
         [=]() {
             LocalVersionFile finder;
-            //fix me
             finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
-            QString version = finder.GetLocalVersion().c_str();
+            QString version = QString("V")+ finder.GetLocalVersion().c_str();
             versionTips_->setText(u8"检查到当前版本:" + version);
+            
+            if (version != versionLocal_.c_str())
+            {
+                ReadUpdatePacksInfo();//fix me,去掉参数
+                ReadFixPacksInfo();//fix me
+            }
         });
 
     vbox->addWidget(stackWidget_);
@@ -187,13 +191,16 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
         //fix me, show info "无法读取本地版本信息"
         return false;
     }
-    //ReadInstallationCDInfo(const std::string & info);
-    //ReadFixPacksInfo(const std::string & info);
-    nlohmann::json json = nlohmann::json::parse(str);
-    ReadUpdatePacksInfo(json);
-    ReadFixPacksInfo(json);
-
-
+    try
+    {
+        json_ = nlohmann::json::parse(str);
+        ReadUpdatePacksInfo();
+        ReadFixPacksInfo();
+    }
+    catch (...)
+    {
+        qWarning() << "can not parse info from webInfo.json";
+    }
     return true;
 }
 
@@ -217,13 +224,13 @@ bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWid
 
 //copy了代码，带来不好的味道。
 //需要测试
-void QFrameLessWidget_Alime::ReadFixPacksInfo(const nlohmann::json& info)
+void QFrameLessWidget_Alime::ReadFixPacksInfo()
 {
-    const nlohmann::json& json = info["FixPacks"];
+    const nlohmann::json& json = json_["FixPacks"];
 
     if (!versionLocal_.empty() && json.find(versionLocal_) != json.end())
     {
-        nlohmann::json array = info["FixPacks"][versionLocal_];
+        nlohmann::json array = json_["FixPacks"][versionLocal_];
         QNetworkAccessManager manager;//网上的意思是最多5个请求
         for (int i = 0; i != array.size(); ++i)
         {
@@ -276,10 +283,10 @@ std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nl
 
 }
 
-void QFrameLessWidget_Alime::ReadUpdatePacksInfo(const nlohmann::json& info)
+void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
 {
     //
-    const nlohmann::json& json = info["UpdatePacks"];
+    const nlohmann::json& json = json_["UpdatePacks"];
 
     std::vector<std::string> keys = GetFilteredVersionKeys(json);
     QNetworkAccessManager manager;

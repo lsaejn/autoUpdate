@@ -3,7 +3,6 @@
 #include "duration.h"
 #include <string>
 
-
 namespace Alime 
 {
 	class Timestamp 

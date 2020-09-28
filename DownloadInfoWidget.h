@@ -59,16 +59,16 @@ public:
 
 private:
     bool StartDownloadTask();
-    bool CancelDownloadTask();
     bool PauseDownloadTask();
-    bool DoSetup();
+    bool CancelDownloadTask();
     
+    bool DoSetup();
     void httpFinished();
     void httpReadyRead();
-    void StartRequest(const QUrl& url);
-    bool isTimeToUpdate(double& second);
     void UpdateUiAccordingToState();
     bool CheckVersionFileAfterSetup();
+    void StartRequest(const QUrl& url);
+    bool isTimeToUpdate(double& second);
 
     QString MakeDownloadHeadway();
     QString MakeDownloadHeadway(int64_t reader, int64_t total);
@@ -90,18 +90,18 @@ private:
     QLabel* fileDownloadHeadway_;
 
     QProgressBar* progressBar_;
+
     QPushButton* pauseButton_;
     QPushButton* downloadButton_;
     
+    uint64_t totalSize_;//始终代表文件完整大小，而非本次任务大小
     uint64_t bytesDown_;
-    uint64_t totalSize_;//始终代表整个文件大小，而非本次需下载的总大小
- 
+    
     QNetworkReply* reply_;
     std::unique_ptr<QFile> file_;
     DownloadState downloadState_;
     bool isBreakPointTranSupported_;
     QNetworkAccessManager QNAManager_;
-
 };
 
 
