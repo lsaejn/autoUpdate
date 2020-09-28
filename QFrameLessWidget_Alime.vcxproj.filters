@@ -101,6 +101,7 @@
   <ItemGroup>
     <None Include="qss\dark.qss" />
     <None Include="images\microsoft.svg" />
+    <None Include="qss\blue.qss" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QssLoader.h">

@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="images\microsoft.svg" />
+    <None Include="qss\blue.qss" />
     <None Include="qss\dark.qss" />
   </ItemGroup>
   <ItemGroup>

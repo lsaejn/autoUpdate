@@ -8,7 +8,11 @@ extern HANDLE g_handle;
 
 bool IsInstanceOn();
 size_t ToLogLevel(const std::string& level);
+
 std::string GetExeFolder();
+std::wstring GetExeFolderW();
+QString GetStyleName();
+
 QString GetDownloadFolder();
 QString GetFolderPart(const QString&);
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg);

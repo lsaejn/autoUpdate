@@ -6,11 +6,6 @@
 #include <utility>
 #include <tuple>
 
-
-/*
-modified from folly/scopeGuard.h
-*/
-
 //TupleTyÀàĞÍÎªstd::Tuple<F, A...>
 template <class TupleTy, size_t... indices>
 auto _Invoke(void* _RawVals) noexcept

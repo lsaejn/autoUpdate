@@ -95,6 +95,33 @@ std::string GetExeFolder()
     return std::string(buffer, pos + 1);
 }
 
+std::wstring GetExeFolderW()
+{
+    wchar_t buffer[1024 * 8];
+    GetModuleFileName(NULL, buffer, sizeof(buffer) / sizeof(*buffer));
+    int pos = -1;
+    int index = 0;
+    while (buffer[index])
+    {
+        if (buffer[index] == '\\' || buffer[index] == '/')
+        {
+            pos = index;
+        }
+        index++;
+    }
+    return std::wstring(buffer, pos + 1);
+}
+
+QString GetStyleName()
+{
+    auto path=GetExeFolderW() + L"..\\CFG\\PKPM.ini";
+    int index=GetPrivateProfileIntW(L"InterfaceStyle", L"index", 1, path.c_str());
+    index = 0;
+    if (index == 0)
+        return ":/qss/dark.qss";
+    return ":/qss/blue.qss";
+}
+
 /*
 exe会被放在update文件夹. 下载的文件被放在update/download/下
 */
@@ -192,7 +219,7 @@ void OpenLocalPath(const QString& path)
     else
     {
         filePath.replace("/", "\\");
-        QString cmd = QString("explorer.exe /select,\"%1\"").arg(filePath);
+        cmd = QString("explorer.exe /select,\"%1\"").arg(filePath);
     }
     process.startDetached(cmd);
 }

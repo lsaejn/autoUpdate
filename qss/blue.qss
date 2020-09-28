@@ -1,19 +1,17 @@
  Alime_WindowBase{
  min-height:600px;
  min-width: 900px;
- max-height:600px;
- max-width:900px;
  }
  
  Alime_TitleBar{
-     background-color: rgba(51, 51, 51, 255);
+     background-color: rgba(6,168,255,255);
      max-height: 50px;
      min-height: 50px;
  }
 
  QLabel#titleLabel{
      font-size:16px;
-     color:rgb(153,153,153);
+     color:white;
      border-color: rgb(255,255,0);
  }
 
@@ -27,11 +25,11 @@ Alime_TitleBar> QPushButton:hover{
 }
 
 QWidget#leftContent{
-background-color: rgb(245,245,245);
+background-color: rgb(240,240,240);
 }
 
 QWidget#rightContent{
-background-color: rgb(255,255,255);
+background-color: rgb(246,246,246);
 border-left:2px solid rgba(160,160,160,70);
 }
 
@@ -46,89 +44,89 @@ background-color: rgb(223, 223, 222);
 }
 
 QPushButton#btnBoard:checked{
-    background-color: rgba(87,137,217,50);
-    border-left:8px solid rgb(68,68,68);
+background-color: rgba(87,137,217,50);
+border-left:8px solid rgb(6,168,255);
 }
 
 QLabel{
-    font-size:16px;
-    padding: 0px,0px,0px,0px;
+font-size:16px;
+padding: 0px,0px,0px,0px;
 }
 
 QLabel#versionTips{
-    color: rgb(109,146,173);
+color: rgb(109,146,173);
 }
 
 QLabel#grayLabel{
-    color: rgb(160,160,160);
-    font-size:14px;
-    padding: 0px,0px,0px,0px;
+color: rgb(160,160,160);
+font-size:14px;
+padding: 0px,0px,0px,0px;
 }
 
 QPushButton#ItemPlay{
-    min-width: 22px;
-    max-width: 22px;
-    min-height:22px;
-    max-height:22px;
-    image: url(:/images/play.png);
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/play.png);
 }
 
 QPushButton#ItemPlay:hover{
-    image: url(:/images/play-blue.png);
+image: url(:/images/play-blue.png);
 }
 
 QPushButton#ItemPlayPause{
-    min-width: 22px;
-    max-width: 22px;
-    min-height:22px;
-    max-height:22px;
-    image: url(:/images/pause.png);
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/pause.png);
 }
 
 QPushButton#ItemPlayPause:hover{
-    image: url(:/images/pause-blue.png);
+image: url(:/images/pause-blue.png);
 }
 
 QPushButton#ItemDelete{
-    min-width: 22px;
-    max-width: 22px;
-    min-height:22px;
-    max-height:22px;
-    image: url(:/images/close-gray.png);
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/close-gray.png);
 }
 
 QPushButton#ItemDelete:hover{
-    image: url(:/images/close-blue.png);
+image: url(:/images/close-blue.png);
 }
 
 QPushButton#ItemSetup{
-    min-width: 22px;
-    max-width: 22px;
-    min-height:22px;
-    max-height:22px;
-    image: url(:/images/setup.png);
+min-width: 22px;
+max-width: 22px;
+min-height:22px;
+max-height:22px;
+image: url(:/images/setup.png);
 }
 
 QPushButton#ItemSetup:hover{
-    image: url(:/images/setup-blue.png);
+image: url(:/images/setup-blue.png);
 }
 
 QLabel#exeIconLabel{
-    min-width: 30px;
-    max-width: 30px;
-    image: url(:/images/exe.png);
+min-width: 30px;
+max-width: 30px;
+image: url(:/images/exe.png);
 }
 
 QLabel#isoIconLabel{
-    min-width: 30px;
-    max-width: 30px;
-    image: url(:/images/iso.png);
+min-width: 30px;
+max-width: 30px;
+image: url(:/images/iso.png);
 }
 
 QLabel#itemIconLabel{
-    min-width: 30px;
-    max-width: 30px;
-    image: url(:/images/zip.png);
+min-width: 30px;
+max-width: 30px;
+image: url(:/images/zip.png);
 }
 
 QToolTip {
@@ -144,18 +142,18 @@ QProgressBar{
         background: rgb(229,230,234);
 }
 QProgressBar::chunk {
-    border: none;
-    background: rgb(6, 168, 255);
+        border: none;
+        background: rgb(6, 168, 255);
 }
 
 QListWidget#updatePkgList{
-    background: rgba(6, 168, 255,0);
-    border:none;
+background: rgba(6, 168, 255,0);
+border:none;
 }
 
 QListWidget#fixPkgList{
-    background: rgba(6, 168, 255,0);
-    border:none;
+background: rgba(6, 168, 255,0);
+border:none;
 }
 
 QMenu {

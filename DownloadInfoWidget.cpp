@@ -432,11 +432,12 @@ bool DownloadInfoWidget::DoSetup()
     TaskThread *t=new TaskThread(this, [=]() {
         QString path(localFilePath_);
         //fix me, test
-        path = "D:\\test app\\Setup.exe";
+        //path = "D:\\test app\\Setup.exe";
         std::wstring u16AppPath = path.toStdWString();
 
- /*       wchar_t buffer[256] = { 0 };
-        for(int i=0; i!=)*/
+        auto folder=GetExeFolderW();
+        folder += L"..\\";
+        folder = L"PATH=\"" + folder + L"\"";
 
         SHELLEXECUTEINFO ShExecInfo = { 0 };
         ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -445,7 +446,7 @@ bool DownloadInfoWidget::DoSetup()
         ShExecInfo.lpVerb = L"open";
         ShExecInfo.hInstApp = NULL;
         ShExecInfo.lpFile = u16AppPath.c_str();
-        ShExecInfo.lpParameters = L"-PATH=\"D:\\PKPMV3 TEST\"";
+        ShExecInfo.lpParameters = folder.c_str();
         ShExecInfo.lpDirectory = NULL;
         ShExecInfo.nShow = SW_NORMAL;
         

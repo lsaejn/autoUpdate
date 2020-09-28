@@ -13,17 +13,14 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    //auto& ins = ConfigFileReadWriter::Instance();
-    QssLoader loder(":/qss/dark.qss", app);
+    QssLoader loder(GetStyleName(), app);
 
     CreateFolderForApp();
     qInstallMessageHandler(Logging);
 
-
     ALIME_SCOPE_EXIT{
         if (g_handle != INVALID_HANDLE_VALUE)
-            CloseHandle(g_handle);
-    };
+            CloseHandle(g_handle);};
 
     if (!IsInstanceOn())
     {
