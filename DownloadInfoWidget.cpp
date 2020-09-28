@@ -288,10 +288,27 @@ void DownloadInfoWidget::httpFinished()
     reply_->deleteLater();
     reply_ = nullptr;
     };
+    {
+        file_->flush();
+        file_->close();
+        file_.reset();
+    }
 
-    file_->flush();
-    file_->close();
-    file_.reset();
+    //不应改出现被重定向的情况。但某些内网喜欢搞这种恶心的东西
+    const QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (!redirectionTarget.isNull())
+    {
+        ShowWarningBox(u8"网页被重定向", u8"您所在的网络不支持Http下载", u8"确定");
+        const QUrl redirectedUrl = redirectionTarget.toUrl();
+        file_ = openFileForWrite(localFilePath_);
+        if (!file_)
+        {
+            qWarning() << "could not open file";
+            return;
+        }
+        StartRequest(redirectedUrl);
+        return;
+    }
 
     if (bytesDown_ == totalSize_)
     {
