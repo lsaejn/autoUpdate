@@ -35,7 +35,7 @@ signals:
     void notify_stateLabel(QString);
     void notify_timeLabel(QString);
 public:
-    DownloadInfoWidget(QWidget* parent, const QString& fileName, uint64_t fileSize, const QString& url);
+    DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QString& url);
     ~DownloadInfoWidget()=default;
 
     enum class WebFileType

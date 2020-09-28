@@ -9,6 +9,7 @@ class QListWidget;
 class QNetworkReply;
 class QLabel;
 class QStackedWidget;
+class SetupImageWidget;
 
 /*
 如果不需要水平分割的标题栏
@@ -36,18 +37,18 @@ private:
     std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
 
     bool AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent, 
-        uint64_t _fileSize, const QString& _url);
+        qint64 _fileSize, const QString& _url);
 
     void ReadFixPacksInfo();
     void ReadUpdatePacksInfo();
-    void ReadInstallationCDInfo(const nlohmann::json& info);
-    
+    void ReadInstallationCDInfo();
 
 private:
     QStackedWidget* stackWidget_;
     QListWidget* updatePkgList_;
     QListWidget* isoFileList_;
     QListWidget* fixPkgList_;
+    SetupImageWidget* imageWidget_;
 
     QWidget* leftContent_;
     QWidget* rightContent_;

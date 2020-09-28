@@ -18,7 +18,7 @@
 
 //我们不使用grid，以便做精细布局
 //子widget的parent我设得有点随意，这可能导致一些内存占用问题，我不确定
-DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, uint64_t _fileSize, const QString& _url)
+DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, qint64 _fileSize, const QString& _url)
     :QWidget(_parent),
     url_(_url),
     fileDownloadHeadway_(nullptr),

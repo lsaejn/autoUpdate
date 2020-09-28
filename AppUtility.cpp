@@ -152,12 +152,12 @@ QString GetFolderPart(const QString& path)
     return path.mid(0, index + 1);
 }
 
-double ToMByte(int sizeInBit)
+double ToMByte(long long sizeInBit)
 {
     return sizeInBit * 1.0 / (1024 * 1024);
 }
 
-double ToKByte(int sizeInBit)
+double ToKByte(long long sizeInBit)
 {
     return sizeInBit * 1.0 / (1024);
 }

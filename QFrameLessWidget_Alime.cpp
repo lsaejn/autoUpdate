@@ -108,11 +108,12 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     updatePkgList_->setObjectName("updatePkgList");
     fixPkgList_ = new QListWidget(this);
     fixPkgList_->setObjectName("fixPkgList");
+    imageWidget_ = new SetupImageWidget(this);
 
     stackWidget_ = new QStackedWidget(this);
     stackWidget_->addWidget(updatePkgList_);
     stackWidget_->addWidget(fixPkgList_);
-    stackWidget_->addWidget(new SetupImageWidget(this));
+    stackWidget_->addWidget(imageWidget_);
 
     //不使用ID是担心可能要调整顺序 0.0
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
@@ -126,8 +127,11 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             
             if (version != versionLocal_.c_str())
             {
+                updatePkgList_->clear();
+                fixPkgList_->clear();
                 ReadUpdatePacksInfo();//fix me,去掉参数
                 ReadFixPacksInfo();//fix me
+                ReadInstallationCDInfo();
             }
         });
 
@@ -196,6 +200,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
         json_ = nlohmann::json::parse(str);
         ReadUpdatePacksInfo();
         ReadFixPacksInfo();
+        ReadInstallationCDInfo();
     }
     catch (...)
     {
@@ -204,13 +209,30 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
     return true;
 }
 
-void QFrameLessWidget_Alime::ReadInstallationCDInfo(const nlohmann::json&/* json*/)
+void QFrameLessWidget_Alime::ReadInstallationCDInfo()
 {
+    auto dubugString = json_.dump();
+    const std::string isoFileUrl= json_["LatestIsoUrl"];
+    QNetworkAccessManager manager;
+    QString url(isoFileUrl.c_str());
+    QEventLoop loop;
+    QNetworkReply* reply = manager.head(QNetworkRequest(url));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+    loop.exec();
+    QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+    if (reply->error())
+    {
+        qDebug() << reply->errorString();
+        reply->deleteLater();
+    }
+    reply->deleteLater();
 
+    qint64 pkgSize = var.toLongLong();
+    AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
 }
 
 bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
-    uint64_t _fileSize, const QString& _url)
+    qint64 _fileSize, const QString& _url)
 {
     QListWidgetItem* item = new QListWidgetItem();
     QSize preferSize = item->sizeHint();
@@ -309,7 +331,7 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
         }
         reply->deleteLater();
 
-        int pkgSize = var.toInt();
+        auto pkgSize = var.toLongLong();
         QListWidgetItem* item = new QListWidgetItem();
         QSize preferSize = item->sizeHint();
         item->setSizeHint(QSize(preferSize.width(), 70));

@@ -1,9 +1,10 @@
 #pragma once
-#include <QWidget>
+#include <QListWidget>
 
-class SetupImageWidget : public QWidget
+class SetupImageWidget : public QListWidget
 {
     Q_OBJECT
 public:
     SetupImageWidget(QWidget* parent);
+    void AdjustUIElement();
 };
