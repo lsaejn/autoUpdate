@@ -116,7 +116,6 @@ QString GetStyleName()
 {
     auto path=GetExeFolderW() + L"..\\CFG\\PKPM.ini";
     int index=GetPrivateProfileIntW(L"InterfaceStyle", L"index", 1, path.c_str());
-    index = 0;
     if (index == 0)
         return ":/qss/dark.qss";
     return ":/qss/blue.qss";
@@ -144,7 +143,7 @@ QString GetFolderPart(const QString& path)
 {
     QString result;
     size_t index = 0;
-    for (size_t i = 0; i != path.size(); ++i)
+    for (int i = 0; i != path.size(); ++i)
     {
         if (path[i] == '/' || path[i] == '\\')
             index = i;

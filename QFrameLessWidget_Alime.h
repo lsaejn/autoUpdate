@@ -23,15 +23,15 @@ class QFrameLessWidget_Alime : public Alime_ContentWidget
 public:
     QFrameLessWidget_Alime(QWidget *parent = Q_NULLPTR);
     virtual QString GetTitle() override;
-
+    void SetTips(const QString&, bool isWaring = false);
 private:
     void ReadPkgFileInfo();
+    bool ReadLocalVersion();
     
     void ShowVersionTipsInfo(const QString&);
     void QueryInfoFinish(QNetworkReply* reply);
     bool InitDownloadList(const std::string& pkgFileContent);
 
-    bool ReadLocalVersion();
     //QWidget* MakeNewListItem();
     
     std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
@@ -56,5 +56,6 @@ private:
     std::string mainVersionLocal_;
     std::string versionLocal_;
 
+    bool netAvailable_;
     nlohmann::json json_;//网络文件对应的json
 };

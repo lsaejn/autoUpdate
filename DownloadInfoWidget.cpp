@@ -425,56 +425,21 @@ bool DownloadInfoWidget::PauseDownloadTask()
 
 bool DownloadInfoWidget::DoSetup()
 {
+    if (SetupThread::HasInstance())
+    {
+        ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
+        return false;
+    }
+        
     ProcessManager checker;
     checker.SetAppName(L"PKPMMAIN.EXE");
     checker.ShutDownExistingApp();
 
-    TaskThread *t=new TaskThread(this, [=]() {
-        QString path(localFilePath_);
-        //fix me, test
-        //path = "D:\\test app\\Setup.exe";
-        std::wstring u16AppPath = path.toStdWString();
-
-        auto folder=GetExeFolderW();
-        folder += L"..\\";
-        folder = L"PATH=\"" + folder + L"\"";
-
-        SHELLEXECUTEINFO ShExecInfo = { 0 };
-        ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-        ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-        ShExecInfo.hwnd = NULL;
-        ShExecInfo.lpVerb = L"open";
-        ShExecInfo.hInstApp = NULL;
-        ShExecInfo.lpFile = u16AppPath.c_str();
-        ShExecInfo.lpParameters = folder.c_str();
-        ShExecInfo.lpDirectory = NULL;
-        ShExecInfo.nShow = SW_NORMAL;
-        
-
-        ShellExecuteExW(&ShExecInfo);
-        if (ShExecInfo.hProcess)
-        {
-            //DWORD ret = WAIT_FAILED;
-            if (WAIT_OBJECT_0 == WaitForSingleObject(ShExecInfo.hProcess, INFINITE))
-            {
-                qDebug() << "setup finished ";
-            }
-            else
-            {
-                qWarning() << "WaitForSingleObject error, error code is: " << GetLastError();
-            }
-            CloseHandle(ShExecInfo.hProcess);
-        }
-        else
-        {
-            qDebug() << "failed to create process";
-        }
-        });
-
-    CHECK_CONNECT_ERROR(connect(t, &TaskThread::started, []() {
+    QThread* t =new SetupThread(this, localFilePath_);
+    CHECK_CONNECT_ERROR(connect(t, &QThread::started, []() {
         qDebug() << "succeed to create process ";
         }));
-    CHECK_CONNECT_ERROR(connect(t, &TaskThread::finished, [=]() {
+    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, [=]() {
         bool ret = CheckVersionFileAfterSetup();
         if (!ret)
         {
@@ -484,7 +449,7 @@ bool DownloadInfoWidget::DoSetup()
             //update Ui here
         }
         }));
-    CHECK_CONNECT_ERROR(connect(t, &TaskThread::finished, t, &QObject::deleteLater));
+    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));
     t->start();
     return true;
 }

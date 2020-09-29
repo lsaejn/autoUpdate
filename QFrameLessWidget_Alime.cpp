@@ -22,7 +22,16 @@
 CLASSREGISTER(QFrameLessWidget_Alime)
 
 QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
-    : Alime_ContentWidget(parent)
+    : Alime_ContentWidget(parent),
+    netAvailable_(false),
+    stackWidget_(nullptr),
+    updatePkgList_(nullptr),
+    isoFileList_(nullptr),
+    fixPkgList_(nullptr),
+    imageWidget_(nullptr),
+    leftContent_(nullptr),
+    rightContent_(nullptr),
+    versionTips_(nullptr)
 {
     {
         ReadPkgFileInfo();
@@ -98,7 +107,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     else
     {
         QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
-                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询当前版本信息, 请从官网下载");
+                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询本地版本信息, 请从官网下载");
         ShowVersionTipsInfo(strHTML);
     }
 
@@ -124,6 +133,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
             QString version = QString("V")+ finder.GetLocalVersion().c_str();
             versionTips_->setText(u8"检查到当前版本:" + version);
+            if (netAvailable_);
             
             if (version != versionLocal_.c_str())
             {
@@ -152,12 +162,12 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
     if (ret != QNetworkReply::NoError)
     {
         qWarning() << "Error Happened";
-        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
-                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法检查到程序升级信息，请检查网络");
-        ShowVersionTipsInfo(strHTML);
+        SetTips(u8"无法检查到程序升级信息，请检查网络", true);
+        netAvailable_ = false;
     }
     else
     {
+        netAvailable_ = true;
         const QByteArray reply_data = reply->readAll();
         QString str(reply_data);
         InitDownloadList(str.toStdString());
@@ -342,8 +352,19 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
     }
 }
 
-
 void QFrameLessWidget_Alime::ShowVersionTipsInfo(const QString& str)
 {
     versionTips_->setText(str);
+}
+
+void QFrameLessWidget_Alime::SetTips(const QString& str, bool IsColorRed)
+{
+    if(!IsColorRed)
+        ShowVersionTipsInfo(str);
+    else
+    {
+        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
+                            <body><font id=\"f\">%1</font></body></html>").arg(str);
+        ShowVersionTipsInfo(strHTML);
+    }
 }

@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClCompile Include="SetupImageWidget.cpp" />
     <ClCompile Include="String_utility.cpp" />
+    <ClCompile Include="TaskThread.cpp" />
     <QtRcc Include="QFrameLessWidget_Alime.qrc" />
     <QtUic Include="QFrameLessWidget_Alime.ui" />
     <QtMoc Include="QFrameLessWidget_Alime.h" />

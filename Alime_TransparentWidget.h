@@ -1,5 +1,14 @@
 #pragma once
 #include <QWidget>
+/*
+--------------Alime_TransparentWidget---
+|-------------Alime_WindowBase----------|
+|-------------Alime_TitleBar---------------.|
+|          |                                                    |
+|          |------Alime_ContentWidget-------|
+|          |                                                    |
+|----------------------------------------......|
+*/
 
 class Alime_TransparentWidget : public QWidget
 {
