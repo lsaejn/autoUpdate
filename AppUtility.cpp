@@ -161,6 +161,30 @@ double ToKByte(long long sizeInBit)
     return sizeInBit * 1.0 / (1024);
 }
 
+QString MakeDownloadSpeed(long long bytesInSecond)
+{
+    if (bytesInSecond < 1024)
+    {
+        QString result = QString::number(bytesInSecond);
+        result += " B/s";
+        return result;
+    }
+    double kBytesInSecond = bytesInSecond / 1024;
+    if (kBytesInSecond < 1024)
+    {
+        QString result = QString::number(kBytesInSecond);
+        result += " KB/s";
+        return result;
+    }
+    else
+    {
+        double mBytes=kBytesInSecond /1024;
+        QString result = QString::number(mBytes, 'g', 2);
+        result += " MB/s";
+        return result;
+    }
+}
+
 void ShowWarningBox(const QString& title, const QString& waring, const QString& btnText)
 {
     QMessageBox warningBox(QMessageBox::Warning, title, waring);
@@ -209,9 +233,10 @@ void OpenLocalPath(const QString& path)
     QString filePath = path;
     QProcess process;
     QString cmd;
-    if (!QFile::exists(path))
+
+    QFileInfo fileinfo(filePath);
+    if (fileinfo.isDir())
     {
-        filePath = GetFolderPart(path);
         filePath.replace("/", "\\"); // 只能识别 "\"
         cmd = QString("explorer.exe /open,\"%1\"").arg(filePath);
     }

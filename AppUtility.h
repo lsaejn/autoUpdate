@@ -21,6 +21,7 @@ void OpenLocalPath(const QString&);
 
 double ToMByte(long long sizeInBit);
 double ToKByte(long long sizeInBit);
+QString MakeDownloadSpeed(long long bytesInSecond);
 
 void ShowWarningBox(const QString& title, const QString& waring, const QString& btnText);
 bool ShowQuestionBox(const QString& title, const QString& info, const QString& yesText, const QString& noText);

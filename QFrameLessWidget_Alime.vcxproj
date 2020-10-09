@@ -107,9 +107,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="alternative\FolderCompare.cpp" />
+    <ClCompile Include="alternative\FakePackage.cpp" />
     <ClCompile Include="SetupImageWidget.cpp" />
     <ClCompile Include="String_utility.cpp" />
     <ClCompile Include="TaskThread.cpp" />
+    <ClCompile Include="alternative\WebFiles.cpp" />
     <QtRcc Include="QFrameLessWidget_Alime.qrc" />
     <QtUic Include="QFrameLessWidget_Alime.ui" />
     <QtMoc Include="QFrameLessWidget_Alime.h" />
@@ -153,6 +156,7 @@
     <QtMoc Include="Alime_ContentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="alternative\WebFiles.h" />
     <QtMoc Include="DownloadInfoWidget.h" />
     <ClInclude Include="Alime\processIterator.h" />
     <ClInclude Include="Alime\ScopeGuard.h" />
@@ -162,6 +166,8 @@
     <ClInclude Include="AppUtility.h" />
     <ClInclude Include="AppVersion.h" />
     <ClInclude Include="ConfigFileRW.h" />
+    <ClInclude Include="alternative\FolderCompare.h" />
+    <ClInclude Include="alternative\FakePackage.h" />
     <ClInclude Include="Md5Checker.h" />
     <ClInclude Include="QssLoader.h" />
     <QtMoc Include="SetupImageWidget.h" />

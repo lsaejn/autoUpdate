@@ -77,6 +77,15 @@
     <ClCompile Include="TaskThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="alternative\FolderCompare.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alternative\FakePackage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alternative\WebFiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -147,6 +156,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Alime\processIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alternative\FolderCompare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alternative\FakePackage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alternative\WebFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

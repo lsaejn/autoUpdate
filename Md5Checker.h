@@ -6,6 +6,8 @@
 #include <QFile>
 #include <QDebug>
 
+
+
 class MD5Checker
 {
 public:

@@ -295,7 +295,7 @@ void DownloadInfoWidget::httpFinished()
     {
         downloadState_ = DownloadState::Finished;
         downloadStatusLabel_->setText(u8"已完成");
-        QMessageBox::information(NULL, "Tip", QString(u8"是否立即安装"));
+        QMessageBox::information(NULL, "Tip", QString(u8"下载完成"));
     }
     else if (bytesDown_ < totalSize_ )
     {
@@ -511,10 +511,9 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
     emit notify_progressInfo(v);
 
     uint64_t increment = bytesReceived+ size_lastDownloadTask - bytesDown_;
-    int speed = increment / 1024 / secondElepsed;
-    QString result = QString::number(speed);
-    result += " KB/s";
-    emit notify_stateLabel(result);
+    long long speed = increment/secondElepsed;//数字太大
+    QString speedString = MakeDownloadSpeed(speed);
+    emit notify_stateLabel(speedString);
 
     //fix me, 估计剩余时间
     int secondLeftEstimated = (bytesTotal - bytesReceived) / (increment / secondElepsed);
@@ -631,7 +630,13 @@ void DownloadInfoWidget::AddMenuItems()
             CancelDownloadTask();
         else if (str == u8"打开所在文件夹")
         {
-            OpenLocalPath(localFilePath_);
+            if(QFile::exists(localFilePath_))
+                OpenLocalPath(localFilePath_);
+            else {
+                auto index=localFilePath_.lastIndexOf("/");
+                auto folderPath = localFilePath_.mid(0, index);
+                OpenLocalPath(folderPath);
+            }
         }
         }));
 }

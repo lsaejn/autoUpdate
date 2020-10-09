@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alime_Ribbon", "..\Alime_Ri
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unitTest", "..\unitTest\unitTest.vcxproj", "{EE12E643-B78F-48A2-A5E7-A7BBBEC79F51}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtQuickApp", "..\QtQuickApp\QtQuickApp.vcxproj", "{3FE71C5D-CAB8-4321-91E5-C37A009867B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -63,6 +65,12 @@ Global
 		{EE12E643-B78F-48A2-A5E7-A7BBBEC79F51}.Release|x64.Build.0 = Release|x64
 		{EE12E643-B78F-48A2-A5E7-A7BBBEC79F51}.Release|x86.ActiveCfg = Release|Win32
 		{EE12E643-B78F-48A2-A5E7-A7BBBEC79F51}.Release|x86.Build.0 = Release|Win32
+		{3FE71C5D-CAB8-4321-91E5-C37A009867B2}.Debug|x64.ActiveCfg = Debug|Win32
+		{3FE71C5D-CAB8-4321-91E5-C37A009867B2}.Debug|x86.ActiveCfg = Debug|Win32
+		{3FE71C5D-CAB8-4321-91E5-C37A009867B2}.Debug|x86.Build.0 = Debug|Win32
+		{3FE71C5D-CAB8-4321-91E5-C37A009867B2}.Release|x64.ActiveCfg = Release|Win32
+		{3FE71C5D-CAB8-4321-91E5-C37A009867B2}.Release|x86.ActiveCfg = Release|Win32
+		{3FE71C5D-CAB8-4321-91E5-C37A009867B2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
