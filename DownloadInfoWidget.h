@@ -34,6 +34,8 @@ signals:
     void notify_playButton(bool);
     void notify_stateLabel(QString);
     void notify_timeLabel(QString);
+public slots:
+    void ShowTipsWhenSetupFinished(int);
 public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QString& url);
     ~DownloadInfoWidget()=default;
@@ -57,11 +59,11 @@ public:
         Finished
     };
 
-private:
+public:
     bool StartDownloadTask();
     bool PauseDownloadTask();
     bool CancelDownloadTask();
-    
+private:
     bool DoSetup();
     void httpFinished();
     void httpReadyRead();

@@ -437,7 +437,7 @@ bool DownloadInfoWidget::DoSetup()
     checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
     checker.ShutDownFuzzyMatchApp();
 
-    QThread* t =new SetupThread(this, localFilePath_);
+    SetupThread* t =new SetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, []() {
         qDebug() << "succeed to create process ";
         }));
@@ -452,8 +452,22 @@ bool DownloadInfoWidget::DoSetup()
         }
         }));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));
+    connect(t, &SetupThread::TaskFinished, this, 
+        &DownloadInfoWidget::ShowTipsWhenSetupFinished);
     t->start();
     return true;
+}
+
+void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
+{
+    if (!errorCode)
+    {
+        ShowWarningBox(u8"成功", u8"安装程序执行完毕", u8"确定");
+        return;
+    }
+    else {
+        ShowWarningBox(u8"错误", u8"安装失败", u8"确定");
+    }
 }
 
 QString DownloadInfoWidget::MakeDownloadHeadway()

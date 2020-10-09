@@ -71,9 +71,9 @@ public:
     static bool HasInstance() { return hasInstance; }
 
 signals:
-    void TaskFinished();
+    void TaskFinished(int exitCode);
 protected:
-    void run()
+    virtual void run()
     {
         QString path(localFilePath_);
         std::wstring u16AppPath = path.toStdWString();
@@ -98,14 +98,28 @@ protected:
         {
             while (!isInterruptionRequested())
             {
-                if (WAIT_OBJECT_0 == WaitForSingleObject(ShExecInfo.hProcess, 1000))
+                auto ret = WaitForSingleObject(ShExecInfo.hProcess, 1000);
+                if (WAIT_OBJECT_0 == ret)
                 {
                     qDebug() << "setup finished ";
+                    emit TaskFinished(0);
                     break;
                 }
-                else
+                else if(WAIT_FAILED==ret)
                 {
-                    qWarning() << "WaitForSingleObject error, error code is: " << GetLastError();
+                    qWarning() << "WaitForSingleObject func error, error code is: " << GetLastError();
+                    emit TaskFinished(1);
+                    break;
+                }
+                else if (WAIT_TIMEOUT == ret)
+                {
+                    qDebug() << "time out";
+                }
+                else if (WAIT_ABANDONED == ret)
+                {
+                    qWarning() << "setup.exe is corrupted";
+                    emit TaskFinished(1);
+                    break;
                 }
             }
             CloseHandle(ShExecInfo.hProcess);
@@ -113,6 +127,7 @@ protected:
         else
         {
             qDebug() << "failed to create process";
+            emit TaskFinished(2);
         }
     }
 private:
