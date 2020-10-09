@@ -4,6 +4,7 @@
 #include <QCryptographicHash>
 #include <QString>
 #include <QFile>
+#include <QDebug>
 
 class MD5Checker
 {

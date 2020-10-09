@@ -18,7 +18,7 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
     shadow->setObjectName("border");
     shadow->setOffset(0, 0);
     shadow->setColor(QColor("#FF444444"));
-    ////ÒõÓ°Ô²½Ç
+
     shadow->setBlurRadius(10);
     QVBoxLayout* box = new QVBoxLayout(this);
     Alime_WindowBase* base= new Alime_WindowBase(this, box);

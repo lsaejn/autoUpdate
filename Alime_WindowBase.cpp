@@ -19,8 +19,9 @@ Alime_WindowBase::Alime_WindowBase(QWidget* parent, QLayout* ownerBox)
 {
     //¿Í»§Çø
     auto content = Alime_ContentWidget::creator_(this);
-
     titleBar_ = new Alime_TitleBar(this);
+
+    //fix me£¬modify shadowWindow or move installEventFilter
     installEventFilter(titleBar_);
     titleBar_->SysButtonEventRegister([=]() { box_->setMargin(content->GetShadowWidth());}, false);
     titleBar_->SysButtonEventRegister([=]() {box_->setMargin(0);}, true);
@@ -39,7 +40,7 @@ Alime_WindowBase::Alime_WindowBase(QWidget* parent, QLayout* ownerBox)
     pLayout->addWidget(content);
 
     pLayout->setSpacing(0);
-    pLayout->setContentsMargins(0, 0, 0, 0);
+    pLayout->setMargin(0);
     setLayout(pLayout);
 }
 

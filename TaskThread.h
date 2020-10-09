@@ -40,7 +40,9 @@ private:
 
 #include <atomic>
 
-
+/*
+* 关闭所有程序是因为可能控件正在被使用
+*/
 class SetupThread : public QThread
 {
     Q_OBJECT

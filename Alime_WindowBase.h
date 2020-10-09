@@ -10,9 +10,9 @@ class Alime_WindowBase : public QWidget
 
 public:
     Alime_WindowBase(QWidget* parent = Q_NULLPTR, QLayout* ownerBox= Q_NULLPTR);
-    void SetWindowTitle(const QString& titleName);
-    void SetWindowIcon(const QString& qrcPath);
-    void SetSysButton(const QString& minB, const QString& max, const QString& restore, const QString& close);
+    //void SetWindowTitle(const QString& titleName);
+    //void SetWindowIcon(const QString& qrcPath);
+    //void SetSysButton(const QString& minB, const QString& max, const QString& restore, const QString& close);
 private:
     Alime_TitleBar* titleBar_;
     QLayout* box_;

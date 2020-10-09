@@ -432,8 +432,10 @@ bool DownloadInfoWidget::DoSetup()
     }
         
     ProcessManager checker;
-    checker.SetAppName(L"PKPMMAIN.EXE");
+    checker.SetMatchReg(L"PKPMMAIN.EXE");
     checker.ShutDownExistingApp();
+    checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
+    checker.ShutDownFuzzyMatchApp();
 
     QThread* t =new SetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, []() {
@@ -608,13 +610,13 @@ bool DownloadInfoWidget::CheckVersionFileAfterSetup()
 void DownloadInfoWidget::AddMenuItems()
 {
     QMenu* lableMenu = new QMenu(this);
-    lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
-    lableMenu->addSeparator();
-    lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
-    lableMenu->addSeparator();
+    //lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
+    //lableMenu->addSeparator();
+    //lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
+    //lableMenu->addSeparator();
     lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除");
     lableMenu->addSeparator();
-    lableMenu->addAction(QIcon(":/images/folder.png"), u8"打开文件夹");
+    lableMenu->addAction(QIcon(":/images/folder.png"), u8"打开所在文件夹");
     CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested,
         [=](const QPoint& /*pos*/) {
             lableMenu->exec(QCursor::pos());
@@ -627,7 +629,7 @@ void DownloadInfoWidget::AddMenuItems()
             PauseDownloadTask();
         else if (str == u8"删除")
             CancelDownloadTask();
-        else if (str == u8"打开文件夹")
+        else if (str == u8"打开所在文件夹")
         {
             OpenLocalPath(localFilePath_);
         }
