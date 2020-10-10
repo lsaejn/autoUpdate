@@ -380,7 +380,6 @@ bool DownloadInfoWidget::CancelDownloadTask()
 {
     if (downloadState_ == DownloadState::NotStarted)
     {
-        //we do nothing
         QFile::remove(localFilePath_);
         LoadingProgressForBreakPoint();
         return true;
@@ -432,6 +431,16 @@ bool DownloadInfoWidget::PauseDownloadTask()
 
 bool DownloadInfoWidget::DoSetup()
 {
+    if (DownloadState::Finished != downloadState_)
+    {
+        ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
+        return false;
+    }
+    else if (localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
+    {
+        qDebug() << "not a valid exe file";
+    }
+
     if (SetupThread::HasInstance())
     {
         ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
@@ -613,6 +622,7 @@ void DownloadInfoWidget::LoadingProgressForBreakPoint()
     else
     {
         bytesDown_=fileInfo.size();
+        qWarning() << "why delete this file?";
         qDebug() << bytesDown_;
         if (bytesDown_ > totalSize_)
         {

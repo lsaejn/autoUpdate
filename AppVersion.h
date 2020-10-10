@@ -13,7 +13,7 @@ class LocalVersionFile
 public:
     LocalVersionFile()
     {
-        folder_= GetExeFolder()+"CFG";
+        folder_= GetExeFolder()+"../CFG/";
     }
 
     ~LocalVersionFile() = default;

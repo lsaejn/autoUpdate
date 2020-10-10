@@ -127,10 +127,13 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     //不使用ID是担心可能要调整顺序 0.0
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
         stackWidget_, &QStackedWidget::setCurrentIndex);
+
+    //fix me, 删掉这个连接。
+    //每次更新完成后，重新读版本信息文件，然后刷新列表
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
         [=]() {
             LocalVersionFile finder;
-            finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
+            auto newVersion=finder.GetLocalVersion();
             QString version = QString("V")+ finder.GetLocalVersion().c_str();
             //versionTips_->setText(u8"检查到当前版本:" + version);
             if (netAvailable_)
@@ -140,11 +143,13 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             }
             else
                 return;
-            
+            //fix me, 没有测试过这一块
             if (version != versionLocal_.c_str())
             {
                 updatePkgList_->clear();
                 fixPkgList_->clear();
+                isoFileList_->clear();
+                ReadLocalVersion();
                 ReadUpdatePacksInfo();//fix me,去掉参数
                 ReadFixPacksInfo();//fix me
                 ReadInstallationCDInfo();
@@ -187,7 +192,8 @@ QString QFrameLessWidget_Alime::GetTitle()
 
 bool QFrameLessWidget_Alime::ReadLocalVersion()
 {
-    auto versionFiles = FindSpecificFiles::FindVersionFiles(QApplication::applicationDirPath().toLocal8Bit().data(), "V", "ini");
+    auto versionFiles = FindSpecificFiles::FindVersionFiles(
+        (QApplication::applicationDirPath()+u8"/../CFG/").toLocal8Bit().data(), "V", "ini");
     if (versionFiles.size() == 0)
     {
         qWarning() << u8"无法找到版本信息文件";

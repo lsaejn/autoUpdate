@@ -109,6 +109,7 @@ private:
     
     QNetworkReply* reply_;
     std::unique_ptr<QFile> file_;
+    //fix me, use function instead
     DownloadState downloadState_;
     bool isBreakPointTranSupported_;
     QNetworkAccessManager QNAManager_;
