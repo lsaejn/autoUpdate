@@ -132,8 +132,14 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             LocalVersionFile finder;
             finder.SetVersionFileFolder(QApplication::applicationDirPath().toLocal8Bit().data());
             QString version = QString("V")+ finder.GetLocalVersion().c_str();
-            versionTips_->setText(u8"检查到当前版本:" + version);
-            if (netAvailable_);
+            //versionTips_->setText(u8"检查到当前版本:" + version);
+            if (netAvailable_)
+            {
+                QString tips= version+ u8"   找到以下可用信息";
+                versionTips_->setText(u8"检查到当前版本:" + tips);
+            }
+            else
+                return;
             
             if (version != versionLocal_.c_str())
             {

@@ -36,6 +36,9 @@ signals:
     void notify_timeLabel(QString);
 public slots:
     void ShowTipsWhenSetupFinished(int);
+    void SetupStarted();
+    void SetupFinished();
+    
 public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QString& url);
     ~DownloadInfoWidget()=default;
@@ -59,15 +62,18 @@ public:
         Finished
     };
 
+//用户操作设为public，方便记忆
 public:
     bool StartDownloadTask();
     bool PauseDownloadTask();
     bool CancelDownloadTask();
+
 private:
     bool DoSetup();
     void httpFinished();
     void httpReadyRead();
     void AddMenuItems();
+    void ShowSetupProgress(bool);
     void UpdateUiAccordingToState();
     bool CheckVersionFileAfterSetup();
     void StartRequest(const QUrl& url);
@@ -93,6 +99,7 @@ private:
     QLabel* fileDownloadHeadway_;
 
     QProgressBar* progressBar_;
+    QProgressBar* setupProgressBar_;
 
     QPushButton* pauseButton_;
     QPushButton* downloadButton_;

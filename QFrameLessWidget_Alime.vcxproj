@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClCompile Include="alternative\FolderCompare.cpp" />
     <ClCompile Include="alternative\FakePackage.cpp" />
+    <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp" />
     <ClCompile Include="SetupImageWidget.cpp" />
     <ClCompile Include="String_utility.cpp" />
     <ClCompile Include="TaskThread.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="ConfigFileRW.h" />
     <ClInclude Include="alternative\FolderCompare.h" />
     <ClInclude Include="alternative\FakePackage.h" />
+    <QtMoc Include="alternative\FolderDownloadInfoWidget.h" />
     <ClInclude Include="Md5Checker.h" />
     <ClInclude Include="QssLoader.h" />
     <QtMoc Include="SetupImageWidget.h" />

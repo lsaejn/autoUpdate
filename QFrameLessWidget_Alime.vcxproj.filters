@@ -86,6 +86,9 @@
     <ClCompile Include="alternative\WebFiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -107,6 +110,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="SetupImageWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="alternative\FolderDownloadInfoWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

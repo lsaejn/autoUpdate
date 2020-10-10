@@ -130,7 +130,7 @@ QLabel#itemIconLabel{
 }
 
 QToolTip {
-    border: 1px solid rgb(90,137,218);
+    border: 1px solid rgb(120,120,120);
     padding: 2px;
     background-color: rgb(250,250,248);
 }

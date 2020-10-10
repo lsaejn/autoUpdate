@@ -93,8 +93,14 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         progressBar_ = new QProgressBar(this);
         progressBar_->setFixedWidth(240);
         progressBar_->setRange(0, 100);
-        downloadStateBox->addWidget(progressBar_);
 
+        setupProgressBar_ = new QProgressBar(this);
+        setupProgressBar_->setFixedWidth(240);
+        setupProgressBar_->setRange(0, 0);
+        setupProgressBar_->setVisible(false);
+        downloadStateBox->addWidget(setupProgressBar_);
+
+        downloadStateBox->addWidget(progressBar_);
         {
             QWidget* stateSubBox = new QWidget();
             QHBoxLayout* subBox = new QHBoxLayout(stateSubBox);
@@ -357,7 +363,8 @@ void DownloadInfoWidget::httpReadyRead()
 
 bool DownloadInfoWidget::isTimeToUpdate(double& second)
 {
-    //我们统一在readCallback里更新，所以可以这么做
+    //fix me, 我们统一在readCallback里更新，所以可以这么做
+    //这也导致多个任务的时候，刚启动的任务计算是错误的。
     static Alime::Timestamp lastUpdate = Alime::Timestamp::Now();
     Alime::Timestamp now = Alime::Timestamp::Now();
     if (now - lastUpdate >= Alime::Duration::Seconds(1))
@@ -438,9 +445,8 @@ bool DownloadInfoWidget::DoSetup()
     checker.ShutDownFuzzyMatchApp();
 
     SetupThread* t =new SetupThread(this, localFilePath_);
-    CHECK_CONNECT_ERROR(connect(t, &QThread::started, []() {
-        qDebug() << "succeed to create process ";
-        }));
+    CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
+    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, [=]() {
         bool ret = CheckVersionFileAfterSetup();
         if (!ret)
@@ -468,6 +474,31 @@ void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
     else {
         ShowWarningBox(u8"错误", u8"安装失败", u8"确定");
     }
+}
+
+void DownloadInfoWidget::ShowSetupProgress(bool visible)
+{
+    if (visible)
+    {
+        progressBar_->setVisible(false);
+        setupProgressBar_->setVisible(true);
+        downloadStatusLabel_->setText(u8"正在安装...");
+    }
+    else
+    {
+        progressBar_->setVisible(true);
+        setupProgressBar_->setVisible(false);
+        downloadStatusLabel_->setText(u8"已完成");
+    }
+}
+void DownloadInfoWidget::SetupStarted()
+{
+    ShowSetupProgress(true);
+}
+
+void  DownloadInfoWidget::SetupFinished()
+{
+    ShowSetupProgress(false);
 }
 
 QString DownloadInfoWidget::MakeDownloadHeadway()
