@@ -20,5 +20,6 @@
         <file>images/setup-blue.png</file>
         <file>images/exe.png</file>
         <file>images/iso.png</file>
+        <file>images/PkpmV52.ico</file>
     </qresource>
 </RCC>

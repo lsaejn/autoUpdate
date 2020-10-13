@@ -85,10 +85,20 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     btn03->setCheckable(true);
     leftButtonLayout->addWidget(btn03);
 
+    //QPushButton* btn04 = new QPushButton(u8"差异更新/测试");
+    //btn04->setObjectName("btnBoard");
+    //btn04->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //btn04->setCheckable(true);
+    //leftButtonLayout->addWidget(btn04);
+
     QButtonGroup* group = new QButtonGroup(this);
-    group->addButton(btn01,0);
-    group->addButton(btn02,1);
-    group->addButton(btn03,2);
+    group->addButton(btn01, 0);
+    group->addButton(btn02, 1);
+    group->addButton(btn03, 2);
+
+    //group->addButton(btn04, 3);
+
+
     
     //leftContent->setFixedWidth(240);
 
@@ -107,7 +117,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     else
     {
         QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
-                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询本地版本信息, 请从官网下载");
+                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询本地版本信息, 请从官网重新下载完整程序");
         ShowVersionTipsInfo(strHTML);
     }
 
@@ -134,7 +144,9 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
         [=]() {
             LocalVersionFile finder;
             auto newVersion=finder.GetLocalVersion();
-            QString version = QString("V")+ finder.GetLocalVersion().c_str();
+            if (newVersion.empty())
+                return;
+            QString version = QString("V")+ newVersion.c_str();
             //versionTips_->setText(u8"检查到当前版本:" + version);
             if (netAvailable_)
             {
@@ -148,11 +160,11 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             {
                 updatePkgList_->clear();
                 fixPkgList_->clear();
-                isoFileList_->clear();
+                //imageWidget_->clear();
                 ReadLocalVersion();
                 ReadUpdatePacksInfo();//fix me,去掉参数
                 ReadFixPacksInfo();//fix me
-                ReadInstallationCDInfo();
+                //ReadInstallationCDInfo();
             }
         });
 
@@ -250,6 +262,7 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo()
     reply->deleteLater();
 
     qint64 pkgSize = var.toLongLong();
+    qDebug() << "pkgSize= "<< pkgSize;
     AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
 }
 

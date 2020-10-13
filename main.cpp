@@ -9,10 +9,12 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QtWidgets/QApplication>
+#include <QFontDatabase>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
     QssLoader loder(GetStyleName(), app);
 
     CreateFolderForApp();

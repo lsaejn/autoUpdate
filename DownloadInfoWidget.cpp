@@ -6,10 +6,15 @@
 #include <QProgressBar>
 #include <QMessageBox>
 #include <QProcess>
+#include <QEventLoop>
+#include <QThread>
+
 
 #include <thread>
 
 #include "DownloadInfoWidget.h"
+#include "TaskThread.h"
+#include "SetupHelper.h"
 #include "Alime/ScopeGuard.h"
 #include "Alime/time/Timestamp.h"
 #include "Alime/time/Duration.h"
@@ -275,7 +280,7 @@ void DownloadInfoWidget::httpFinished()
     reply_->deleteLater();
     reply_ = nullptr;
     };
-    {
+    {//fix me, 移除
         file_->flush();
         file_->close();
         file_.reset();
@@ -285,15 +290,19 @@ void DownloadInfoWidget::httpFinished()
     const QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!redirectionTarget.isNull())
     {
-        ShowWarningBox(u8"网页被重定向", u8"您所在的网络不支持Http下载", u8"确定");
+        ShowWarningBox(u8"资源被重定向", u8"您所在的网络不支持Http下载", u8"确定");
         const QUrl redirectedUrl = redirectionTarget.toUrl();
+        int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << redirectedUrl.toString();
+        qDebug() << "status code is "<<statusCode;
         file_ = openFileForWrite(localFilePath_);
         if (!file_)
         {
             qWarning() << "could not open file";
             return;
         }
-        StartRequest(redirectedUrl);
+        //fix me, 支持重定向
+        //StartRequest(redirectedUrl);
         return;
     }
 
@@ -423,12 +432,6 @@ bool DownloadInfoWidget::PauseDownloadTask()
     }
 }
 
-#include <QProcess>
-#include <QEventLoop>
-#include <QThread>
-#include "TaskThread.h"
-#include "SetupHelper.h"
-
 bool DownloadInfoWidget::DoSetup()
 {
     if (DownloadState::Finished != downloadState_)
@@ -550,6 +553,7 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
     if (bytesTotal == 0)
     {
         qWarning() << u8"频繁操作触发了Qt的bug";
+        qWarning() << u8"bytesTotal=0, 服务器数据错误";
         return;
     }
     double secondElepsed = 1.0;

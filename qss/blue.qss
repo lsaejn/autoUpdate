@@ -1,4 +1,4 @@
- Alime_WindowBase{
+Alime_TransparentWidget{
      min-height:600px;
      min-width: 900px;
  }
@@ -162,13 +162,13 @@ QListWidget#SetupImageWidget{
 }
 
 QMenu {
-    icon-size: 12px;
+    icon-size: 16px;
 }
 
 QMenu::item
 {
     background: transparent;
-    padding:2px 16px;
+    padding:2px 26px;
 }
 
 QMenu::item:selected {

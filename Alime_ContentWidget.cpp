@@ -16,7 +16,7 @@ QString Alime_ContentWidget::GetTitle()
 
 QString Alime_ContentWidget::GetIcon()
 {
-	return ":/images/microsoft.svg";
+	return ":/images/PkpmV52.ico";
 }
 
 int Alime_ContentWidget::GetShadowWidth()
