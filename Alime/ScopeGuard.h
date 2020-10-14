@@ -71,8 +71,6 @@ auto catch_exception(Try&& t, Catch&& c, CatchA&&... a) -> typename std::common_
     }
 }
 
-
-
 class ScopeGuardImplBase
 {
 public:
@@ -106,7 +104,6 @@ protected:
 protected:
     bool dismissed_;
 };
-
 
 template <typename F, bool InvokeNoexcept>
 class ScopeGuardImpl : public ScopeGuardImplBase

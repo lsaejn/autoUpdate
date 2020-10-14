@@ -246,7 +246,12 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 void QFrameLessWidget_Alime::ReadInstallationCDInfo()
 {
     auto dubugString = json_.dump();
-    const std::string isoFileUrl= json_["LatestIsoUrl"];
+    std::string isoFileUrl= json_["LatestIsoUrl"];
+    //使用qt https需要额外的库, 对于维护xp机器的人很痛苦
+    if (string_utility::startsWith(isoFileUrl.c_str(), "https"))
+    {
+        isoFileUrl.erase(4, 1);
+    }
     QNetworkAccessManager manager;
     QString url(isoFileUrl.c_str());
     QEventLoop loop;
@@ -256,13 +261,14 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo()
     QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
     if (reply->error())
     {
+        qDebug() << u8"查询光盘信息时出错";
         qDebug() << reply->errorString();
         reply->deleteLater();
+        return;
     }
     reply->deleteLater();
 
     qint64 pkgSize = var.toLongLong();
-    qDebug() << "pkgSize= "<< pkgSize;
     AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
 }
 

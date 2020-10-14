@@ -257,7 +257,7 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     if (isBreakPointTranSupported_)
     {
         QString strRange = QString("bytes=%1-").arg(bytesDown_);
-        qDebug() << "StartRequest"<<bytesDown_;
+        qDebug() << "StartRequest, url:"<< url.toString()<<" ,bytesDown_="<<bytesDown_;
         request.setRawHeader("Range", strRange.toLatin1());
     }
     reply_ = QNAManager_.get(QNetworkRequest(request));
@@ -276,9 +276,13 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
 //下载完成/暂停/取消/出错
 void DownloadInfoWidget::httpFinished()
 {
+    bool redirected = false;
     ALIME_SCOPE_EXIT{
-    reply_->deleteLater();
-    reply_ = nullptr;
+        if (!redirected)
+        {
+            reply_->deleteLater();
+            reply_ = nullptr;
+        }
     };
     {//fix me, 移除
         file_->flush();
@@ -286,26 +290,31 @@ void DownloadInfoWidget::httpFinished()
         file_.reset();
     }
 
-    //不应改出现被重定向的情况。但某些内网喜欢搞这种恶心的东西
+    //不想支持重定向。
+    //打乱了正常的逻辑, 主要是某些内网喜欢搞这种恶心的东西
     const QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!redirectionTarget.isNull())
     {
-        ShowWarningBox(u8"资源被重定向", u8"您所在的网络不支持Http下载", u8"确定");
+        redirected = true;
         const QUrl redirectedUrl = redirectionTarget.toUrl();
         int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        qDebug() << redirectedUrl.toString();
-        qDebug() << "status code is "<<statusCode;
+        ShowWarningBox(u8"资源被重定向到 "+ redirectedUrl.toString(), u8"您所在的网络不支持Https下载", u8"确定");
+        qDebug() << "status code is " << statusCode;
         file_ = openFileForWrite(localFilePath_);
         if (!file_)
         {
             qWarning() << "could not open file";
+            reply_->deleteLater();
+            reply_ = NULL;
             return;
         }
+        reply_->deleteLater();
+        reply_ = NULL;
         //fix me, 支持重定向
-        //StartRequest(redirectedUrl);
+        StartRequest(redirectedUrl);
         return;
     }
-
+    
     if (bytesDown_ == totalSize_)
     {
         downloadState_ = DownloadState::Finished;
@@ -439,7 +448,7 @@ bool DownloadInfoWidget::DoSetup()
         ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
         return false;
     }
-    else if (localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
+    else if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
     {
         qDebug() << "not a valid exe file";
     }
@@ -580,9 +589,9 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
     bytesDown_ = bytesReceived + size_lastDownloadTask;
     if (bytesDown_ == totalSize_)
     {
-        qDebug() << bytesDown_;
+        qDebug() << u8"下载完成"<<bytesDown_;
     }
-    qDebug() << bytesDown_;
+    qDebug() << u8"已下载:"<<bytesDown_;
     emit notify_sizeInfo(MakeDownloadHeadway());
 }
 
@@ -626,11 +635,9 @@ void DownloadInfoWidget::LoadingProgressForBreakPoint()
     else
     {
         bytesDown_=fileInfo.size();
-        qWarning() << "why delete this file?";
-        qDebug() << bytesDown_;
         if (bytesDown_ > totalSize_)
         {
-            qWarning() << "bad file size";
+            qWarning() << "LoadingProgressForBreakPoint() bad file size";
             downloadStatusLabel_->setText(u8"文件大小错误，建议重新下载");
             QFile f(localFilePath_);
             f.open(QIODevice::WriteOnly);
