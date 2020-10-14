@@ -22,7 +22,8 @@ int main(int argc, char *argv[])
 
     ALIME_SCOPE_EXIT{
         if (g_handle != INVALID_HANDLE_VALUE)
-            CloseHandle(g_handle);};
+            CloseHandle(g_handle);
+    };
 
     if (!IsInstanceOn())
     {
