@@ -333,9 +333,11 @@ std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nl
             {
                 key = key.substr(1);
             }
+            //这个和业务相关，我们暂时只支持相同注册表的包,也就是V5.x.y只能升级到V5.x.z
             if (AscendingOrder()(versionLocal_.substr(1), key))
             {
-                keys.push_back(iter.key());
+                if(IsSameRegKey(versionLocal_.substr(1), key))
+                    keys.push_back(iter.key());
             }
         }
         return keys;

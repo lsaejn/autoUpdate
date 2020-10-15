@@ -9,6 +9,7 @@
 #include <QProcess>
 
 #include "AppUtility.h"
+#include "String_utility.h"
 #include "ConfigFileRW.h"
 
 HANDLE g_handle = INVALID_HANDLE_VALUE;
@@ -22,25 +23,28 @@ void Logging(QtMsgType type, const QMessageLogContext& context, const QString& m
     if (static_cast<size_t>(type) < ConfigFileReadWriter::Instance().GetLogLevel())
         return;
 
-    QString text;
+    QString level;//Qt的loglevel有点古怪
     switch (type)
     {
     case QtDebugMsg://开发
-        text = QString("Debug:");
+        level = QString("Debug");
         break;
     case QtWarningMsg://测试
-        text = QString("Warning:");
+        level = QString("Warning");
         break;
     case QtCriticalMsg://用户
-        text = QString("Critical:");
+        level = QString("Critical");
         break;
     case QtFatalMsg:
-        text = QString("Fatal:");
+        level = QString("Fatal");
         break;
     }
-    QString context_info = QString("%1 %2").arg(QString(context.file)).arg(context.line);
+    QString qs = context.file;
+    auto index=qs.lastIndexOf("\\");
+    QString fileName = qs.mid(index + 1);
+    QString context_info = QString("%1-%2").arg(QString(fileName)).arg(context.line);
     QString current_date = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    QString message = QString("[%1 %2] [%3] %4").arg(text).arg(context_info).arg(current_date).arg(msg);
+    QString message = QString("[%1] [%2] [%3] %4").arg(level).arg(context_info).arg(current_date).arg(msg);
 
     //低效
     QFile file(ConfigFileReadWriter::Instance().GetLogFilePath());
@@ -246,4 +250,21 @@ void OpenLocalPath(const QString& path)
         cmd = QString("explorer.exe /select,\"%1\"").arg(filePath);
     }
     process.startDetached(cmd);
+}
+
+
+bool IsSameRegKey(const std::string& v1, const std::string& v2)
+{
+
+    if (v1.empty() || v2.empty())
+        return false;
+    //for reason that old file s name is V4
+    auto version1 = v1 + ".0";
+    auto version2 = v2 + ".0";
+    bool v1StartsWithV = version1.front() == 'V';
+    bool v2StartsWithV = version2.front() == 'V';
+    // escape 'V'
+    if(v1StartsWithV&& v2StartsWithV)
+        return string_utility::startsWith(version1.c_str(), version2.c_str(), 4);
+    return string_utility::startsWith(version1.c_str(), version2.c_str(), 3);
 }

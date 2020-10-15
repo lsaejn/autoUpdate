@@ -29,10 +29,9 @@ public:
         if (!localFile.open(QFile::ReadOnly))
         {
             qDebug() << "file open error.";
+            isGood_ = false;
             return "";
         }
-
-
 
         quint64 totalBytes = 0;
         quint64 bytesReaded = 0;
@@ -74,12 +73,16 @@ public:
 
     QString MD5(const QByteArray& buffer)
     {
-
         QByteArray num;
         num = QCryptographicHash::hash(buffer, QCryptographicHash::Md5);
         QString md5;
         md5.append(num.toHex().toLower());
         return md5;
+    }
+
+    bool IsGood()
+    {
+        return isGood_;
     }
 
     void ResetState()
@@ -88,14 +91,17 @@ public:
     }
 
 private:
+
+    Q_DISABLE_COPY(MD5Checker)
+
     bool isGood_;
 };
 
 
-class MD5Scanner
+class MD5FolderScanner
 {
 public:
-    MD5Scanner(const QString& str)
+    MD5FolderScanner(const QString& str)
         :type_(0),
         folder_(str)
     {
@@ -104,13 +110,13 @@ public:
             folder_ = info.absoluteFilePath();
     }
 
-    MD5Scanner& SetOutputType(int type)
+    MD5FolderScanner& SetOutputType(int type)
     {
         type_ = type;
         return *this;
     }
 
-    MD5Scanner& SetOutputFilename(const QString& filename)
+    MD5FolderScanner& SetOutputFilename(const QString& filename)
     {
         outPutFilename_ = filename;
         return *this;
@@ -130,10 +136,13 @@ public:
             QFile::remove(fullPath);
 
         bool result = ScanFolder(folder_, checker);
-        targetFile.open(QIODevice::WriteOnly | QIODevice::Append);
+        if (!result)
+            return false;
+        if (!targetFile.open(QIODevice::WriteOnly | QIODevice::Append))
+            return false;
         targetFile.write(json_.dump().c_str());
         //qDebug()<<
-        return false;
+        return result;
     }
 
 private:
@@ -156,13 +165,17 @@ private:
         QFileInfo info(foler);
         if (!info.exists() || !info.isDir())
         {
-            qWarning() << "invalid folder path";
+            qWarning() << "invalid folder path"<< foler;
             return false;
         }
 
         QDir dir(foler);
         if (dir.entryInfoList().isEmpty())
+        {
+            qWarning() << "folder info empty, check accessRights" << foler;
             return false;
+        }
+            
 
         foreach(QFileInfo subFileInfo, dir.entryInfoList())
         {
@@ -180,15 +193,16 @@ private:
             {
                 if (subFileInfo.fileName() == "." || subFileInfo.fileName() == "..")
                     continue;
-                qDebug() << "handling Dir" << subFileInfo.absoluteFilePath();
+                qDebug() << "handling Dir :" << subFileInfo.absoluteFilePath();
                 ScanFolder(subFileInfo.absoluteFilePath(), checker);
             }
         }
-
         return true;
     }
 
 private:
+    Q_DISABLE_COPY(MD5FolderScanner)
+
     int type_;
     QString folder_;
     nlohmann::json json_;

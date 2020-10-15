@@ -89,6 +89,15 @@
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UpgradeHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeStyle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeTheme.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -113,6 +122,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="alternative\FolderDownloadInfoWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlimeQLib\QtAlimeStyle.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlimeQLib\QtAlimeTheme.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -171,6 +186,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="alternative\WebFiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlimeQLib\details\QtAlimeStyleDetail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlimeQLib\details\QtAlimeStyle_P.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlimeQLib\details\QtAlimeTheme_P.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

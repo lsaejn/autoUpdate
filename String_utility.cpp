@@ -26,6 +26,15 @@ namespace string_utility
 			(!std::memcmp(src, des, std::strlen(des)));
 	}
 
+	bool startsWith(const char* src, const char* des, int len)
+	{
+		size_t len1 = std::strlen(src);
+		size_t len2 = std::strlen(des);
+		if (len1 < len || len2 < len)
+			return false;
+		return !std::memcmp(src, des, len);
+	}
+
 	bool endsWith(const char* src, const char* des)
 	{
 		int offset = std::strlen(src) - std::strlen(des);

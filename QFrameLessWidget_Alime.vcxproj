@@ -112,6 +112,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlimeQLib\QtAlimeStyle.cpp" />
+    <ClCompile Include="AlimeQLib\QtAlimeTheme.cpp" />
     <ClCompile Include="alternative\FolderCompare.cpp" />
     <ClCompile Include="alternative\FakePackage.cpp" />
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp" />
@@ -119,6 +121,7 @@
     <ClCompile Include="String_utility.cpp" />
     <ClCompile Include="TaskThread.cpp" />
     <ClCompile Include="alternative\WebFiles.cpp" />
+    <ClCompile Include="UpgradeHelper.cpp" />
     <QtRcc Include="QFrameLessWidget_Alime.qrc" />
     <QtUic Include="QFrameLessWidget_Alime.ui" />
     <QtMoc Include="QFrameLessWidget_Alime.h" />
@@ -162,6 +165,11 @@
     <QtMoc Include="Alime_ContentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="AlimeQLib\QtAlimeStyle.h" />
+    <ClInclude Include="AlimeQLib\details\QtAlimeStyleDetail.h" />
+    <ClInclude Include="AlimeQLib\details\QtAlimeStyle_P.h" />
+    <ClInclude Include="AlimeQLib\details\QtAlimeTheme_P.h" />
+    <QtMoc Include="AlimeQLib\QtAlimeTheme.h" />
     <ClInclude Include="alternative\WebFiles.h" />
     <QtMoc Include="DownloadInfoWidget.h" />
     <ClInclude Include="Alime\processIterator.h" />
@@ -182,6 +190,7 @@
     <ClInclude Include="String_utility.h" />
     <QtMoc Include="TaskThread.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />
+    <ClInclude Include="UpgradeHelper.h" />
     <ClInclude Include="VersionFileFinder.h" />
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,8 @@ void ShowWarningBox(const QString& title, const QString& waring, const QString& 
 bool ShowQuestionBox(const QString& title, const QString& info, const QString& yesText, const QString& noText);
 void CreateFolderForApp();
 
+bool IsSameRegKey(const std::string& version1, const std::string& version2);
+
 #define CHECK_CONNECT_ERROR(expr) \
 if(!expr) \
 qDebug()<<"connect failed"
