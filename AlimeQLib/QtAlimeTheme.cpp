@@ -1,14 +1,10 @@
 #include "QtAlimeTheme.h"
-#include "details/QtAlimeTheme_P.h"
+#include "details/QtAlimeThemePrivate.h"
 
 #include <QString>
 #include <QStringBuilder>
 #include <QDebug>
 
-/*!material
- *  \class QtMaterialThemePrivate
- *  \internal
- */
 
 QtAlimeThemePrivate::QtAlimeThemePrivate(QtAlimeTheme *q)
     : q_ptr(q)

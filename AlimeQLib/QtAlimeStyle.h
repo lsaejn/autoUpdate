@@ -1,10 +1,10 @@
 #pragma once
 
 #include <QtWidgets/QCommonStyle>
-#include "details/QtAlimeStyle_P.h"
+#include "details/QtAlimeStylePrivate.h"
 
 #define ALIME_DISABLE_THEME_COLORS \
-    if (d->useThemeColors == true) { d->useThemeColors = false; }
+    if (d->useThemeColors) { d->useThemeColors = false; }
 
 class QtAlimeTheme;
 

@@ -53,7 +53,7 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WarningLevel>Level4</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ALIME_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -112,8 +112,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlimeQLib\details\QtAlimeImageButtonPrivate.cpp" />
+    <ClCompile Include="AlimeQLib\details\QtAlimeStylePrivate.cpp" />
     <ClCompile Include="AlimeQLib\QtAlimeStyle.cpp" />
     <ClCompile Include="AlimeQLib\QtAlimeTheme.cpp" />
+    <ClCompile Include="AlimeQLib\QtAlimeImageButton.cpp" />
+    <ClCompile Include="AlimeQLib\QtAlimeOverlayWidget.cpp" />
+    <ClCompile Include="AlimeQLib\QtAlimeRipple.cpp" />
+    <ClCompile Include="AlimeQLib\QtAlimeRippleOverlay.cpp" />
     <ClCompile Include="alternative\FolderCompare.cpp" />
     <ClCompile Include="alternative\FakePackage.cpp" />
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp" />
@@ -166,10 +172,14 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AlimeQLib\QtAlimeStyle.h" />
-    <ClInclude Include="AlimeQLib\details\QtAlimeStyleDetail.h" />
-    <ClInclude Include="AlimeQLib\details\QtAlimeStyle_P.h" />
-    <ClInclude Include="AlimeQLib\details\QtAlimeTheme_P.h" />
+    <ClInclude Include="AlimeQLib\details\QtAlimeStylePrivate.h" />
+    <ClInclude Include="AlimeQLib\details\QtAlimeThemePrivate.h" />
     <QtMoc Include="AlimeQLib\QtAlimeTheme.h" />
+    <QtMoc Include="AlimeQLib\QtAlimeImageButton.h" />
+    <QtMoc Include="AlimeQLib\QtAlimeOverlayWidget.h" />
+    <QtMoc Include="AlimeQLib\QtAlimeRippleOverlay.h" />
+    <QtMoc Include="AlimeQLib\QtAlimeRipple.h" />
+    <ClInclude Include="AlimeQLib\details\QtAlimeImageButtonPrivate.h" />
     <ClInclude Include="alternative\WebFiles.h" />
     <QtMoc Include="DownloadInfoWidget.h" />
     <ClInclude Include="Alime\processIterator.h" />
@@ -216,6 +226,7 @@
     <Image Include="images\pause.png" />
     <Image Include="images\pc-gray.png" />
     <Image Include="images\pc.png" />
+    <Image Include="images\PkpmV52.ico" />
     <Image Include="images\play-blue.png" />
     <Image Include="images\play.png" />
     <Image Include="images\reset.png" />

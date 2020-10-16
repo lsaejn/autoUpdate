@@ -98,6 +98,24 @@
     <ClCompile Include="AlimeQLib\QtAlimeTheme.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeImageButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeOverlayWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeRipple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeRippleOverlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\details\QtAlimeStylePrivate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\details\QtAlimeImageButtonPrivate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -128,6 +146,18 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="AlimeQLib\QtAlimeTheme.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlimeQLib\QtAlimeImageButton.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlimeQLib\QtAlimeOverlayWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlimeQLib\QtAlimeRipple.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AlimeQLib\QtAlimeRippleOverlay.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -191,13 +221,13 @@
     <ClInclude Include="UpgradeHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AlimeQLib\details\QtAlimeStyleDetail.h">
+    <ClInclude Include="AlimeQLib\details\QtAlimeImageButtonPrivate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AlimeQLib\details\QtAlimeStyle_P.h">
+    <ClInclude Include="AlimeQLib\details\QtAlimeStylePrivate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AlimeQLib\details\QtAlimeTheme_P.h">
+    <ClInclude Include="AlimeQLib\details\QtAlimeThemePrivate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -296,6 +326,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="images\zip.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\PkpmV52.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

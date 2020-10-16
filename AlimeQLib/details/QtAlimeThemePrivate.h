@@ -1,5 +1,4 @@
-#ifndef QTMATERIALTHEME_P_H
-#define QTMATERIALTHEME_P_H
+#pragma once
 
 #include <QHash>
 #include <QColor>
@@ -21,4 +20,3 @@ public:
     QHash<QString, QColor> colors;
 };
 
-#endif // QTMATERIALTHEME_P_H

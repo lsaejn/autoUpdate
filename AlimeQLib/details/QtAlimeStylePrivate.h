@@ -11,8 +11,12 @@ class QtAlimeStylePrivate
     Q_DECLARE_PUBLIC(QtAlimeStyle)
 
 public:
-    QtAlimeStylePrivate(QtAlimeStyle*q);
-    ~QtAlimeStylePrivate();
+    QtAlimeStylePrivate::QtAlimeStylePrivate(QtAlimeStyle* q)
+        : q_ptr(q)
+    {
+    }
+
+    ~QtAlimeStylePrivate() = default;
 
     void init();
 

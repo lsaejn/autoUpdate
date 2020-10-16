@@ -1,16 +1,18 @@
 #include <QLabel>
+#include <QEvent>
+
+#include <QApplication>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include <QEvent>
 #include <QMouseEvent>
-#include <QApplication>
-#include "Alime_TitleBar.h"
 
 #ifdef Q_OS_WIN
-#pragma comment(lib, "user32.lib")
 #include <qt_windows.h>
+#pragma comment(lib, "user32.lib")
 #endif
 
+#include "Alime_TitleBar.h"
+#include "AlimeQLib/QtAlimeImageButton.h"
 
 class Alime_TitlePushButton
 {
@@ -35,8 +37,8 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
 {
     setAttribute(Qt::WA_StyledBackground, true);
 
+    iconLabel_ = new QLabel();
     titleLabel_ = new QLabel(this);
-    iconLabel_ = new QLabel(this);
     closeButton_ = new QPushButton(this);
     minimizeButton_ = new QPushButton(this);
     maximizeButton_ = new QPushButton(this);
@@ -51,7 +53,19 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
     InitPushButton();
 
     QHBoxLayout* pLayout = new QHBoxLayout(this);
+
+#ifdef ALIME_DEVELOP
+    //
+    btn_ = new QtAlimeImageButton(QIcon(":/images/PkpmV52.ico"), this);
+    btn_->setColor(Qt::white);
+    btn_->setColor(QColor(53, 99, 203));
+    btn_->setIconSize({30, 30});
+    btn_->setFixedSize(parent->height(), parent->height());
+    pLayout->addWidget(btn_);
+#else
     pLayout->addWidget(iconLabel_);
+#endif
+
     pLayout->addSpacing(10);
     pLayout->addWidget(titleLabel_);
     pLayout->addStretch();
@@ -60,11 +74,6 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
     pLayout->addWidget(closeButton_);
     pLayout->setSpacing(10);
     pLayout->setContentsMargins(5, 0, 5, 0);
-}
-
-Alime_TitleBar::~Alime_TitleBar()
-{
-
 }
 
 void Alime_TitleBar::mouseDoubleClickEvent(QMouseEvent* event)
@@ -93,6 +102,9 @@ void Alime_TitleBar::mousePressEvent(QMouseEvent* event)
 }
 
 
+/*
+这么处理时因为一个bug，完美版本请移步我的github
+*/
 void Alime_TitleBar::mouseReleaseEvent(QMouseEvent* event)
 {
 #ifdef Q_OS_WIN
@@ -103,16 +115,13 @@ void Alime_TitleBar::mouseReleaseEvent(QMouseEvent* event)
         auto hwnd = (HWND)window()->winId();
         RECT rc;
         ::GetWindowRect(hwnd, &rc);
-        //MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, 0);
         MoveWindow(hwnd, rc.left - 5, rc.top - 5, rc.right - rc.left - 10, rc.bottom - rc.top - 10, 0);
         event->ignore();
-
     }
     IsNcPressing_ = false;
 #else
 #endif
 }
-
 
 bool Alime_TitleBar::eventFilter(QObject* obj, QEvent* event)
 {

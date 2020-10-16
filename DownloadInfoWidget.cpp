@@ -450,7 +450,9 @@ bool DownloadInfoWidget::DoSetup()
     }
     else if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
     {
-        qDebug() << "not a valid exe file";
+        qDebug() << u8"正在安装的并非应用程序";
+        OpenLocalPath(localFilePath_);
+        return true;
     }
 
     if (SetupThread::HasInstance())
