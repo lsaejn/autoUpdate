@@ -4,14 +4,14 @@
 
 bool ResourceCompare::PkpmMD5File::Parse()
 {
-
+	return true;
 }
 
 bool ResourceCompare::PkpmMD5File::GetFileContent()
 {
 	auto url = ConfigFileReadWriter::Instance().GetUrlOfIntegralImageFilesFolder();
 	//show text
-
+	return true;
 }
 
 ResourceCompare::ResourceCompare()
@@ -21,7 +21,7 @@ ResourceCompare::ResourceCompare()
 	filesToDownload_(NULL),
 	scanner_(rootPath_)
 {
-	ShowProgressBar();
+	//ShowProgressBar();
 	Init();
 }
 

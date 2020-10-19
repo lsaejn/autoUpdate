@@ -12,13 +12,14 @@
 #include <atomic>
 #include <memory>
 
+#include "FolderCompare.h"
+
 class QLabel;
 class QProgressBar;
 class QPushButton;
 class QFile;
 class QFileInfo;
 
-//Widget as a item in QListWidget
 class ComparisonDownloadInfoWidget : public QWidget
 {
     Q_OBJECT
@@ -33,39 +34,36 @@ public:
         Downloading,
         Paused,
         Cancel,
-        Error,
+        replacing,
         Finished
     };
 
 public:
-    //bool StartDownloadTask();
-    //bool PauseDownloadTask();
-    //bool CancelDownloadTask();
+    bool StartDownloadTask();
+    bool PauseDownloadTask();
+    bool CancelDownloadTask();
 
 private:
-    QString url_;
-    QString fileName_;
-    QString localFilePath_;
+    QString webRootUrl_;
+    QString rootPath_;
 
-    QLabel* fileNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
-    QLabel* leftTimeEstimated_;
+    QLabel* versionNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
     QLabel* downloadStatusLabel_;
-    QLabel* fileDownloadHeadway_;
 
     QProgressBar* progressBar_;
-    QProgressBar* setupProgressBar_;
 
     QPushButton* pauseButton_;
     QPushButton* downloadButton_;
 
-    qint64 totalSize_;//始终代表文件完整大小，而非本次任务大小
-    qint64 bytesDown_;
+    uint fileCountFinished;
+    QVector<QString> filesToDownload_;
 
     QNetworkReply* reply_;
     std::unique_ptr<QFile> file_;
     DownloadState downloadState_;
     bool isBreakPointTranSupported_;
     QNetworkAccessManager QNAManager_;
+    ResourceCompare Comparer_;
 };
 
 

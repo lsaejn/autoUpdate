@@ -42,13 +42,13 @@ private:
     void ReadFixPacksInfo();
     void ReadUpdatePacksInfo();
     void ReadInstallationCDInfo();
-
+    void ReadIntegralFilesPackInfo();
 private:
     QStackedWidget* stackWidget_;
     QListWidget* updatePkgList_;
-    QListWidget* isoFileList_;
     QListWidget* fixPkgList_;
     SetupImageWidget* imageWidget_;
+    QListWidget* integralFilesPackList_;
 
     QWidget* leftContent_;
     QWidget* rightContent_;

@@ -21,12 +21,21 @@
 
 CLASSREGISTER(QFrameLessWidget_Alime)
 
+
+
+#define MAKE_PUSHBUTTON(varName, text, objectName, checkable, checked, layout) \
+QPushButton* varName = new QPushButton(text); \
+varName->setObjectName(objectName); \
+varName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); \
+varName->setCheckable(checkable); \
+varName->setChecked(checked); \
+layout->addWidget(varName)
+
 QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     : Alime_ContentWidget(parent),
     netAvailable_(false),
     stackWidget_(nullptr),
     updatePkgList_(nullptr),
-    isoFileList_(nullptr),
     fixPkgList_(nullptr),
     imageWidget_(nullptr),
     leftContent_(nullptr),
@@ -66,40 +75,17 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     leftButtonLayout->setSpacing(0);
     leftButtonLayout->addSpacing(20);
 
-    QPushButton* btn01 = new QPushButton(u8"升级包");
-    btn01->setObjectName("btnBoard");
-    btn01->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    btn01->setCheckable(true);
-    btn01->setChecked(true);
-    leftButtonLayout->addWidget(btn01);
-
-    QPushButton* btn02 = new QPushButton(u8"补丁包");
-    btn02->setObjectName("btnBoard");
-    btn02->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    btn02->setCheckable(true);
-    leftButtonLayout->addWidget(btn02);
-
-    QPushButton* btn03 = new QPushButton(u8"最新版光盘");
-    btn03->setObjectName("btnBoard");
-    btn03->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    btn03->setCheckable(true);
-    leftButtonLayout->addWidget(btn03);
-
-    //QPushButton* btn04 = new QPushButton(u8"差异更新/测试");
-    //btn04->setObjectName("btnBoard");
-    //btn04->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //btn04->setCheckable(true);
-    //leftButtonLayout->addWidget(btn04);
+    MAKE_PUSHBUTTON(btn01, u8"升级包", "btnBoard", true, true, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn02, u8"补丁包", "btnBoard", true, false, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn03, u8"最新版光盘", "btnBoard", true, false, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn04, u8"差异更新/测试", "btnBoard", true, false, leftButtonLayout);
 
     QButtonGroup* group = new QButtonGroup(this);
     group->addButton(btn01, 0);
     group->addButton(btn02, 1);
     group->addButton(btn03, 2);
+    group->addButton(btn04, 3);
 
-    //group->addButton(btn04, 3);
-
-
-    
     //leftContent->setFixedWidth(240);
 
     //整个右边就是vbox，加入布局是为了保持一定的灵活性，方便以后加入其他内容(竖条)。
@@ -128,6 +114,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     fixPkgList_ = new QListWidget(this);
     fixPkgList_->setObjectName("fixPkgList");
     imageWidget_ = new SetupImageWidget(this);
+    integralFilesPackList_ = new QListWidget(this);
 
     stackWidget_ = new QStackedWidget(this);
     stackWidget_->addWidget(updatePkgList_);
@@ -160,11 +147,12 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             {
                 updatePkgList_->clear();
                 fixPkgList_->clear();
-                //imageWidget_->clear();
+                integralFilesPackList_->clear();
+
                 ReadLocalVersion();
                 ReadUpdatePacksInfo();//fix me,去掉参数
                 ReadFixPacksInfo();//fix me
-                //ReadInstallationCDInfo();
+                ReadIntegralFilesPackInfo();
             }
         });
 
@@ -242,6 +230,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
         ReadUpdatePacksInfo();
         ReadFixPacksInfo();
         ReadInstallationCDInfo();
+        ReadIntegralFilesPackInfo();
     }
     catch (...)
     {
@@ -278,6 +267,50 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo()
 
     qint64 pkgSize = var.toLongLong();
     AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
+}
+
+void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
+{
+    auto dubugString = json_.dump();
+    try
+    {
+        nlohmann::json versions = json_["IntegralImageFiles"]["Version"];
+        QVector<QString> vec;
+
+        for (int i = 0; i != versions.size(); ++i)
+        {
+            std::string v= versions[i].get<std::string>().c_str();
+            if (string_utility::startsWith(v.c_str(), "V")&& v!= versionLocal_)
+            {
+                vec.push_back(QString(v.c_str()));
+            }
+        }
+        vec = vec;
+
+    }
+    catch (...)
+    {
+        return;
+    }
+  
+    //QNetworkAccessManager manager;
+    //QString url(isoFileUrl.c_str());
+    //QEventLoop loop;
+    //QNetworkReply* reply = manager.head(QNetworkRequest(url));
+    //connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+    //loop.exec();
+    //QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+    //if (reply->error())
+    //{
+    //    qDebug() << u8"查询光盘信息时出错";
+    //    qDebug() << reply->errorString();
+    //    reply->deleteLater();
+    //    return;
+    //}
+    //reply->deleteLater();
+
+    //qint64 pkgSize = var.toLongLong();
+    //AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
 }
 
 bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
