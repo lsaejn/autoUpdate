@@ -10,7 +10,7 @@
 #include <QCoreApplication>
 #include <QCryptographicHash>
 
-#include "thirdParty/nlohmann/json.hpp"
+#include "../thirdParty/nlohmann/json.hpp"
 
 
 
@@ -65,16 +65,14 @@ public:
     {
         QString md5;
         QString content(buffer);
-        QByteArray num;
-        num = QCryptographicHash::hash(content.toLocal8Bit(), QCryptographicHash::Md5);
+        QByteArray num= QCryptographicHash::hash(content.toLocal8Bit(), QCryptographicHash::Md5);
         md5.append(num.toHex());
         return md5;
     }
 
     QString MD5(const QByteArray& buffer)
     {
-        QByteArray num;
-        num = QCryptographicHash::hash(buffer, QCryptographicHash::Md5);
+        QByteArray num= QCryptographicHash::hash(buffer, QCryptographicHash::Md5);
         QString md5;
         md5.append(num.toHex().toLower());
         return md5;
@@ -110,6 +108,7 @@ public:
             folder_ = info.absoluteFilePath();
     }
 
+    //怕是没时间写了
     MD5FolderScanner& SetOutputType(int type)
     {
         type_ = type;
@@ -125,35 +124,20 @@ public:
     bool Scan()
     {
         MD5Checker checker;
-        // json_
-        QFileInfo f(outPutFilename_);
-        QString appFolder = QCoreApplication::applicationDirPath() + "/";
-
-        QString fullPath = appFolder + outPutFilename_;
-
-        QFile targetFile(fullPath);
-        if (targetFile.exists())
-            QFile::remove(fullPath);
-
         bool result = ScanFolder(folder_, checker);
         if (!result)
             return false;
-        if (!targetFile.open(QIODevice::WriteOnly | QIODevice::Append))
-            return false;
-        targetFile.write(json_.dump().c_str());
-        //qDebug()<<
-        return result;
     }
 
 private:
-    void WriteFile(const char* u8key, const char* u8Value)
+    void WriteJson(const char* u8key, const char* u8Value)
     {
         if (0 == type_)
         {
             if (json_.find(u8key) != json_.end())
             {
-                //break here
-                getchar();
+                qDebug() << "json key already exist,:" << "u8key";
+                return;
             }
             json_[u8key] = u8Value;
         }
@@ -176,7 +160,6 @@ private:
             return false;
         }
             
-
         foreach(QFileInfo subFileInfo, dir.entryInfoList())
         {
             if (subFileInfo.isFile())
@@ -187,7 +170,7 @@ private:
                 auto relativePath = "\\" + root.relativeFilePath(fullPath);
                 relativePath.replace('/', "\\");
                 qDebug() << "handling File :" << relativePath;
-                WriteFile(relativePath.toStdString().c_str(), result.toStdString().c_str());
+                WriteJson(relativePath.toStdString().c_str(), result.toStdString().c_str());
             }
             else
             {
@@ -200,12 +183,30 @@ private:
         return true;
     }
 
+    void WriteFile()
+    {
+        // json_
+        QFileInfo f(outPutFilename_);
+        QString appFolder = QCoreApplication::applicationDirPath() + "/";
+
+        QString fullPath = appFolder + outPutFilename_;
+
+        QFile targetFile(fullPath);
+        if (targetFile.exists())
+            QFile::remove(fullPath);
+        if (!targetFile.open(QIODevice::WriteOnly | QIODevice::Append))
+            return;
+        //if(type_)
+        targetFile.write(json_.dump().c_str());
+    }
+
 private:
     Q_DISABLE_COPY(MD5FolderScanner)
 
     int type_;
     QString folder_;
-    nlohmann::json json_;
+    nlohmann::json json_;//or QHash?
+    bool useMultiThread_;
     QString outPutFilename_;
 };
 

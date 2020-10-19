@@ -1,5 +1,6 @@
 #include <QPainter>
 #include <QEvent>
+#include <QMouseEvent>
 
 #include "QtAlimeStyle.h"
 #include "QtAlimeImageButton.h"
@@ -128,9 +129,9 @@ void QtAlimeImageButton::mousePressEvent(QMouseEvent* event)
 {
     Q_D(QtAlimeImageButton);
 
-    d->rippleOverlay->addRipple(QPoint(d->rippleOverlay->width(),
-        d->rippleOverlay->height()) / 2,
-        iconSize().width());
+    QPointF pos = event->localPos();
+    d->rippleOverlay->addRipple(QPoint(pos.x(), pos.y()),
+    iconSize().width()/2);
     emit clicked();
 
     QAbstractButton::mousePressEvent(event);

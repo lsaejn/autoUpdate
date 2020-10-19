@@ -116,6 +116,11 @@ std::wstring GetExeFolderW()
     return std::wstring(buffer, pos + 1);
 }
 
+QString GetApplicationDirPath()
+{
+    return QCoreApplication::applicationDirPath() + "/";
+}
+
 QString GetStyleName()
 {
     auto path=GetExeFolderW() + L"..\\CFG\\PKPM.ini";

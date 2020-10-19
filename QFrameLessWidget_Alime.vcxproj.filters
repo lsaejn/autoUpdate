@@ -89,9 +89,6 @@
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UpgradeHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AlimeQLib\QtAlimeStyle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -114,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AlimeQLib\details\QtAlimeImageButtonPrivate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlimeQLib\QtAlimeRippleHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -197,9 +197,6 @@
     <ClInclude Include="AppUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Md5Checker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ConfigFileRW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -218,9 +215,6 @@
     <ClInclude Include="alternative\WebFiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UpgradeHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AlimeQLib\details\QtAlimeImageButtonPrivate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -228,6 +222,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AlimeQLib\details\QtAlimeThemePrivate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlimeQLib\QtAlimeRippleHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alternative\Md5Checker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlimeQLib\QtAlimeProgressBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

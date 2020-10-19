@@ -12,6 +12,7 @@ public:
 	QString GetUrlOfPkgRootFolder() const;
 	QString GetUrlOfFixPackFolder() const;
 	QString GetUrlOfUpdatePackFolder() const;
+	QString GetUrlOfIntegralImageFilesFolder() const;
 
 	size_t GetLogLevel() const;
 	size_t GetLogFileRollSize() const;
@@ -37,6 +38,7 @@ private:
 	QString pkgRootFolder_;
 	QString fixPackFolder_;
 	QString updatePackFolder_;
+	QString integralImageFilesFolder_;
 	nlohmann::json json_;
 };
 

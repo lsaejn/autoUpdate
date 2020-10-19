@@ -11,6 +11,8 @@ size_t ToLogLevel(const std::string& level);
 
 std::string GetExeFolder();
 std::wstring GetExeFolderW();
+QString GetApplicationDirPath();
+
 QString GetStyleName();
 
 QString GetDownloadFolder();

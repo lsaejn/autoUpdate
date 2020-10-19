@@ -4,11 +4,10 @@
 #include <QGraphicsDropShadowEffect>
 #include <windows.h>
 #include <windowsx.h>
-#include <QMouseEvent>
 
 Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
 	:QWidget(parent),
-    boundaryWidth(5)
+    boundaryWidth_(5)
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
@@ -24,7 +23,7 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
     Alime_WindowBase* base= new Alime_WindowBase(this, box);
     
     box->addWidget(base);
-    //给嵌套QWidget设置阴影
+
     base->setGraphicsEffect(shadow);
     box->setMargin(5);
 }
@@ -32,30 +31,31 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
 bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void* message, long* result)
 {
     MSG* msg = (MSG*)message;
+    const int boundaryWidth = boundaryWidth_;
     switch (msg->message)
     {
     case WM_NCHITTEST:
         int xPos = GET_X_LPARAM(msg->lParam) - this->frameGeometry().x();
         int yPos = GET_Y_LPARAM(msg->lParam) - this->frameGeometry().y();
-        if (xPos < boundaryWidth && yPos < boundaryWidth)                    //左上角
+        if (xPos < boundaryWidth && yPos < boundaryWidth)
             *result = HTTOPLEFT;
-        else if (xPos >= width() - boundaryWidth && yPos < boundaryWidth)          //右上角
+        else if (xPos >= width() - boundaryWidth && yPos < boundaryWidth)
             *result = HTTOPRIGHT;
-        else if (xPos < boundaryWidth && yPos >= height() - boundaryWidth)         //左下角
+        else if (xPos < boundaryWidth && yPos >= height() - boundaryWidth)
             *result = HTBOTTOMLEFT;
-        else if (xPos >= width() - boundaryWidth && yPos >= height() - boundaryWidth)//右下角
+        else if (xPos >= width() - boundaryWidth && yPos >= height() - boundaryWidth)
             *result = HTBOTTOMRIGHT;
-        else if (xPos < boundaryWidth)                                     //左边
+        else if (xPos < boundaryWidth)
             *result = HTLEFT;
-        else if (xPos >= width() - boundaryWidth)                              //右边
+        else if (xPos >= width() - boundaryWidth)
             *result = HTRIGHT;
-        else if (yPos < boundaryWidth)                                       //上边
+        else if (yPos < boundaryWidth)
             *result = HTTOP;
-        else if (yPos >= height() - boundaryWidth)                             //下边
+        else if (yPos >= height() - boundaryWidth)
             *result = HTBOTTOM;
-        else              //其他部分不做处理，返回false，留给其他事件处理器处理
+        else
             return false;
         return true;
     }
-    return false;         //此处返回false，留给其他事件处理器处理
+    return false;
 }

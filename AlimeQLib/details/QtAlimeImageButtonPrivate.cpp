@@ -33,7 +33,7 @@ void QtAlimeImageButtonPrivate::updateRipple()
     Q_Q(QtAlimeImageButton);
 
     QRect r(q->rect());
-    r.setSize(QSize(q->width() * 2, q->height() * 2));
+    //r.setSize(QSize(q->width() * 2, q->height() * 2));
     r.moveCenter(q->geometry().center());
     rippleOverlay->setGeometry(r);
 }

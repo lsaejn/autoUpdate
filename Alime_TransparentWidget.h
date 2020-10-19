@@ -25,5 +25,5 @@ public:
     Alime_TransparentWidget(QWidget* parent = Q_NULLPTR);
     virtual bool nativeEvent(const QByteArray& eventType, void* message, long* result);
 private:
-    int boundaryWidth;
+    int boundaryWidth_;
 };

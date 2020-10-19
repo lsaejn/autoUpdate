@@ -64,6 +64,7 @@ void ConfigFileReadWriter::SetDownloadFolder()
 
 void ConfigFileReadWriter::Init()
 {
+	//追求开发效率,不使用QJson
 	try
 	{
 		std::string folder = GetExeFolder();
@@ -81,6 +82,7 @@ void ConfigFileReadWriter::Init()
 		pkgRootFolder_= json_["pkgRootFolder"].get<std::string>().c_str();
 		fixPackFolder_ = pkgRootFolder_+json_["fixPackFolder"].get<std::string>().c_str();
 		updatePackFolder_= pkgRootFolder_+json_["updatePackFolder"].get<std::string>().c_str();
+		integralImageFilesFolder_= pkgRootFolder_ + json_["IntegralImageFileFolder"].get<std::string>().c_str();
 	}
 	catch (...)
 	{
@@ -103,4 +105,9 @@ QString ConfigFileReadWriter::GetUrlOfFixPackFolder() const
 QString ConfigFileReadWriter::GetUrlOfUpdatePackFolder() const
 {
 	return updatePackFolder_;
+}
+
+QString ConfigFileReadWriter::GetUrlOfIntegralImageFilesFolder() const
+{
+	return integralImageFilesFolder_;
 }

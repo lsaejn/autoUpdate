@@ -30,7 +30,7 @@ ps:还需要一个过滤列表，指明更新时应执行哪些exe(用于注册)，哪些是配置文件(不更新)
 */
 
 /*
-我们修改了Material代码，以便增加颜色/波纹颜色
+我们修改了Material代码，以便修改ripple的颜色/坐标/持续时间等
 */
 
 int main(int argc, char *argv[])
