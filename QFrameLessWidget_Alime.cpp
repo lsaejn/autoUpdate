@@ -120,7 +120,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     stackWidget_->addWidget(updatePkgList_);
     stackWidget_->addWidget(fixPkgList_);
     stackWidget_->addWidget(imageWidget_);
-
+    stackWidget_->addWidget(integralFilesPackList_);
     //不使用ID是担心可能要调整顺序 0.0
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
         stackWidget_, &QStackedWidget::setCurrentIndex);
@@ -275,6 +275,8 @@ void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
     try
     {
         nlohmann::json versions = json_["IntegralImageFiles"]["Version"];
+
+        //debug
         QVector<QString> vec;
 
         for (int i = 0; i != versions.size(); ++i)
@@ -285,11 +287,14 @@ void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
                 vec.push_back(QString(v.c_str()));
             }
         }
-        vec = vec;
 
+        for (int i = 0; i != vec.size(); ++i)
+            AddItemToComparisonDownloadWidget(vec[i]);
+        //fix me
     }
     catch (...)
     {
+        qDebug() << "fuck what happen";
         return;
     }
   
@@ -311,6 +316,19 @@ void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
 
     //qint64 pkgSize = var.toLongLong();
     //AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
+}
+
+#include "alternative/FolderDownloadInfoWidget.h"
+bool QFrameLessWidget_Alime::AddItemToComparisonDownloadWidget(const QString& version)
+{
+    QListWidgetItem* item = new QListWidgetItem();
+    QSize preferSize = item->sizeHint();
+    item->setSizeHint(QSize(preferSize.width(), 40));
+    integralFilesPackList_->addItem(item);
+
+    ComparisonDownloadInfoWidget* itemWidget = new ComparisonDownloadInfoWidget(this, version);
+    integralFilesPackList_->setItemWidget(item, itemWidget);
+    return true;
 }
 
 bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,

@@ -334,5 +334,11 @@
     <Image Include="images\PkpmV52.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="images\directory.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\directory-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

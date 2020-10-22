@@ -21,5 +21,6 @@
         <file>images/exe.png</file>
         <file>images/iso.png</file>
         <file>images/PkpmV52.ico</file>
+        <file>images/directory.png</file>
     </qresource>
 </RCC>

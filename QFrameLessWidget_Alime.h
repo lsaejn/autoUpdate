@@ -36,8 +36,11 @@ private:
     
     std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
 
+    //static
     bool AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent, 
         qint64 _fileSize, const QString& _url);
+
+    bool AddItemToComparisonDownloadWidget(const QString&);
 
     void ReadFixPacksInfo();
     void ReadUpdatePacksInfo();

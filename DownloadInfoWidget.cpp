@@ -36,7 +36,9 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     downloadState_(DownloadState::NotStarted),
     fileName_ (_fileName),
     reply_(nullptr),
-    isBreakPointTranSupported_(true)
+    isBreakPointTranSupported_(true),
+    redirectTimes_{0},
+    retryTimes_{0}
 {
     localFilePath_ = GetDownloadFolder()+fileName_;
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -152,6 +154,13 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         openFolder->setToolTip(u8"开始安装");
         CHECK_CONNECT_ERROR(connect(openFolder, &QPushButton::clicked, this, &DownloadInfoWidget::DoSetup));
 
+        //testButton
+        //QPushButton* testBtn = new QPushButton("test", this);
+        //connect(testBtn, &QPushButton::clicked, [=]() {
+        //    reply_->abort();
+        //    });
+        //mainLayout->addWidget(testBtn);
+
         mainLayout->addWidget(downloadButton_);
         mainLayout->addWidget(pauseButton_);
         mainLayout->addSpacing(15);
@@ -190,7 +199,9 @@ bool DownloadInfoWidget::StartDownloadTask()
         return false;//fix me, 提示无法下载
     }  
     //for for file protocol
-    const QUrl newUrl = QUrl::fromUserInput(url_);
+    //url_ = "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
+    QUrl newUrl = QUrl::fromUserInput(url_);
+    
     if (!newUrl.isValid())
     {
         qCritical() << QString("Invalid URL: %1: %2").arg(url_, newUrl.errorString());
@@ -243,6 +254,7 @@ bool DownloadInfoWidget::StartDownloadTask()
            
     StartRequest(newUrl);
     downloadState_ = DownloadState::Downloading;
+    downloadStatusLabel_->setText(u8"正在连接...");
     UpdatePlayButton(false);
     return true;
 }
@@ -261,7 +273,8 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
         request.setRawHeader("Range", strRange.toLatin1());
     }
     reply_ = QNAManager_.get(QNetworkRequest(request));
-
+    bool succ=connect(reply_, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), 
+        this, &DownloadInfoWidget::httpError);
     CHECK_CONNECT_ERROR(connect(reply_, &QNetworkReply::finished, this, &DownloadInfoWidget::httpFinished));
     CHECK_CONNECT_ERROR(connect(reply_, &QIODevice::readyRead, this, &DownloadInfoWidget::httpReadyRead));
     CHECK_CONNECT_ERROR(connect(reply_, &QNetworkReply::downloadProgress, this, &DownloadInfoWidget::UpdateChildWidgets));
@@ -271,6 +284,11 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     CHECK_CONNECT_ERROR(connect(this, &DownloadInfoWidget::notify_sizeInfo, fileDownloadHeadway_, &QLabel::setText));
     CHECK_CONNECT_ERROR(connect(this, &DownloadInfoWidget::notify_stateLabel, downloadStatusLabel_, &QLabel::setText));
     CHECK_CONNECT_ERROR(connect(this, &DownloadInfoWidget::notify_timeLabel, leftTimeEstimated_, &QLabel::setText));
+}
+
+void DownloadInfoWidget::httpError(QNetworkReply::NetworkError errorCode)
+{
+    qDebug() << "error happened, NetworkError is"<<errorCode;
 }
 
 //下载完成/暂停/取消/出错
@@ -284,21 +302,47 @@ void DownloadInfoWidget::httpFinished()
             reply_ = nullptr;
         }
     };
+    QFileInfo fi;
+    if (file_)
+    {
+        fi.setFile(file_->fileName());
+    }
     {//fix me, 移除
         file_->flush();
         file_->close();
         file_.reset();
     }
+    //if (reply_->error())
+    //{//we process timeout error here
+    //    QNetworkReply::NetworkError ec = reply_->error();
+    //    qDebug() << "specific network error is:" << ec;
+    //    if (ec < 100 && ec == QNetworkReply::TimeoutError)
+    //    {
+    //        downloadStatusLabel_->setText(u8"下载超时");
+    //        leftTimeEstimated_->setText("--");
+    //    }
+    //    else if(ec!= QNetworkReply::OperationCanceledError) {
+    //        downloadStatusLabel_->setText(u8"下载出错");
+    //        leftTimeEstimated_->setText("--");
+    //    }
+
+    //    //QFile::remove(fi.absoluteFilePath());
+    //    downloadState_ = DownloadState::Interrupted;
+    //    UpdatePlayButton();
+    //    return;
+    //}
 
     //不想支持重定向。
     //打乱了正常的逻辑, 主要是某些内网喜欢搞这种恶心的东西
-    const QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    //http://203.187.160.133:9011/update.pkpm.cn/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe
+    //redirectionTarget = "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
     if (!redirectionTarget.isNull())
     {
         redirected = true;
         const QUrl redirectedUrl = redirectionTarget.toUrl();
         int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        ShowWarningBox(u8"资源被重定向到 "+ redirectedUrl.toString(), u8"您所在的网络不支持Https下载", u8"确定");
+        ShowWarningBox(u8"重定向", redirectedUrl.toString(), u8"确定");
         qDebug() << "status code is " << statusCode;
         file_ = openFileForWrite(localFilePath_);
         if (!file_)
@@ -325,16 +369,16 @@ void DownloadInfoWidget::httpFinished()
     {
         if (reply_->error())
         { 
+            qDebug() << reply_->errorString();
             if (DownloadState::Paused== downloadState_)
             {
                 downloadStatusLabel_->setText(u8"暂停中...");
                 downloadState_ = DownloadState::NotStarted;
-                 
                 qDebug()<<u8"用户中断了下载  "<< QString::number(bytesDown_);
             }
             else if (DownloadState::Cancel == downloadState_)
             {
-                qDebug(u8"用户取消了下载");
+                qDebug(u8"用户取消并删除了文件下载");
                 downloadStatusLabel_->setText(u8"下载取消");
                 QFile::remove(localFilePath_);
                 LoadingProgressForBreakPoint();
@@ -342,14 +386,13 @@ void DownloadInfoWidget::httpFinished()
             }
             else if(DownloadState::Downloading == downloadState_)
             {
-                downloadState_ = DownloadState::Interrupted;
                 downloadStatusLabel_->setText(u8"下载出错");
                 qDebug(u8"对端关闭连接/网络中断");
                 downloadState_ = DownloadState::Error;
             }
             else
             {
-                qDebug(u8"状态逻辑错误,跟代码");
+                qDebug(u8"状态逻辑错误");
             }
         }
     }
@@ -367,7 +410,7 @@ void DownloadInfoWidget::httpReadyRead()
 {
     if (downloadState_ != DownloadState::Downloading)
     {
-        qWarning() << u8"!!!!!!!!fuck what happen";
+        qWarning() << u8"state error";
     }
     if (file_)
     {
@@ -463,9 +506,11 @@ bool DownloadInfoWidget::DoSetup()
         
     ProcessManager checker;
     checker.SetMatchReg(L"PKPMMAIN.EXE");
-    checker.ShutDownExistingApp();
-    checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
-    checker.ShutDownFuzzyMatchApp();
+    bool ret=checker.AssurePkpmmainClosed();
+    if (!ret)
+        return false;
+    //checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
+    //checker.ShutDownFuzzyMatchApp();
 
     SetupThread* t =new SetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
@@ -563,8 +608,7 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
 {
     if (bytesTotal == 0)
     {
-        qWarning() << u8"频繁操作触发了Qt的bug";
-        qWarning() << u8"bytesTotal=0, 服务器数据错误";
+        qWarning() << u8"bytesTotal=0. connection timeout?";
         return;
     }
     double secondElepsed = 1.0;

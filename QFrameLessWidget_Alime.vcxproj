@@ -108,7 +108,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -211,6 +211,8 @@
     <Image Include="images\close.png" />
     <Image Include="images\deskop-gray.png" />
     <Image Include="images\deskop.png" />
+    <Image Include="images\directory-blue.png" />
+    <Image Include="images\directory.png" />
     <Image Include="images\exe.png" />
     <Image Include="images\folder-blue.png" />
     <Image Include="images\folder.png" />

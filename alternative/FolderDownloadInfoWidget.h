@@ -20,12 +20,17 @@ class QPushButton;
 class QFile;
 class QFileInfo;
 
+/*
+文件夹差异更新使用不同的样式
+版本名称+[正在下载的文件名+速度]+进度条+开始+暂停+结束
+*/
+
 class ComparisonDownloadInfoWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    ComparisonDownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QString& url);
+    ComparisonDownloadInfoWidget(QWidget* parent, const QString& version);
     ~ComparisonDownloadInfoWidget() = default;
 
     enum class DownloadState
@@ -44,26 +49,35 @@ public:
     bool CancelDownloadTask();
 
 private:
-    QString webRootUrl_;
     QString rootPath_;
-
-    QLabel* versionNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
-    QLabel* downloadStatusLabel_;
+    QString webRootUrl_;
+    QString* fileDownloading_;//包含相对路径的文件名
+    
+    QLabel* versionNameLabel_;
+    QLabel* speed_;
 
     QProgressBar* progressBar_;
+    QLabel* fileDownloadingLabel_;
 
-    QPushButton* pauseButton_;
-    QPushButton* downloadButton_;
+    QPushButton* startButton_;
+    QPushButton* cancelButton_;
 
-    uint fileCountFinished;
-    QVector<QString> filesToDownload_;
+    //uint fileCountFinished;
 
     QNetworkReply* reply_;
+    
     std::unique_ptr<QFile> file_;
+    ResourceCompare Comparer_;
     DownloadState downloadState_;
     bool isBreakPointTranSupported_;
     QNetworkAccessManager QNAManager_;
-    ResourceCompare Comparer_;
+
+    QString version_;
+    QVector<QString> failed_;
+    QVector<QString> filesSkiped_;
+    QVector<QString> filesFinished_;
+    QVector<QString> filesUnModified_;
+    QVector<QString> filesToDownload_;
 };
 
 

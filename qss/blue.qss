@@ -63,6 +63,14 @@ QLabel#grayLabel{
     padding: 0px,0px,0px,0px;
 }
 
+QLabel#speedLabel{
+    max-width: 100px;
+}
+
+QLabel#filePackLabel{
+    max-width: 80px;
+}
+
 QPushButton#ItemPlay{
     min-width: 22px;
     max-width: 22px;
@@ -127,6 +135,12 @@ QLabel#itemIconLabel{
     min-width: 30px;
     max-width: 30px;
     image: url(:/images/zip.png);
+}
+
+QLabel#folderIconLabel{
+    min-width: 48px;
+    max-width: 48px;
+    image: url(:/images/directory.png);
 }
 
 QToolTip {

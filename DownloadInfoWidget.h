@@ -78,6 +78,7 @@ private:
     bool CheckVersionFileAfterSetup();
     void StartRequest(const QUrl& url);
     bool isTimeToUpdate(double& second);
+    void httpError(QNetworkReply::NetworkError);
 
     QString MakeDownloadHeadway();
     QString MakeDownloadHeadway(int64_t reader, int64_t total);
@@ -113,6 +114,8 @@ private:
     DownloadState downloadState_;
     bool isBreakPointTranSupported_;
     QNetworkAccessManager QNAManager_;
+    int redirectTimes_;
+    int retryTimes_;
 };
 
 
