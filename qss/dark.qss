@@ -37,7 +37,7 @@ border-left:2px solid rgba(160,160,160,70);
 
 QPushButton#btnBoard{
 background-color: transparent;
-font-size:24px;
+font-size:20px;
 color:rgb(6,168,255);
 }
 
@@ -129,6 +129,12 @@ QLabel#itemIconLabel{
     min-width: 30px;
     max-width: 30px;
     image: url(:/images/zip.png);
+}
+
+QLabel#folderIconLabel{
+    min-width: 48px;
+    max-width: 48px;
+    image: url(:/images/directory.png);
 }
 
 QToolTip {

@@ -23,7 +23,7 @@
 
 //我们不使用grid，以便做精细布局
 //子widget的parent我设得有点随意，这可能导致一些内存占用问题，我不确定
-DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, qint64 _fileSize, const QString& _url)
+DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, qint64 _fileSize, const QUrl& _url)
     :QWidget(_parent),
     url_(_url),
     fileDownloadHeadway_(nullptr),
@@ -200,18 +200,18 @@ bool DownloadInfoWidget::StartDownloadTask()
     }  
     //for for file protocol
     //url_ = "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
-    QUrl newUrl = QUrl::fromUserInput(url_);
+    QUrl newUrl = url_;//for local debug
     
     if (!newUrl.isValid())
     {
-        qCritical() << QString("Invalid URL: %1: %2").arg(url_, newUrl.errorString());
+        qCritical() << QString("Invalid URL: %1: %2").arg(url_.toString(), newUrl.errorString());
         return false;//维护人员上传的文件错误
     }
 
     QString fileName = newUrl.fileName();
     if (fileName.isEmpty())
     {
-        qCritical() << QString("Invalid URL: %1: %2").arg(url_, newUrl.errorString());
+        qCritical() << QString("Invalid URL: %1: %2").arg(url_.toString(), newUrl.errorString());
         return false;
     }
 
@@ -265,6 +265,7 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     QUrl url = requestedUrl;
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     // 如果支持断点续传，则设置请求头信息
     if (isBreakPointTranSupported_)
     {
@@ -342,7 +343,7 @@ void DownloadInfoWidget::httpFinished()
         redirected = true;
         const QUrl redirectedUrl = redirectionTarget.toUrl();
         int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        ShowWarningBox(u8"重定向", redirectedUrl.toString(), u8"确定");
+        ShowWarningBox(u8"不要大惊小怪", u8"重定向"+redirectedUrl.toString(), u8"确定");
         qDebug() << "status code is " << statusCode;
         file_ = openFileForWrite(localFilePath_);
         if (!file_)
@@ -363,9 +364,15 @@ void DownloadInfoWidget::httpFinished()
     {
         downloadState_ = DownloadState::Finished;
         downloadStatusLabel_->setText(u8"已完成");
-        QMessageBox::information(NULL, "Tip", QString(u8"下载完成"));
+        UpdatePlayButton();
+        //QMessageBox::information(NULL, "Tip", QString(u8"下载完成"));
+        auto ret=ShowQuestionBox(u8"下载完成", u8"下载完成, 是否立即安装", u8"确定", u8"取消");
+        if (ret)
+        {
+            DoSetup();
+        }
     }
-    else if (bytesDown_ < totalSize_ )
+    else if (bytesDown_ < totalSize_ )//we retry connecting here
     {
         if (reply_->error())
         { 
@@ -394,6 +401,7 @@ void DownloadInfoWidget::httpFinished()
             {
                 qDebug(u8"状态逻辑错误");
             }
+            UpdatePlayButton();
         }
     }
     else
@@ -401,9 +409,9 @@ void DownloadInfoWidget::httpFinished()
         qDebug(u8"文件大小错误, 用户手动修改了文件名称或者下载的内容错误");
         downloadState_ = DownloadState::Error;
         downloadStatusLabel_->setText(u8"发生错误");
+        UpdatePlayButton();
     }
     leftTimeEstimated_->setText("--");
-    UpdatePlayButton();
 }
 
 void DownloadInfoWidget::httpReadyRead()
@@ -494,7 +502,13 @@ bool DownloadInfoWidget::DoSetup()
     else if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
     {
         qDebug() << u8"正在安装的并非应用程序";
-        OpenLocalPath(localFilePath_);
+        if (localFilePath_.endsWith(".zip", Qt::CaseInsensitive))
+        {
+            //fix me
+            //UnZipFileTo();
+        }
+        else
+            OpenLocalPath(localFilePath_);
         return true;
     }
 
@@ -509,6 +523,7 @@ bool DownloadInfoWidget::DoSetup()
     bool ret=checker.AssurePkpmmainClosed();
     if (!ret)
         return false;
+    //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
     //checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
     //checker.ShutDownFuzzyMatchApp();
 

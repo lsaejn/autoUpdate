@@ -21,10 +21,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -44,10 +46,11 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
     <OutDir>$(SolutionDir)bin\</OutDir>
-    <TargetName>$(ProjectName)d</TargetName>
+    <TargetName>installerd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
     <OutDir>$(SolutionDir)bin\release\</OutDir>
+    <TargetName>installer</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,7 +111,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -128,6 +131,7 @@
     <ClCompile Include="String_utility.cpp" />
     <ClCompile Include="TaskThread.cpp" />
     <ClCompile Include="alternative\WebFiles.cpp" />
+    <ClCompile Include="thirdParty\zlib\UnZip.cpp" />
     <QtRcc Include="QFrameLessWidget_Alime.qrc" />
     <QtUic Include="QFrameLessWidget_Alime.ui" />
     <QtMoc Include="QFrameLessWidget_Alime.h" />
@@ -202,6 +206,8 @@
     <ClInclude Include="String_utility.h" />
     <QtMoc Include="TaskThread.h" />
     <ClInclude Include="thirdParty\nlohmann\json.hpp" />
+    <ClInclude Include="thirdParty\zlib\UnZip.h" />
+    <ClInclude Include="UnZipper.h" />
     <ClInclude Include="VersionFileFinder.h" />
   </ItemGroup>
   <ItemGroup>

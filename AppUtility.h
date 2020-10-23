@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <QDebug>
+#include <QUrl>
 #include "windows.h"
 
 extern HANDLE g_handle;
@@ -17,6 +18,8 @@ QString GetStyleName();
 
 QString GetDownloadFolder();
 QString GetFolderPart(const QString&);
+QString GetFilePart(const QUrl& url);
+QString GetFilePart(const QString&);
 void Logging(QtMsgType type, const QMessageLogContext& context, const QString& msg);
 
 void OpenLocalPath(const QString&);
@@ -30,6 +33,8 @@ bool ShowQuestionBox(const QString& title, const QString& info, const QString& y
 void CreateFolderForApp();
 
 bool IsSameRegKey(const std::string& version1, const std::string& version2);
+
+bool UnzipFile(const QString zipFilePath, const QString& TargetPath);
 
 #define CHECK_CONNECT_ERROR(expr) \
 if(!expr) \

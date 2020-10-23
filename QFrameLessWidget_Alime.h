@@ -38,7 +38,7 @@ private:
 
     //static
     bool AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent, 
-        qint64 _fileSize, const QString& _url);
+        qint64 _fileSize, const QUrl& _url, const QString& filename);
 
     bool AddItemToComparisonDownloadWidget(const QString&);
 

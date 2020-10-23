@@ -14,10 +14,9 @@
 #include "Alime_TitleBar.h"
 #include "AlimeQLib/QtAlimeImageButton.h"
 
-class Alime_TitlePushButton
+namespace 
 {
-public:
-    static void InitPushButton(QPushButton* btn, const QString& fileUrl,
+    void InitPushButton(QPushButton* btn, const QString& fileUrl,
         const QString& tooltip, const QString& objName,
         const size_t btnSize, const size_t imageSize, bool show = true)
     {
@@ -28,7 +27,8 @@ public:
         btn->setIcon(QIcon(fileUrl));
         btn->setToolTip(tooltip);
     }
-};
+}
+
 
 
 Alime_TitleBar::Alime_TitleBar(QWidget* parent)
@@ -55,7 +55,7 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
     QHBoxLayout* pLayout = new QHBoxLayout(this);
 
 #ifdef ALIME_DEVELOP
-    //
+    //开发版本提供按钮波纹，点击波纹，定制对话框
     btn_ = new QtAlimeImageButton(QIcon(":/images/PkpmV52.ico"), this);
     btn_->setColor(Qt::white);
     btn_->setColor(QColor(53, 99, 203));
@@ -103,7 +103,7 @@ void Alime_TitleBar::mousePressEvent(QMouseEvent* event)
 
 
 /*
-这么处理时因为一个bug，完美版本请移步我的github
+这么处理是因为一个bug，完美版本请移步本人github
 */
 void Alime_TitleBar::mouseReleaseEvent(QMouseEvent* event)
 {
@@ -168,17 +168,14 @@ void Alime_TitleBar::onClicked()
         }
         else if (pButton->objectName() == "maximizeButton" || pButton->objectName() == "resetButton")
         {
-            if (maximizeButton_->objectName()=="maximizeButton")
+            if (maximizeButton_->objectName()=="maximizeButton" && maxStateCallback_)
             {
-                if(maxStateCallback_)
-                    maxStateCallback_();
-               
+                maxStateCallback_();
             }
             else if(normalStateCallback_)
             {
                 normalStateCallback_();
             }
-            
             pWindow->isMaximized() ? pWindow->showNormal() : pWindow->showMaximized();
             repaint();
         }
@@ -199,20 +196,22 @@ void Alime_TitleBar::updateMaximize()
         {
             maximizeButton_->setIcon(QIcon(":/images/reset.png"));
             maximizeButton_->setObjectName("resetButton");
+            maximizeButton_->setToolTip(u8"向下还原");
         }
         else
         {
             maximizeButton_->setIcon(QIcon(":/images/max.png"));
             maximizeButton_->setObjectName("maximizeButton");
+            maximizeButton_->setToolTip(u8"最大化");
         }
     }
 }
 
 void Alime_TitleBar::InitPushButton()
 {
-    Alime_TitlePushButton::InitPushButton(minimizeButton_, ":/images/min.png", "Minimize", "minimizeButton", 40, 32);
-    Alime_TitlePushButton::InitPushButton(maximizeButton_, ":/images/max.png", "Maximize", "maximizeButton", 40, 32);
-    Alime_TitlePushButton::InitPushButton(closeButton_, ":/images/close.png", "Close", "closeButton", 40, 32);
+    ::InitPushButton(minimizeButton_, ":/images/min.png", u8"最小化", "minimizeButton", 40, 24);
+    ::InitPushButton(maximizeButton_, ":/images/max.png", u8"最大化", "maximizeButton", 40, 24);
+    ::InitPushButton(closeButton_, ":/images/close.png", u8"关闭", "closeButton", 40, 24);
 
     connect(minimizeButton_, SIGNAL(clicked(bool)), this, SLOT(onClicked()));
     connect(maximizeButton_, SIGNAL(clicked(bool)), this, SLOT(onClicked()));

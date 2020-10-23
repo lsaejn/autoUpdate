@@ -143,7 +143,7 @@ private:
         }
     }
 
-    //we use this for a known depth
+    //we use this for a known limited depth
     bool ScanFolder(const QString& foler, MD5Checker& checker)
     {
         QFileInfo info(foler);

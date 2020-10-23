@@ -80,8 +80,8 @@ protected:
 
         auto folder = GetExeFolderW();
         folder += L"..\\";
-        folder = L"/S -PATH=\"" + folder + L"\"";
-
+        //folder = L"/S -PATH=\"" + folder + L"\"";
+        folder = L" -PATH=\"" + folder + L"\"";
         SHELLEXECUTEINFO ShExecInfo = { 0 };
         ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
         ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;

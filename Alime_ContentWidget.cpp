@@ -26,5 +26,5 @@ int Alime_ContentWidget::GetShadowWidth()
 
 QSize Alime_ContentWidget::GetWindowSize()
 {
-	return { 1200, 800 };
+	return { 1000, 680 };
 }

@@ -165,12 +165,14 @@ void QFrameLessWidget_Alime::ReadPkgFileInfo()
     connect(manager, &QNetworkAccessManager::finished, this, &QFrameLessWidget_Alime::QueryInfoFinish);
     //fix me
     connect(manager, &QNetworkAccessManager::finished, manager, &QObject::deleteLater);
-    qDebug() << manager->supportedSchemes();
-    //openssl 1.1.1, debug版本默认支持openssl, release版本默认不支持openssl
-    //bool bSupp = QSslSocket::supportsSsl();
-    //QString buildVersion = QSslSocket::sslLibraryBuildVersionString();
-    //QString version = QSslSocket::sslLibraryVersionString();
-    //qDebug() << bSupp << buildVersion << version << endl;
+    /*
+        qDebug() << manager->supportedSchemes();
+        openssl 1.1.1, debug版本默认支持openssl, release版本默认不支持openssl
+        bool bSupp = QSslSocket::supportsSsl();
+        QString buildVersion = QSslSocket::sslLibraryBuildVersionString();
+        QString version = QSslSocket::sslLibraryVersionString();
+        qDebug() << bSupp << buildVersion << version << endl;
+    */
     manager->get(QNetworkRequest(QUrl(ConfigFileReadWriter::Instance().GetUrlOfUpdateInfoFile())));
 }
 
@@ -250,7 +252,7 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo()
         isoFileUrl.erase(4, 1);
     }
     QNetworkAccessManager manager;
-    QString url(isoFileUrl.c_str());
+    QUrl url(isoFileUrl.c_str());
     QEventLoop loop;
     QNetworkReply* reply = manager.head(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
@@ -266,7 +268,7 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo()
     reply->deleteLater();
 
     qint64 pkgSize = var.toLongLong();
-    AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url);
+    AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url, GetFilePart(url));
 }
 
 void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
@@ -332,14 +334,14 @@ bool QFrameLessWidget_Alime::AddItemToComparisonDownloadWidget(const QString& ve
 }
 
 bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
-    qint64 _fileSize, const QString& _url)
+    qint64 _fileSize, const QUrl& _url, const QString& fileName)
 {
     QListWidgetItem* item = new QListWidgetItem();
     QSize preferSize = item->sizeHint();
     item->setSizeHint(QSize(preferSize.width(), 70));
     target->addItem(item);
-    auto index = _url.lastIndexOf("/");
-    auto itemWidget = new DownloadInfoWidget(this, _url.mid(index + 1), _fileSize, _url);
+    //auto index = _url.lastIndexOf("/");
+    auto itemWidget = new DownloadInfoWidget(this, fileName, _fileSize, _url);
     target->setItemWidget(item, itemWidget);
     return true;
 }
@@ -359,7 +361,8 @@ void QFrameLessWidget_Alime::ReadFixPacksInfo()
             auto str=array[i].get<std::string>();
             QString url = ConfigFileReadWriter::Instance().GetUrlOfFixPackFolder() + str.c_str();
             QEventLoop loop;
-            QNetworkReply* reply = manager.head(QNetworkRequest(url));
+            QUrl qUrl{ url };
+            QNetworkReply* reply = manager.head(QNetworkRequest(qUrl));
             connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
             loop.exec();
 
@@ -373,7 +376,9 @@ void QFrameLessWidget_Alime::ReadFixPacksInfo()
             reply->deleteLater();
 
             int pkgSize = var.toInt();
-            AddNewItemAndWidgetToList(fixPkgList_, this, pkgSize, url);
+            //auto fullName = qUrl.toString();
+            //auto fileApart = GetFilePart(fullName);
+            AddNewItemAndWidgetToList(fixPkgList_, this, pkgSize, url, GetFilePart(qUrl));
         }
     }
 
@@ -417,7 +422,7 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
     for (const auto& key : keys)
     {
         std::string webUrl = json[mainVersionLocal_][key];
-        QString url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
+        QUrl url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
         QEventLoop loop;
         QNetworkReply* reply = manager.head(QNetworkRequest(url));
         //我们阻塞当前线程,初始化stackWidget内容
@@ -438,8 +443,8 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
         QSize preferSize = item->sizeHint();
         item->setSizeHint(QSize(preferSize.width(), 70));
         updatePkgList_->addItem(item);
-        auto index = url.lastIndexOf("/");
-        auto itemWidget = new DownloadInfoWidget(this, url.mid(index + 1), pkgSize, url);
+
+        auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
         updatePkgList_->setItemWidget(item, itemWidget);
     }
 }

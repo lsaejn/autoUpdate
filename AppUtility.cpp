@@ -124,8 +124,8 @@ QString GetApplicationDirPath()
 QString GetStyleName()
 {
     auto path=GetExeFolderW() + L"..\\CFG\\PKPM.ini";
-    int index=GetPrivateProfileIntW(L"InterfaceStyle", L"index", 1, path.c_str());
-    if (index == 0)
+    int index=GetPrivateProfileIntW(L"InterfaceStyle", L"index", -1, path.c_str());
+    if (index != 1)//0 or file not found
         return ":/qss/dark.qss";
     return ":/qss/blue.qss";
 }
@@ -150,7 +150,6 @@ QString GetDownloadFolder()
 
 QString GetFolderPart(const QString& path)
 {
-    QString result;
     size_t index = 0;
     for (int i = 0; i != path.size(); ++i)
     {
@@ -159,6 +158,19 @@ QString GetFolderPart(const QString& path)
     }
     return path.mid(0, index + 1);
 }
+
+QString GetFilePart(const QString& path)
+{
+    auto index = path.lastIndexOf('/');
+    return path.mid(index + 1);
+}
+
+QString GetFilePart(const QUrl& qUrl)
+{
+    auto fullName = qUrl.toString();
+    return GetFilePart(fullName);
+}
+
 
 double ToMByte(long long sizeInBit)
 {
@@ -272,4 +284,12 @@ bool IsSameRegKey(const std::string& v1, const std::string& v2)
     if(v1StartsWithV&& v2StartsWithV)
         return string_utility::startsWith(version1.c_str(), version2.c_str(), 4);
     return string_utility::startsWith(version1.c_str(), version2.c_str(), 3);
+}
+
+//we copy this file from github-netease/nim-duilibframework
+#include "thirdParty/zlib/UnZip.h"
+
+bool UnzipFile(const QString zipFilePath, const QString& TargetPath)
+{
+    return true;
 }

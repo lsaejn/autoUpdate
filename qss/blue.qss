@@ -1,6 +1,6 @@
 Alime_TransparentWidget{
-     min-height:600px;
-     min-width: 900px;
+     min-height:400px;
+     min-width: 800px;
  }
  
  Alime_TitleBar{
@@ -35,7 +35,7 @@ QWidget#rightContent{
 
 QPushButton#btnBoard{
     background-color: transparent;
-    font-size:24px;
+    font-size:20px;
     color:rgb(6,168,255);
 }
 

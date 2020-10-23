@@ -40,7 +40,7 @@ public slots:
     void SetupFinished();
     
 public:
-    DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QString& url);
+    DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QUrl& url);
     ~DownloadInfoWidget()=default;
 
     enum class WebFileType
@@ -90,7 +90,7 @@ private:
     std::unique_ptr<QFile> openFileForWrite(const QString& fileName);
 
 private:
-    QString url_;
+    QUrl url_;
     QString fileName_;
     QString localFilePath_;
 

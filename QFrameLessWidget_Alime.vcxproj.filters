@@ -116,6 +116,9 @@
     <ClCompile Include="AlimeQLib\QtAlimeRippleHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="thirdParty\zlib\UnZip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -231,6 +234,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AlimeQLib\QtAlimeProgressBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdParty\zlib\UnZip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnZipper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
