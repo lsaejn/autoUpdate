@@ -58,6 +58,9 @@
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>ALIME_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <PostBuildEvent>
+      <Command>copy D:\\AutoUpate\\QFrameLessWidget_Alime\\bin\\installerd.exe C:\Users\lsaejn\Desktop\pkpmV52\Installer\installerd.exe</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

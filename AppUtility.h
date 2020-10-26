@@ -14,6 +14,8 @@ std::string GetExeFolder();
 std::wstring GetExeFolderW();
 QString GetApplicationDirPath();
 
+QString GetPkpmRootPath();
+
 QString GetStyleName();
 
 QString GetDownloadFolder();
@@ -35,6 +37,7 @@ void CreateFolderForApp();
 bool IsSameRegKey(const std::string& version1, const std::string& version2);
 
 bool UnzipFile(const QString zipFilePath, const QString& TargetPath);
+
 
 #define CHECK_CONNECT_ERROR(expr) \
 if(!expr) \

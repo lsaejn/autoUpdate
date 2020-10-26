@@ -121,6 +121,15 @@ QString GetApplicationDirPath()
     return QCoreApplication::applicationDirPath() + "/";
 }
 
+QString GetPkpmRootPath()
+{
+    auto installerPath = QCoreApplication::applicationDirPath() + "/";
+    auto rootPath = installerPath + "../";
+    QDir dir(rootPath);
+    QString s=dir.absolutePath();
+    return s+"/";
+}
+
 QString GetStyleName()
 {
     auto path=GetExeFolderW() + L"..\\CFG\\PKPM.ini";
@@ -293,3 +302,4 @@ bool UnzipFile(const QString zipFilePath, const QString& TargetPath)
 {
     return true;
 }
+

@@ -492,6 +492,7 @@ bool DownloadInfoWidget::PauseDownloadTask()
     }
 }
 
+#include "UnZipper.h"
 bool DownloadInfoWidget::DoSetup()
 {
     if (DownloadState::Finished != downloadState_)
@@ -506,6 +507,13 @@ bool DownloadInfoWidget::DoSetup()
         {
             //fix me
             //UnZipFileTo();
+            UnZipper uzp;
+            uzp.SetResource(localFilePath_.toStdWString());
+            uzp.SetTargetPath(GetPkpmRootPath().toStdWString());
+            uzp.SetBackupRootPath(L"");
+            bool ret=uzp.UnZip();
+            if(!ret)
+                uzp.Recover();
         }
         else
             OpenLocalPath(localFilePath_);
@@ -551,7 +559,7 @@ void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 {
     if (!errorCode)
     {
-        ShowWarningBox(u8"成功", u8"安装程序执行完毕", u8"确定");
+        ShowWarningBox(u8"结束", u8"安装程序执行完毕", u8"确定");
         return;
     }
     else {
