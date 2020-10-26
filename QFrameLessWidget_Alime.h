@@ -9,7 +9,7 @@ class QListWidget;
 class QNetworkReply;
 class QLabel;
 class QStackedWidget;
-class SetupImageWidget;
+class SetupWidget;
 
 /*
 如果不需要水平分割的标题栏
@@ -37,7 +37,7 @@ private:
     std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
 
     //static
-    bool AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent, 
+    DownloadInfoWidget* AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent,
         qint64 _fileSize, const QUrl& _url, const QString& filename);
 
     bool AddItemToComparisonDownloadWidget(const QString&);
@@ -48,9 +48,9 @@ private:
     void ReadIntegralFilesPackInfo();
 private:
     QStackedWidget* stackWidget_;
-    QListWidget* updatePkgList_;
-    QListWidget* fixPkgList_;
-    SetupImageWidget* imageWidget_;
+    SetupWidget* updatePkgList_;
+    SetupWidget* fixPkgList_;
+    QListWidget* imageWidget_;
     QListWidget* integralFilesPackList_;
 
     QWidget* leftContent_;

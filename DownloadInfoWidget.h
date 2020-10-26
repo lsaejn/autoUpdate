@@ -10,6 +10,7 @@
 
 #include <atomic>
 #include <memory>
+#include <functional>
 
 class QLabel;
 class QProgressBar;
@@ -17,6 +18,7 @@ class QPushButton;
 class QFile;
 class QFileInfo;
 
+using CheckCallBack=std::function<bool()> ;
 /*
 需要StateManager+FileManager
 来管理控件
@@ -34,6 +36,9 @@ signals:
     void notify_playButton(bool);
     void notify_stateLabel(QString);
     void notify_timeLabel(QString);
+    void finishDownload();
+    void finishSetup();
+    void errorDownload();
 public slots:
     void ShowTipsWhenSetupFinished(int);
     void SetupStarted();
@@ -67,12 +72,18 @@ public:
     bool StartDownloadTask();
     bool PauseDownloadTask();
     bool CancelDownloadTask();
-
-private:
     bool DoSetup();
+
+public:
+    bool IsUpdatePackage();
+    bool IsFinished();
+    void SetCheckCallBack(CheckCallBack f);
+private:
     void httpFinished();
     void httpReadyRead();
     void AddMenuItems();
+    void SetPackFlag(int type);
+    bool IsAutoSetupRunning();
     void ShowSetupProgress(bool);
     void UpdateUiAccordingToState();
     bool CheckVersionFileAfterSetup();
@@ -88,6 +99,7 @@ private:
     void UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTotal);
     void UpdatePlayButton(bool stopped=true);
     std::unique_ptr<QFile> openFileForWrite(const QString& fileName);
+    
 
 private:
     QUrl url_;
@@ -116,6 +128,10 @@ private:
     QNetworkAccessManager QNAManager_;
     int redirectTimes_;
     int retryTimes_;
+
+    int packFlag_;
+
+    CheckCallBack autoRuningFunc_;
 };
 
 

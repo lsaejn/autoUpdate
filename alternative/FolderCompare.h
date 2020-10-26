@@ -6,7 +6,6 @@
 #include <QHash>
 
 //fix me, use AlimeProgressBar
-#include "../AlimeQLib/QtAlimeProgressBar.h"
 #include <QProgressDialog>
 
 //class ProgressBarDialog: public QWidget

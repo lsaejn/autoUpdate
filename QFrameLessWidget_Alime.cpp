@@ -42,10 +42,9 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     rightContent_(nullptr),
     versionTips_(nullptr)
 {
-    {
-        ReadPkgFileInfo();
-        ReadLocalVersion();
-    }
+    ReadPkgFileInfo();
+    ReadLocalVersion();
+
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
     rightContent_ = new QWidget(this);
@@ -75,10 +74,12 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     leftButtonLayout->setSpacing(0);
     leftButtonLayout->addSpacing(20);
 
-    MAKE_PUSHBUTTON(btn01, u8"升级包", "btnBoard", true, true, leftButtonLayout);
-    MAKE_PUSHBUTTON(btn02, u8"补丁包", "btnBoard", true, false, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn01, u8"当前版本升级到最新", "btnBoard", true, true, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn02, u8"当前版本补丁", "btnBoard", true, false, leftButtonLayout);
     MAKE_PUSHBUTTON(btn03, u8"最新版光盘", "btnBoard", true, false, leftButtonLayout);
     MAKE_PUSHBUTTON(btn04, u8"差异更新/测试", "btnBoard", true, false, leftButtonLayout);
+    btn03->setVisible(false);
+    btn04->setVisible(false);
 
     QButtonGroup* group = new QButtonGroup(this);
     group->addButton(btn01, 0);
@@ -109,11 +110,11 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     vbox->addWidget(versionTips_);
 
-    updatePkgList_ = new QListWidget(this);
+    updatePkgList_ = new SetupWidget(this);
     updatePkgList_->setObjectName("updatePkgList");
-    fixPkgList_ = new QListWidget(this);
+    fixPkgList_ = new SetupWidget(this);
     fixPkgList_->setObjectName("fixPkgList");
-    imageWidget_ = new SetupImageWidget(this);
+    imageWidget_ = new QListWidget(this);
     integralFilesPackList_ = new QListWidget(this);
 
     stackWidget_ = new QStackedWidget(this);
@@ -150,13 +151,42 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
                 integralFilesPackList_->clear();
 
                 ReadLocalVersion();
-                ReadUpdatePacksInfo();//fix me,去掉参数
+                ReadUpdatePacksInfo();
                 ReadFixPacksInfo();//fix me
                 ReadIntegralFilesPackInfo();
             }
         });
-
     vbox->addWidget(stackWidget_);
+
+    QWidget* foot = new  QWidget(this);
+    QHBoxLayout* footBox = new QHBoxLayout(foot);
+    QPushButton* updateBtn = new QPushButton(u8"一键更新", foot);
+
+    connect(updateBtn, &QPushButton::clicked, [=]() {
+        SetupWidget* stackElem=dynamic_cast<SetupWidget*>(stackWidget_->currentWidget());
+        if (!stackElem)
+            return;
+        else
+        {
+            connect(stackElem, &SetupWidget::installing, [=](int i) {
+                updateBtn->setText(u8"正在安装");
+                });
+            connect(stackElem, &SetupWidget::finish, [=]() {
+                updateBtn->setText(u8"升级成功");
+                });
+            connect(stackElem, &SetupWidget::error, [=]() {
+                updateBtn->setText(u8"升级失败");
+                });
+            stackElem->SetupAllTask();
+        }
+        });
+
+    updateBtn->setObjectName("updateBtn");
+    footBox->addStretch(0);
+    footBox->addWidget(updateBtn);
+    footBox->addSpacing(50);
+    vbox->addWidget(foot);
+    vbox->addSpacing(40);
 }
 
 void QFrameLessWidget_Alime::ReadPkgFileInfo()
@@ -333,7 +363,7 @@ bool QFrameLessWidget_Alime::AddItemToComparisonDownloadWidget(const QString& ve
     return true;
 }
 
-bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
+DownloadInfoWidget* QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
     qint64 _fileSize, const QUrl& _url, const QString& fileName)
 {
     QListWidgetItem* item = new QListWidgetItem();
@@ -343,7 +373,7 @@ bool QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWid
     //auto index = _url.lastIndexOf("/");
     auto itemWidget = new DownloadInfoWidget(this, fileName, _fileSize, _url);
     target->setItemWidget(item, itemWidget);
-    return true;
+    return itemWidget;
 }
 
 //copy了代码，带来不好的味道。
@@ -378,7 +408,8 @@ void QFrameLessWidget_Alime::ReadFixPacksInfo()
             int pkgSize = var.toInt();
             //auto fullName = qUrl.toString();
             //auto fileApart = GetFilePart(fullName);
-            AddNewItemAndWidgetToList(fixPkgList_, this, pkgSize, url, GetFilePart(qUrl));
+            auto item=AddNewItemAndWidgetToList(fixPkgList_, this, pkgSize, url, GetFilePart(qUrl));
+            item->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, fixPkgList_));
         }
     }
 
@@ -446,6 +477,7 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
 
         auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
         updatePkgList_->setItemWidget(item, itemWidget);
+        itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
     }
 }
 

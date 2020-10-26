@@ -136,23 +136,53 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         downloadButton_ = new QPushButton(this);
         downloadButton_->setObjectName("ItemPlay");
         downloadButton_->setToolTip(u8"开始");
-        CHECK_CONNECT_ERROR(connect(downloadButton_, &QPushButton::clicked, this, &DownloadInfoWidget::StartDownloadTask));
+        (connect(downloadButton_, &QPushButton::clicked, [this] {
+            if (IsAutoSetupRunning())
+            {
+                ShowWarningBox("error", u8"正在一键更新", u8"确定");
+                return;
+            }
+            StartDownloadTask();
+            }));
 
         pauseButton_= new QPushButton(this);
         pauseButton_->setObjectName("ItemPlayPause");
         pauseButton_->setToolTip(u8"暂停");
         pauseButton_->hide();
-        CHECK_CONNECT_ERROR(connect(pauseButton_, &QPushButton::clicked, this, &DownloadInfoWidget::PauseDownloadTask));
+        CHECK_CONNECT_ERROR(connect(pauseButton_, &QPushButton::clicked, [this]()
+            {
+                if (IsAutoSetupRunning())
+                {
+                    ShowWarningBox("error", u8"正在一键更新", u8"确定");
+                    return;
+                }
+                PauseDownloadTask();
+            }));
 
         QPushButton* deleteLocalFile = new QPushButton(this);
         deleteLocalFile->setObjectName("ItemDelete");
         deleteLocalFile->setToolTip(u8"删除文件");
-        CHECK_CONNECT_ERROR(connect(deleteLocalFile, &QPushButton::clicked, this,&DownloadInfoWidget::CancelDownloadTask));
+        CHECK_CONNECT_ERROR(connect(deleteLocalFile, &QPushButton::clicked, [this]() {
+            if (IsAutoSetupRunning())
+            {
+                ShowWarningBox("error", u8"正在一键更新", u8"确定");
+                return;
+            }
+            CancelDownloadTask();
+            }));
 
         QPushButton* openFolder = new QPushButton(this);
         openFolder->setObjectName("ItemSetup");
         openFolder->setToolTip(u8"开始安装");
-        CHECK_CONNECT_ERROR(connect(openFolder, &QPushButton::clicked, this, &DownloadInfoWidget::DoSetup));
+        CHECK_CONNECT_ERROR(connect(openFolder, &QPushButton::clicked, [this]()
+            {
+                if (IsAutoSetupRunning())
+                {
+                    ShowWarningBox("error", u8"正在一键更新", u8"确定");
+                    return;
+                }
+                this->DoSetup();
+            }));
 
         //testButton
         //QPushButton* testBtn = new QPushButton("test", this);
@@ -365,12 +395,13 @@ void DownloadInfoWidget::httpFinished()
         downloadState_ = DownloadState::Finished;
         downloadStatusLabel_->setText(u8"已完成");
         UpdatePlayButton();
+        emit finishDownload();
         //QMessageBox::information(NULL, "Tip", QString(u8"下载完成"));
-        auto ret=ShowQuestionBox(u8"下载完成", u8"下载完成, 是否立即安装", u8"确定", u8"取消");
-        if (ret)
-        {
-            DoSetup();
-        }
+        //auto ret=ShowQuestionBox(u8"下载完成", u8"下载完成, 是否立即安装", u8"确定", u8"取消");
+        //if (ret)
+        //{
+        //    DoSetup();
+        //}
     }
     else if (bytesDown_ < totalSize_ )//we retry connecting here
     {
@@ -402,6 +433,7 @@ void DownloadInfoWidget::httpFinished()
                 qDebug(u8"状态逻辑错误");
             }
             UpdatePlayButton();
+            emit errorDownload();
         }
     }
     else
@@ -516,13 +548,18 @@ bool DownloadInfoWidget::DoSetup()
                 uzp.Recover();
         }
         else
-            OpenLocalPath(localFilePath_);
+        {
+            if(!IsAutoSetupRunning())
+                OpenLocalPath(localFilePath_);
+        }
+        emit finishSetup();
         return true;
     }
 
     if (SetupThread::HasInstance())
     {
         ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
+        emit finishSetup();
         return false;
     }
         
@@ -590,6 +627,7 @@ void DownloadInfoWidget::SetupStarted()
 void  DownloadInfoWidget::SetupFinished()
 {
     ShowSetupProgress(false);
+    emit finishSetup();
 }
 
 QString DownloadInfoWidget::MakeDownloadHeadway()
@@ -612,7 +650,6 @@ QString DownloadInfoWidget::MakeDownloadHeadway(int64_t readed, int64_t total)
         result += QString::number(ToMByte(total), 'f', 2) + "MB";
         return result;
     }
-    
 }
 
 QString DownloadInfoWidget::MakeDurationToString(int second)
@@ -755,7 +792,7 @@ void DownloadInfoWidget::AddMenuItems()
         [=](const QPoint& /*pos*/) {
             lableMenu->exec(QCursor::pos());
         }));
-    (connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
+    CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
         QString str = action->text();
         if (str == u8"开始")
             StartDownloadTask();
@@ -767,11 +804,43 @@ void DownloadInfoWidget::AddMenuItems()
         {
             if(QFile::exists(localFilePath_))
                 OpenLocalPath(localFilePath_);
-            else {
+            else
+            {
                 auto index=localFilePath_.lastIndexOf("/");
                 auto folderPath = localFilePath_.mid(0, index);
                 OpenLocalPath(folderPath);
             }
         }
         }));
+}
+
+bool DownloadInfoWidget::IsUpdatePackage()
+{
+    //fix me, fuck!
+    static int i = 0;
+    if (i++ % 2 == 0)
+        packFlag_ = 0;
+    else
+        packFlag_ = 1;
+    return packFlag_ == 0;
+}
+
+bool DownloadInfoWidget::IsFinished()
+{
+    return  bytesDown_ ==totalSize_;
+}
+
+void DownloadInfoWidget::SetPackFlag(int type)
+{
+    packFlag_ = type;
+}
+
+bool DownloadInfoWidget::IsAutoSetupRunning()
+{
+    return autoRuningFunc_();
+}
+
+void DownloadInfoWidget::SetCheckCallBack(CheckCallBack f)
+{
+    autoRuningFunc_ = f;
 }

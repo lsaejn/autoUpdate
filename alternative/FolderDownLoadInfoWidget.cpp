@@ -7,8 +7,10 @@
 #include <QApplication>
 #include <QStackedWidget>
 #include <QButtonGroup>
+#include <QProgressBar>
 
 #include "FolderDownloadInfoWidget.h"
+
 
 ComparisonDownloadInfoWidget::ComparisonDownloadInfoWidget
 	(QWidget* parent, const QString& version)

@@ -242,6 +242,9 @@
     <ClInclude Include="UnZipper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WebFileFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\close.png">
