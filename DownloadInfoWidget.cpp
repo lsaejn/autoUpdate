@@ -529,9 +529,8 @@ bool DownloadInfoWidget::DoSetup()
 {
     if (DownloadState::Finished != downloadState_)
     {
-        if (IsAutoSetupRunning())
-            return false;
-        ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
+        if (!IsAutoSetupRunning())
+            ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
         return false;
     }
     else if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
@@ -541,6 +540,7 @@ bool DownloadInfoWidget::DoSetup()
         {
             //fix me
             //UnZipFileTo();
+            SetupStarted();
             UnZipper uzp;
             uzp.SetResource(localFilePath_.toStdWString());
             uzp.SetTargetPath(GetPkpmRootPath().toStdWString());
@@ -548,6 +548,7 @@ bool DownloadInfoWidget::DoSetup()
             bool ret=uzp.UnZip();
             if(!ret)
                 uzp.Recover();
+            SetupFinished();
         }
         else
         {

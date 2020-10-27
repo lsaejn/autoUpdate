@@ -2,13 +2,16 @@
 
 #include "windows.h"
 
-#include <QFile>
 #include <string>
+
+#include <QFile>
 #include <QFileInfo>
 #include <QtGlobal>
+#include <QApplication>
 
 #include "AppUtility.h"
 #include "thirdParty/zlib/UnZip.h"
+
 
 /*
 *use like this, if all setting are default
@@ -144,6 +147,7 @@ private:
 		QString root= QString::fromStdWString(desPath_);
 		for (int i=0; i!=files.size(); ++i)
 		{
+			qApp->processEvents();
 			const QString& file = files[i];
 			if (file.endsWith("/"))
 			{
@@ -200,6 +204,7 @@ private:
 		ZIPENTRY ze;
 		for (int i = 0; i < numitems; i++)
 		{
+			qApp->processEvents();
 			if (ZR_OK != GetZipItem(hz_, i, &ze))
 			{
 				qDebug() << "GetZipItem error when trying to unzip to local path";

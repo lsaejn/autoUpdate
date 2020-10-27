@@ -56,6 +56,8 @@ public:
     };
 
     //调试用,时间比较吃紧，我们改成单线程跑状态机
+    //NotStarted，Finished是常态;Downloading是二者的中间状态；另外四个是中间状态转常态的顺时状态，方便更新控件
+    //
     enum class DownloadState
     {
         NotStarted,

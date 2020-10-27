@@ -57,6 +57,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>ALIME_DEVELOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\components;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
       <Command>copy D:\\AutoUpate\\QFrameLessWidget_Alime\\bin\\installerd.exe C:\Users\lsaejn\Desktop\pkpmV52\Installer\installerd.exe</Command>

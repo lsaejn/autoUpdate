@@ -122,14 +122,26 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     stackWidget_->addWidget(fixPkgList_);
     stackWidget_->addWidget(imageWidget_);
     stackWidget_->addWidget(integralFilesPackList_);
-    //不使用ID是担心可能要调整顺序 0.0
-    connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
-        stackWidget_, &QStackedWidget::setCurrentIndex);
 
     //fix me, 删掉这个连接。
     //每次更新完成后，重新读版本信息文件，然后刷新列表
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
-        [=]() {
+        [=](int index) {
+            {
+                for (int i = 0; i != stackWidget_->count(); ++i)
+                {
+                    SetupWidget* stackElem = dynamic_cast<SetupWidget*>(stackWidget_->widget(i));
+                    if (stackElem && stackElem->IsAutoSetupOn()&& i!=index)
+                    {
+                        ShowWarningBox("error", u8"另一个安装正在执行", u8"确定");
+                        auto btn=group->button(i);
+                        btn->setChecked(true);
+                        return;
+                    }
+                }
+            }
+            stackWidget_->setCurrentIndex(index);
+
             LocalVersionFile finder;
             auto newVersion=finder.GetLocalVersion();
             if (newVersion.empty())
@@ -165,14 +177,18 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     connect(updateBtn, &QPushButton::clicked, [=]() {
         SetupWidget* stackElem=dynamic_cast<SetupWidget*>(stackWidget_->currentWidget());
         if (!stackElem)
+        {
+            qWarning() << u8"stackWidget switch a index that should not opened to users";
             return;
+        }
         else
         {
             connect(stackElem, &SetupWidget::installing, [=](int i) {
-                updateBtn->setText(u8"正在安装");
+                QString str = QString(u8"正在安装第%1个安装包").arg(i);
+                updateBtn->setText(str);
                 });
             connect(stackElem, &SetupWidget::finish, [=]() {
-                updateBtn->setText(u8"升级成功");
+                updateBtn->setText(u8"更新结束");
                 });
             connect(stackElem, &SetupWidget::error, [=]() {
                 updateBtn->setText(u8"升级失败");
