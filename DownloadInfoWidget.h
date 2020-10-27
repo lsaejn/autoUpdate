@@ -77,6 +77,7 @@ public:
 public:
     bool IsUpdatePackage();
     bool IsFinished();
+    bool IsDownLoading();
     void SetCheckCallBack(CheckCallBack f);
 private:
     void httpFinished();

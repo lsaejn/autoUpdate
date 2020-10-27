@@ -529,6 +529,8 @@ bool DownloadInfoWidget::DoSetup()
 {
     if (DownloadState::Finished != downloadState_)
     {
+        if (IsAutoSetupRunning())
+            return false;
         ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
         return false;
     }
@@ -828,6 +830,11 @@ bool DownloadInfoWidget::IsUpdatePackage()
 bool DownloadInfoWidget::IsFinished()
 {
     return  bytesDown_ ==totalSize_;
+}
+
+bool DownloadInfoWidget::IsDownLoading()
+{
+    return downloadState_ == DownloadState::Downloading;
 }
 
 void DownloadInfoWidget::SetPackFlag(int type)

@@ -177,7 +177,10 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             connect(stackElem, &SetupWidget::error, [=]() {
                 updateBtn->setText(u8"升级失败");
                 });
-            stackElem->SetupAllTask();
+            if (!stackElem->IsAutoSetupOn())
+                stackElem->SetupAllTask();
+            else
+                ShowWarningBox("error", u8"另一个安装正在执行", u8"确定");
         }
         });
 

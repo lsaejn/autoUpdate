@@ -3,6 +3,8 @@
 #include <QLayout>
 #include <QLabel>
 #include <QEventLoop>
+#include <QApplication>
+#include "AppUtility.h"
 
 //#include <QArray>
 
@@ -16,7 +18,6 @@ SetupWidget::SetupWidget(QWidget* parent)
 #include "Alime/ScopeGuard.h"
 void SetupWidget::SetupAllTask()
 {
-    isAutoSetupRunning_ = true;
     ALIME_SCOPE_EXIT{
         isAutoSetupRunning_ = false;
     };
@@ -35,24 +36,35 @@ void SetupWidget::SetupAllTask()
         }
     }
     //fuuuuuuuuuuuuuuuuuuuuuuck
+    isAutoSetupRunning_ = true;
     for(auto elem: array)
     {
+        //没有时间判断了，先暂定下载再说
+        while (elem->IsDownLoading())
+        {
+            elem->PauseDownloadTask();
+            qApp->processEvents();
+        }
         if (!elem->IsFinished())
         {
             QEventLoop loop;
-            std::atomic<bool> downloadFailed = false;
+            std::atomic<bool> downloadFinished = false;
             //std::atomic<bool> downloadFinished = false;// optimize
-            connect(elem, &DownloadInfoWidget::finishDownload, &loop, &QEventLoop::quit, Qt::DirectConnection);
-            connect(elem, &DownloadInfoWidget::errorDownload, &loop, [&]() {
-                downloadFailed = true;
+            connect(elem, &DownloadInfoWidget::finishDownload, [&]() {
+                downloadFinished = true;
+                loop.quit();
                 });
-            connect(elem, &DownloadInfoWidget::errorDownload, &loop, &QEventLoop::quit, Qt::DirectConnection);
+            bool ret=connect(elem, &DownloadInfoWidget::errorDownload, [&]() {
+                downloadFinished = true;
+                ShowWarningBox(u8"错误", u8"网络中断, 更新失败", u8"确定");
+                loop.quit();
+                });
             elem->StartDownloadTask();
-
             loop.exec();
-            if (downloadFailed)
+            if (!downloadFinished)//安装过程中，用户关闭窗口
                 return;
         }
+
         QEventLoop loopSetup;
         std::atomic<bool> setupFinished = false;
         connect(elem, &DownloadInfoWidget::finishSetup, &loopSetup, &QEventLoop::quit, Qt::DirectConnection);
@@ -60,6 +72,7 @@ void SetupWidget::SetupAllTask()
             {
                 setupFinished = true;
             });
+        
         elem->DoSetup();
         if (!setupFinished)
             loopSetup.exec();
