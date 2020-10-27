@@ -52,7 +52,7 @@ QPushButton#updateBtn{
     background-color: rgb(6,168,255);
     font-size:22px;
     color: white;
-    min-width: 120px;
+    min-width: 180px;
     border-radius:4px
 }
 

@@ -42,7 +42,7 @@ void SetupWidget::SetupAllTask()
     isAutoSetupRunning_ = true;
     for(int i=0; i!= elemNum; ++i)
     {
-        auto const elem = array[i];
+        auto elem = array[i];
         //没有时间写状态判断了，先暂定下载再说
         while (elem->IsDownLoading())
         {
@@ -68,7 +68,7 @@ void SetupWidget::SetupAllTask()
             elem->StartDownloadTask();
             loop.exec();
             if (!downloadFinished)//安装过程中，用户关闭窗口
-                return;
+                return;//disconnect here
         }
 
         QEventLoop loopSetup;
@@ -80,8 +80,11 @@ void SetupWidget::SetupAllTask()
         elem->DoSetup();
         if (!setupFinished)
             loopSetup.exec();
-        emit finish(i);
+        //emit finish(i);//?
+        elem->disconnect(this);
     }
+    emit finish(2);//fix me, new signal replace this
+    disconnect();
 }
 
 bool SetupWidget::IsAutoSetupOn()

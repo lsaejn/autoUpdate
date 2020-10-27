@@ -42,8 +42,12 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     rightContent_(nullptr),
     versionTips_(nullptr)
 {
+    versionTips_ = new QLabel();
+    versionTips_->setObjectName("versionTips");
+
     ReadPkgFileInfo();
     ReadLocalVersion();
+
 
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
@@ -93,20 +97,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     rightContent_->setObjectName("rightContent");
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
 
-    versionTips_ = new QLabel();
-    versionTips_->setObjectName("versionTips");
 
-    if (!versionLocal_.empty())
-    {
-        ////fix me
-        versionTips_->setText((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下可升级版本").c_str());
-    }
-    else
-    {
-        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
-                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询本地版本信息, 请从官网重新下载完整程序");
-        ShowVersionTipsInfo(strHTML);
-    }
 
     vbox->addWidget(versionTips_);
 
@@ -189,6 +180,9 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
                 });
             connect(stackElem, &SetupWidget::finish, [=]() {
                 updateBtn->setText(u8"更新结束");
+                stackElem->clear();
+                ReadLocalVersion();
+                ReadPkgFileInfo();
                 });
             connect(stackElem, &SetupWidget::error, [=]() {
                 updateBtn->setText(u8"升级失败");
@@ -255,7 +249,6 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
     if (versionFiles.size() == 0)
     {
         qWarning() << u8"无法找到版本信息文件";
-        return false;
     }
     else
     {
@@ -263,6 +256,18 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
         versionLocal_ = "V" + versionFiles.back();
         mainVersionLocal_ = "V";
         mainVersionLocal_.push_back(versionFiles.back().front());
+    }
+
+    if (!versionLocal_.empty())
+    {
+        ////fix me
+        versionTips_->setText((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下可升级版本").c_str());
+    }
+    else
+    {
+        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
+                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询本地版本信息, 请从官网重新下载完整程序");
+        ShowVersionTipsInfo(strHTML);
     }
     return true;
 }
@@ -278,6 +283,11 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
     try
     {
         json_ = nlohmann::json::parse(str);
+        
+        fixPkgList_->clear();
+        updatePkgList_->clear();
+        integralFilesPackList_->clear();
+
         ReadUpdatePacksInfo();
         ReadFixPacksInfo();
         ReadInstallationCDInfo();
