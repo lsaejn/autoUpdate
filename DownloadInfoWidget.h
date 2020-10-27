@@ -31,11 +31,13 @@ class DownloadInfoWidget : public QWidget
 {
     Q_OBJECT
 signals:
+    //没有必要的信号
     void notify_progressInfo(double);
     void notify_sizeInfo(QString);
     void notify_playButton(bool);
     void notify_stateLabel(QString);
     void notify_timeLabel(QString);
+
     void finishDownload();
     void finishSetup();
     void errorDownload();

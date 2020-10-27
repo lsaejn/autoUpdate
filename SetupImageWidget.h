@@ -2,8 +2,20 @@
 #include <QListWidget>
 #include <atomic>
 //fix me
-//这个QListWidget也没时间写了
-//重设QListWidget，以便预设一些样式
+
+/*
+*需求突然修改导致以下问题:
+*1.业务上不能再同时更新两个StackWidget里的item了，否则文件会错乱。
+* 因此，当一键更新时，我禁止了切换StackWidget的切换，
+* 又因此，一个更新按钮就可以了。StackWidget只塞SetupWidget
+*2.一键更新被打断的方式太多了
+* 无论如何，SetupWidget里的自定义widget和更新按钮都不能做绑定，
+* 因为用户随时可以操作按钮。
+* 因此，当一键更新运行时，我直接禁止了用户操作以便视这次更新为一次完整事务。
+* 这样，用最简单的方式解决了交互问题。
+*/
+//而SetupWidget和更新按钮是同级的，这导致了一些交互问题
+//现在SetupWidget
 class SetupWidget : public QListWidget
 {
     Q_OBJECT
@@ -11,6 +23,7 @@ signals:
     void installing(int);
     void finish(int);
     void error();
+    void reset();
 public:
     SetupWidget(QWidget* parent);
     

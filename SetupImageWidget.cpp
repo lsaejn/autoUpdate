@@ -60,14 +60,15 @@ void SetupWidget::SetupAllTask()
                 loop.quit();
                 });
             bool ret=connect(elem, &DownloadInfoWidget::errorDownload, [&]() {
-                downloadFinished = true;
+                downloadFinished = false;
+                emit error();
                 ShowWarningBox(u8"错误", u8"网络中断, 更新失败", u8"确定");
                 loop.quit();
                 });
             emit installing(i+1);
             elem->StartDownloadTask();
             loop.exec();
-            if (!downloadFinished)//安装过程中，用户关闭窗口
+            if (!downloadFinished)//用户关闭窗口会导致loop结束
                 return;//disconnect here
         }
 

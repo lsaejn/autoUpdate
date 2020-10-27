@@ -179,13 +179,13 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
                 updateBtn->setText(str);
                 });
             connect(stackElem, &SetupWidget::finish, [=]() {
-                updateBtn->setText(u8"更新结束");
+                updateBtn->setText(u8"一键更新");
                 stackElem->clear();
                 ReadLocalVersion();
                 ReadPkgFileInfo();
                 });
             connect(stackElem, &SetupWidget::error, [=]() {
-                updateBtn->setText(u8"升级失败");
+                updateBtn->setText(u8"升级失败,重新开始");
                 });
             if (!stackElem->IsAutoSetupOn())
                 stackElem->SetupAllTask();

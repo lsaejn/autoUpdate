@@ -572,8 +572,8 @@ bool DownloadInfoWidget::DoSetup()
     if (!ret)
         return false;
     //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
-    //checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
-    //checker.ShutDownFuzzyMatchApp();
+    checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
+    checker.ShutDownFuzzyMatchApp();
 
     SetupThread* t =new SetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
@@ -700,7 +700,7 @@ void DownloadInfoWidget::UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTo
     {
         qDebug() << u8"下载完成"<<bytesDown_;
     }
-    qDebug() << u8"已下载:"<<bytesDown_;
+    //qDebug() << u8"已下载:"<<bytesDown_;
     emit notify_sizeInfo(MakeDownloadHeadway());
 }
 
