@@ -163,6 +163,9 @@
     <QtMoc Include="AlimeQLib\QtAlimeRippleOverlay.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="QssLoader.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="qss\dark.qss" />
@@ -170,9 +173,6 @@
     <None Include="qss\blue.qss" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="QssLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="thirdParty\nlohmann\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

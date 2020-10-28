@@ -130,6 +130,11 @@ QString GetPkpmRootPath()
     return s+"/";
 }
 
+QString GetStyleFilePath()
+{
+    return GetApplicationDirPath() + "..\\CFG\\PKPM.ini";
+}
+
 QString GetStyleName()
 {
     auto path=GetExeFolderW() + L"..\\CFG\\PKPM.ini";

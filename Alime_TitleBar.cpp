@@ -57,11 +57,11 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
 #ifdef ALIME_DEVELOP
     //开发版本提供按钮波纹，点击波纹，定制对话框
     btn_ = new QtAlimeImageButton(QIcon(":/images/PkpmV52.ico"), this);
-    btn_->setColor(Qt::white);
     btn_->setColor(QColor(53, 99, 203));
     btn_->setIconSize({30, 30});
     btn_->setFixedSize(height(), height());
     pLayout->addWidget(btn_);
+    iconLabel_->setVisible(false);
 #else
     pLayout->addWidget(iconLabel_);
 #endif

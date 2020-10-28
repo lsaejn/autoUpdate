@@ -17,6 +17,7 @@ QString GetApplicationDirPath();
 QString GetPkpmRootPath();
 
 QString GetStyleName();
+QString GetStyleFilePath();
 
 QString GetDownloadFolder();
 QString GetFolderPart(const QString&);
