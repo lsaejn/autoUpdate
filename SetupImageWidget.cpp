@@ -24,6 +24,7 @@ void SetupWidget::SetupAllTask()
     ALIME_SCOPE_EXIT{
         isAutoSetupRunning_ = false;
     };
+
     int elemNum=count();
     QVector<DownloadInfoWidget*> array{nullptr, nullptr };
     for (int i = 0; i != elemNum; ++i)
@@ -43,6 +44,8 @@ void SetupWidget::SetupAllTask()
     for(int i=0; i!= elemNum; ++i)
     {
         auto elem = array[i];
+        if (!elem)
+            return;
         //没有时间写状态判断了，先暂定下载再说
         while (elem->IsDownLoading())
         {
@@ -78,6 +81,7 @@ void SetupWidget::SetupAllTask()
                 setupFinished = true;
                 loopSetup.quit();
             });
+        emit installing(i + 1);
         elem->DoSetup();
         if (!setupFinished)
             loopSetup.exec();

@@ -60,7 +60,7 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
     btn_->setColor(Qt::white);
     btn_->setColor(QColor(53, 99, 203));
     btn_->setIconSize({30, 30});
-    btn_->setFixedSize(parent->height(), parent->height());
+    btn_->setFixedSize(height(), height());
     pLayout->addWidget(btn_);
 #else
     pLayout->addWidget(iconLabel_);

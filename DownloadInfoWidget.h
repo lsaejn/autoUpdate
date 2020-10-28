@@ -83,11 +83,12 @@ public:
     bool IsFinished();
     bool IsDownLoading();
     void SetCheckCallBack(CheckCallBack f);
+    void SetPackFlag(bool isUpdatePackage);
 private:
     void httpFinished();
     void httpReadyRead();
     void AddMenuItems();
-    void SetPackFlag(int type);
+    
     bool IsAutoSetupRunning();
     void ShowSetupProgress(bool);
     void UpdateUiAccordingToState();
@@ -134,7 +135,7 @@ private:
     int redirectTimes_;
     int retryTimes_;
 
-    int packFlag_;
+    int isUpdatePack_;
 
     CheckCallBack autoRuningFunc_;
 };

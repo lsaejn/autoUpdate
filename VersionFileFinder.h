@@ -52,12 +52,24 @@ class AscendingOrder
 public:
 	bool operator()(const std::string& lhs, const std::string& rhs)
 	{
-		int ret = Compare(lhs, rhs);
+		auto copyLhs = lhs;
+		auto copyRhs = rhs;
+		CheckPreFix(copyLhs, copyRhs);
+		int ret = Compare(copyLhs, copyRhs);
 		if (ret == -1)
 			return true;
 		return false;
 	}
 private:
+	void CheckPreFix(std::string& lhs, std::string& rhs)
+	{
+		if (lhs.front() == 'V' && rhs.front() == 'V')
+		{
+			lhs = lhs.substr(1);
+			rhs = rhs.substr(1);
+		}
+	}
+
 	//@return -1 when lhs<rhs , 0 when lhs==rhs, 1 when lhs>rhs
 	int Compare(const std::string& lhs, const std::string& rhs)
 	{

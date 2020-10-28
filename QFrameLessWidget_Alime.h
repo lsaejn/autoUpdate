@@ -42,15 +42,20 @@ private:
 
     bool AddItemToComparisonDownloadWidget(const QString&);
 
-    void ReadFixPacksInfo();
-    void ReadUpdatePacksInfo();
+    void ReadFixPacksInfo();//当前版本的补丁信息
+    void ReadUpdatePacksInfo();//下一个版本的升级信息和补丁信息
     void ReadInstallationCDInfo();
     void ReadIntegralFilesPackInfo();
+
+    //
+    void ReadInstallationCDInfo(SetupWidget* wgt);
+    //void ReadFixPacksInfo(SetupWidget* wgt);
+    void ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt, const std::string& version);
 private:
     QStackedWidget* stackWidget_;
     SetupWidget* updatePkgList_;
     SetupWidget* fixPkgList_;
-    QListWidget* imageWidget_;
+    SetupWidget* imageWidget_;
     QListWidget* integralFilesPackList_;
 
     QWidget* leftContent_;

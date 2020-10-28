@@ -83,12 +83,24 @@ void ConfigFileReadWriter::Init()
 		fixPackFolder_ = pkgRootFolder_+json_["fixPackFolder"].get<std::string>().c_str();
 		updatePackFolder_= pkgRootFolder_+json_["updatePackFolder"].get<std::string>().c_str();
 		integralImageFilesFolder_= pkgRootFolder_ + json_["IntegralImageFileFolder"].get<std::string>().c_str();
+		useLocalPackFile_= json_["useLocalPackInfo"].get<bool>();
+		localPackInfoName_ = json_["localPackInfo"].get<std::string>().c_str();
 	}
 	catch (...)
 	{
 		ShowWarningBox(u8"发生错误", u8"解析配置文件错误", u8"确定");
 		std::abort();
 	}
+}
+
+QString ConfigFileReadWriter::GetLocalPackInfoPath() const
+{
+	return GetApplicationDirPath()+localPackInfoName_;
+}
+
+bool ConfigFileReadWriter::IsLocalPackFileInfoOn() const
+{
+	return useLocalPackFile_;
 }
 
 void ConfigFileReadWriter::SaveToFile()

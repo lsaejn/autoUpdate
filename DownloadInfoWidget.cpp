@@ -820,12 +820,7 @@ void DownloadInfoWidget::AddMenuItems()
 bool DownloadInfoWidget::IsUpdatePackage()
 {
     //fix me, fuck!
-    static int i = 0;
-    if (i++ % 2 == 0)
-        packFlag_ = 0;
-    else
-        packFlag_ = 1;
-    return packFlag_ == 0;
+    return isUpdatePack_;
 }
 
 bool DownloadInfoWidget::IsFinished()
@@ -838,9 +833,9 @@ bool DownloadInfoWidget::IsDownLoading()
     return downloadState_ == DownloadState::Downloading;
 }
 
-void DownloadInfoWidget::SetPackFlag(int type)
+void DownloadInfoWidget::SetPackFlag(bool isUpdatePackage)
 {
-    packFlag_ = type;
+    isUpdatePack_ = isUpdatePackage;
 }
 
 bool DownloadInfoWidget::IsAutoSetupRunning()

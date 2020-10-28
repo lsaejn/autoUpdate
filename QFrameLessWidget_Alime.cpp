@@ -45,9 +45,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     versionTips_ = new QLabel();
     versionTips_->setObjectName("versionTips");
 
-    ReadPkgFileInfo();
     ReadLocalVersion();
-
 
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
@@ -97,15 +95,13 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     rightContent_->setObjectName("rightContent");
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
 
-
-
     vbox->addWidget(versionTips_);
 
     updatePkgList_ = new SetupWidget(this);
     updatePkgList_->setObjectName("updatePkgList");
     fixPkgList_ = new SetupWidget(this);
     fixPkgList_->setObjectName("fixPkgList");
-    imageWidget_ = new QListWidget(this);
+    imageWidget_ = new SetupWidget(this);
     integralFilesPackList_ = new QListWidget(this);
 
     stackWidget_ = new QStackedWidget(this);
@@ -175,7 +171,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
         else
         {
             connect(stackElem, &SetupWidget::installing, [=](int i) {
-                QString str = QString(u8"正在安装第%1个安装包").arg(i);
+                QString str = QString(u8"正在处理第%1个安装包").arg(i);
                 updateBtn->setText(str);
                 });
             connect(stackElem, &SetupWidget::finish, [=]() {
@@ -200,10 +196,24 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     footBox->addSpacing(50);
     vbox->addWidget(foot);
     vbox->addSpacing(40);
+
+    ReadPkgFileInfo();
 }
 
 void QFrameLessWidget_Alime::ReadPkgFileInfo()
 {
+    auto &config=ConfigFileReadWriter::Instance();
+    if (config.IsLocalPackFileInfoOn())
+    {
+        QFile f(config.GetLocalPackInfoPath());
+        if (f.open(QIODevice::ReadOnly))
+        {
+            QString qstr=f.readAll();
+            if(!qstr.isEmpty()&& InitDownloadList(qstr.toStdString()))
+                return;
+        }
+    }
+    //else
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &QFrameLessWidget_Alime::QueryInfoFinish);
     //fix me
@@ -303,31 +313,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 
 void QFrameLessWidget_Alime::ReadInstallationCDInfo()
 {
-    auto dubugString = json_.dump();
-    std::string isoFileUrl= json_["LatestIsoUrl"];
-    //使用qt https需要额外的库, 对于维护xp机器的人很痛苦
-    if (string_utility::startsWith(isoFileUrl.c_str(), "https"))
-    {
-        isoFileUrl.erase(4, 1);
-    }
-    QNetworkAccessManager manager;
-    QUrl url(isoFileUrl.c_str());
-    QEventLoop loop;
-    QNetworkReply* reply = manager.head(QNetworkRequest(url));
-    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
-    loop.exec();
-    QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
-    if (reply->error())
-    {
-        qDebug() << u8"查询光盘信息时出错";
-        qDebug() << reply->errorString();
-        reply->deleteLater();
-        return;
-    }
-    reply->deleteLater();
-
-    qint64 pkgSize = var.toLongLong();
-    AddNewItemAndWidgetToList(imageWidget_, this, pkgSize, url, GetFilePart(url));
+    return ReadInstallationCDInfo(imageWidget_);
 }
 
 void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
@@ -340,7 +326,7 @@ void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
         //debug
         QVector<QString> vec;
 
-        for (int i = 0; i != versions.size(); ++i)
+        for (size_t i = 0; i != versions.size(); ++i)
         {
             std::string v= versions[i].get<std::string>().c_str();
             if (string_utility::startsWith(v.c_str(), "V")&& v!= versionLocal_)
@@ -409,16 +395,54 @@ DownloadInfoWidget* QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidge
 //需要测试
 void QFrameLessWidget_Alime::ReadFixPacksInfo()
 {
+    return ReadFixPacksInfoOfSpecificVersion(fixPkgList_, versionLocal_);
+}
+
+void QFrameLessWidget_Alime::ReadInstallationCDInfo(SetupWidget* wgt)
+{
+    auto dubugString = json_.dump();
+    std::string isoFileUrl = json_["LatestIsoUrl"];
+    //使用qt https需要额外的库, 对于维护xp机器的人很痛苦
+    if (string_utility::startsWith(isoFileUrl.c_str(), "https"))
+    {
+        isoFileUrl.erase(4, 1);
+    }
+    QNetworkAccessManager manager;
+    QUrl url(isoFileUrl.c_str());
+    QEventLoop loop;
+    QNetworkReply* reply = manager.head(QNetworkRequest(url));
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+    loop.exec();
+    QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+    if (reply->error())
+    {
+        qDebug() << u8"查询光盘信息时出错";
+        qDebug() << reply->errorString();
+        reply->deleteLater();
+        return;
+    }
+    reply->deleteLater();
+
+    qint64 pkgSize = var.toLongLong();
+    auto itemWidget=AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(url));
+    itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
+    itemWidget->SetPackFlag(true);
+}
+
+void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt, const std::string& version)
+{
+    auto debug = json_.dump(4);
     const nlohmann::json& json = json_["FixPacks"];
 
-    if (!versionLocal_.empty() && json.find(versionLocal_) != json.end())
+    if (!version.empty() && json.find(version) != json.end())
     {
-        nlohmann::json array = json_["FixPacks"][versionLocal_];
+        nlohmann::json array = json_["FixPacks"][version];
+        auto sz = array.size();
         QNetworkAccessManager manager;//网上的意思是最多5个请求
-        for (size_t i = 0; i != array.size(); ++i)
+        if (true)
         {
-            auto str=array[i].get<std::string>();
-            QString url = ConfigFileReadWriter::Instance().GetUrlOfFixPackFolder() + str.c_str();
+            auto packName = array["url"].get<std::string>();
+            QString url = ConfigFileReadWriter::Instance().GetUrlOfFixPackFolder() + packName.c_str();
             QEventLoop loop;
             QUrl qUrl{ url };
             QNetworkReply* reply = manager.head(QNetworkRequest(qUrl));
@@ -430,20 +454,21 @@ void QFrameLessWidget_Alime::ReadFixPacksInfo()
             {
                 qDebug() << reply->errorString();
                 reply->deleteLater();
-                continue;
+                return;
             }
             reply->deleteLater();
 
             int pkgSize = var.toInt();
             //auto fullName = qUrl.toString();
             //auto fileApart = GetFilePart(fullName);
-            auto item=AddNewItemAndWidgetToList(fixPkgList_, this, pkgSize, url, GetFilePart(qUrl));
-            item->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, fixPkgList_));
+            auto item = AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(qUrl));
+            item->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, wgt));
+            item->SetPackFlag(false);
         }
     }
-
 }
 
+#include <algorithm>
 std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nlohmann::json& json)
 {
     std::vector<std::string> keys;
@@ -463,6 +488,13 @@ std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nl
             {
                     keys.push_back(iter.key());
             }
+        }
+        //需求改了，但是要求是更严格了。所以我们在这里再过滤一次
+        //我们只给出最新的包
+        std::sort(keys.begin(), keys.end(), AscendingOrder());
+        if (keys.size() > 1)
+        {
+            keys.erase(keys.begin(), --keys.end());
         }
         return keys;
     }
@@ -507,6 +539,17 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
         auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
         updatePkgList_->setItemWidget(item, itemWidget);
         itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
+
+        //10/28, 好爽
+        ReadFixPacksInfoOfSpecificVersion(updatePkgList_, key);
+    }
+
+    //10/27 我们留到以后再改这个地方
+    auto num = keys.size();
+    if (num == 0)
+    {
+        //光盘
+        ReadInstallationCDInfo(updatePkgList_);
     }
 }
 

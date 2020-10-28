@@ -8,6 +8,7 @@ public:
 	static ConfigFileReadWriter& Instance();
 	QString GetLogFilePath() const;
 	QString GetDownloadFolder() const;
+	QString GetLocalPackInfoPath() const;
 	QString GetUrlOfUpdateInfoFile() const;
 	QString GetUrlOfPkgRootFolder() const;
 	QString GetUrlOfFixPackFolder() const;
@@ -17,6 +18,8 @@ public:
 	size_t GetLogLevel() const;
 	size_t GetLogFileRollSize() const;
 	size_t GetMaxTaskNumber() const;
+
+	bool IsLocalPackFileInfoOn() const;
 
 	void SetDownloadFolder();
 
@@ -32,6 +35,7 @@ private:
 	size_t logLever_;
 	size_t maxTaskNum_;
 	size_t logFileRollSize_;
+	bool useLocalPackFile_ = false;
 	QString logFilePath_;
 	QString downloadDir_;
 	QString updateInfoUrl_;
@@ -39,6 +43,7 @@ private:
 	QString fixPackFolder_;
 	QString updatePackFolder_;
 	QString integralImageFilesFolder_;
+	QString localPackInfoName_;
 	nlohmann::json json_;
 };
 

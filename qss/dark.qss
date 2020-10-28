@@ -58,7 +58,7 @@ QPushButton#updateBtn{
 }
 
 QPushButton#updateBtn:hover{
-    background-color: rgb(6,168,255,200);
+    background-color: rgb(6,168,255);
     font-size:22px;
     color: white;
 }
