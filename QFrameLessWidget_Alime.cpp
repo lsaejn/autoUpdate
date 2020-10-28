@@ -170,6 +170,13 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
         }
         else
         {
+            if (!stackElem->IsAutoSetupOn())
+                stackElem->SetupAllTask();
+            else
+            {
+                ShowWarningBox("error", u8"另一个安装正在执行", u8"确定");
+                return;
+            }
             connect(stackElem, &SetupWidget::installing, [=](int i) {
                 QString str = QString(u8"正在处理第%1个安装包").arg(i);
                 updateBtn->setText(str);
@@ -183,10 +190,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             connect(stackElem, &SetupWidget::error, [=]() {
                 updateBtn->setText(u8"升级失败,重新开始");
                 });
-            if (!stackElem->IsAutoSetupOn())
-                stackElem->SetupAllTask();
-            else
-                ShowWarningBox("error", u8"另一个安装正在执行", u8"确定");
+
         }
         });
 
@@ -429,6 +433,15 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo(SetupWidget* wgt)
     itemWidget->SetPackFlag(true);
 }
 
+//无比保证这个版本文件是英文
+bool IsFileExist(const std::string& filename)
+{
+    auto str= GetApplicationDirPath() + "../CFG/" + filename.c_str();
+    QFile f(str);
+    return f.exists();
+}
+
+
 void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt, const std::string& version)
 {
     auto debug = json_.dump(4);
@@ -437,10 +450,14 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt,
     if (!version.empty() && json.find(version) != json.end())
     {
         nlohmann::json array = json_["FixPacks"][version];
-        auto sz = array.size();
+        auto sz = array.size();//sz must equals 1, 由于逻辑大改
         QNetworkAccessManager manager;//网上的意思是最多5个请求
         if (true)
         {
+            if (IsFileExist(array["patchName"]))
+            {
+                return;
+            }
             auto packName = array["url"].get<std::string>();
             QString url = ConfigFileReadWriter::Instance().GetUrlOfFixPackFolder() + packName.c_str();
             QEventLoop loop;

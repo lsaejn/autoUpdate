@@ -23,6 +23,8 @@ void SetupWidget::SetupAllTask()
 {
     ALIME_SCOPE_EXIT{
         isAutoSetupRunning_ = false;
+        emit finish(2);//fix me, new signal replace this
+        disconnect();
     };
 
     int elemNum=count();
@@ -88,8 +90,6 @@ void SetupWidget::SetupAllTask()
         //emit finish(i);//?
         elem->disconnect(this);
     }
-    emit finish(2);//fix me, new signal replace this
-    disconnect();
 }
 
 bool SetupWidget::IsAutoSetupOn()

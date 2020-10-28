@@ -529,6 +529,7 @@ bool DownloadInfoWidget::DoSetup()
 {
     if (DownloadState::Finished != downloadState_)
     {
+        //fix me, 好像逻辑有哪里不对
         if (!IsAutoSetupRunning())
             ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
         return false;
@@ -589,14 +590,14 @@ bool DownloadInfoWidget::DoSetup()
         }
         }));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));
-    connect(t, &SetupThread::TaskFinished, this, 
-        &DownloadInfoWidget::ShowTipsWhenSetupFinished);
+    connect(t, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished);
     t->start();
     return true;
 }
 
 void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 {
+    //调试
     if (!errorCode)
     {
         ShowWarningBox(u8"结束", u8"安装程序执行完毕", u8"确定");
