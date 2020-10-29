@@ -171,10 +171,10 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
             CancelDownloadTask();
             }));
 
-        QPushButton* openFolder = new QPushButton(this);
-        openFolder->setObjectName("ItemSetup");
-        openFolder->setToolTip(u8"开始安装");
-        CHECK_CONNECT_ERROR(connect(openFolder, &QPushButton::clicked, [this]()
+        QPushButton* setupBtn = new QPushButton(this);
+        setupBtn->setObjectName("ItemSetup");
+        setupBtn->setToolTip(u8"开始安装");
+        CHECK_CONNECT_ERROR(connect(setupBtn, &QPushButton::clicked, [this]()
             {
                 if (IsAutoSetupRunning())
                 {
@@ -196,7 +196,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         mainLayout->addSpacing(15);
         mainLayout->addWidget(deleteLocalFile);
         mainLayout->addSpacing(15);
-        mainLayout->addWidget(openFolder);
+        mainLayout->addWidget(setupBtn);
         mainLayout->addSpacing(15);
     }
 }
@@ -295,7 +295,7 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     QUrl url = requestedUrl;
 
     QNetworkRequest request(url);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, false);
     // 如果支持断点续传，则设置请求头信息
     if (isBreakPointTranSupported_)
     {
@@ -397,11 +397,12 @@ void DownloadInfoWidget::httpFinished()
         UpdatePlayButton();
         emit finishDownload();
         //QMessageBox::information(NULL, "Tip", QString(u8"下载完成"));
-        //auto ret=ShowQuestionBox(u8"下载完成", u8"下载完成, 是否立即安装", u8"确定", u8"取消");
-        //if (ret)
-        //{
-        //    DoSetup();
-        //}
+        if (!IsAutoSetupRunning())
+        {
+            auto ret = ShowQuestionBox(u8"下载完成", u8"下载完成, 是否立即安装", u8"确定", u8"取消");
+            if (ret)
+                DoSetup();
+        }
     }
     else if (bytesDown_ < totalSize_ )//we retry connecting here
     {
@@ -534,7 +535,23 @@ bool DownloadInfoWidget::DoSetup()
             ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
         return false;
     }
-    else if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
+
+    if (SetupThread::HasInstance())
+    {
+        ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
+        return false;
+    }
+
+    ProcessManager checker;
+    checker.SetMatchReg(L"PKPMMAIN.EXE");
+    bool ret = checker.AssurePkpmmainClosed();
+    if (!ret)
+        return false;
+    //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
+    checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
+    checker.ShutDownFuzzyMatchApp();
+
+    if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
     {
         qDebug() << u8"正在安装的并非应用程序";
         if (localFilePath_.endsWith(".zip", Qt::CaseInsensitive))
@@ -556,25 +573,9 @@ bool DownloadInfoWidget::DoSetup()
             if(!IsAutoSetupRunning())
                 OpenLocalPath(localFilePath_);
         }
-        emit finishSetup();
         return true;
     }
 
-    if (SetupThread::HasInstance())
-    {
-        ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
-        emit finishSetup();
-        return false;
-    }
-        
-    ProcessManager checker;
-    checker.SetMatchReg(L"PKPMMAIN.EXE");
-    bool ret=checker.AssurePkpmmainClosed();
-    if (!ret)
-        return false;
-    //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
-    checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
-    checker.ShutDownFuzzyMatchApp();
 
     SetupThread* t =new SetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
@@ -597,6 +598,7 @@ bool DownloadInfoWidget::DoSetup()
 
 void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 {
+    Setuping_ = false;
     //调试
     if (!errorCode)
     {
@@ -623,15 +625,23 @@ void DownloadInfoWidget::ShowSetupProgress(bool visible)
         downloadStatusLabel_->setText(u8"已完成");
     }
 }
+
 void DownloadInfoWidget::SetupStarted()
 {
+    Setuping_ = true;
     ShowSetupProgress(true);
 }
 
 void  DownloadInfoWidget::SetupFinished()
 {
+    Setuping_ = false;
     ShowSetupProgress(false);
     emit finishSetup();
+}
+
+bool DownloadInfoWidget::IsSetuping()
+{
+    return Setuping_;
 }
 
 QString DownloadInfoWidget::MakeDownloadHeadway()

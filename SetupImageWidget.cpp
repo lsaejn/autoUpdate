@@ -16,6 +16,7 @@ SetupWidget::SetupWidget(QWidget* parent)
 }
 
 #include "Alime/ScopeGuard.h"
+#include "TaskThread.h"
 /*
 一键更新按钮是意料之外的需求，我们靠奇技淫巧搞定它
 */
@@ -26,6 +27,11 @@ void SetupWidget::SetupAllTask()
         emit finish(2);//fix me, new signal replace this
         disconnect();
     };
+    if (SetupThread::HasInstance())
+    {
+        ShowWarningBox("error", u8"请等待另一个安装执行完成", u8"确定");
+        return;
+    }
 
     int elemNum=count();
     QVector<DownloadInfoWidget*> array{nullptr, nullptr };
@@ -43,11 +49,11 @@ void SetupWidget::SetupAllTask()
     }
     //fuuuuuuuuuuuuuuuuuuuuuuck
     isAutoSetupRunning_ = true;
-    for(int i=0; i!= elemNum; ++i)
+    for(int i=0; i!= array.size(); ++i)
     {
         auto elem = array[i];
         if (!elem)
-            return;
+            continue;
         //没有时间写状态判断了，先暂定下载再说
         while (elem->IsDownLoading())
         {
@@ -95,4 +101,19 @@ void SetupWidget::SetupAllTask()
 bool SetupWidget::IsAutoSetupOn()
 {
     return isAutoSetupRunning_;
+}
+
+bool SetupWidget::HasSetupItem()
+{
+    int elemNum = count();
+    for (int i = 0; i != elemNum; ++i)
+    {
+        auto elem = item(i);
+        DownloadInfoWidget* item = dynamic_cast<DownloadInfoWidget*>(itemWidget(elem));
+        if (item && item->IsSetuping())
+        {
+            return true;
+        }
+    }
+    return false;
 }

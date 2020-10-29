@@ -556,14 +556,24 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
         auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
         updatePkgList_->setItemWidget(item, itemWidget);
         itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
-
+        connect(itemWidget, &DownloadInfoWidget::finishSetup, [&]() {
+            if (itemWidget->IsUpdatePackage()&&!updatePkgList_->IsAutoSetupOn())
+            {
+                updatePkgList_->clear();
+                fixPkgList_->clear();
+                integralFilesPackList_->clear();
+                ReadLocalVersion();
+                ReadUpdatePacksInfo();
+                ReadFixPacksInfo();//fix me
+            }
+            });
         //10/28, 好爽
         ReadFixPacksInfoOfSpecificVersion(updatePkgList_, key);
     }
 
     //10/27 我们留到以后再改这个地方
     auto num = keys.size();
-    if (num == 0)
+    if (num == 0&& json.find(mainVersionLocal_) == json.end())
     {
         //光盘
         ReadInstallationCDInfo(updatePkgList_);

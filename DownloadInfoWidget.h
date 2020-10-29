@@ -80,7 +80,8 @@ public:
 
 public:
     bool IsUpdatePackage();
-    bool IsFinished();
+    bool IsFinished();//download
+    bool IsSetuping();
     bool IsDownLoading();
     void SetCheckCallBack(CheckCallBack f);
     void SetPackFlag(bool isUpdatePackage);
@@ -131,9 +132,10 @@ private:
     //fix me, use function instead
     DownloadState downloadState_;
     bool isBreakPointTranSupported_;
+    bool Setuping_=false;
     QNetworkAccessManager QNAManager_;
     int redirectTimes_;
-    int retryTimes_;
+    int retryTimes_=0;
 
     int isUpdatePack_;
 

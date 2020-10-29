@@ -35,8 +35,9 @@ border-left:2px solid rgba(160,160,160,70);
 
 QPushButton#btnBoard{
 background-color: transparent;
-font-size:24px;
+font-size:22px;
 color:rgb(6,168,255);
+border-left:8px solid rgba(68,68,68,0);
 }
 
 QPushButton#btnBoard:hover{
