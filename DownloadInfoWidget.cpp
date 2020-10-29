@@ -591,7 +591,7 @@ bool DownloadInfoWidget::DoSetup()
         }
         }));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));
-    connect(t, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished);
+    connect(t, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished,Qt::QueuedConnection);
     t->start();
     return true;
 }

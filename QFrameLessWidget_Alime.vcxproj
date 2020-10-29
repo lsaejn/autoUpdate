@@ -46,7 +46,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
     <OutDir>$(SolutionDir)bin\</OutDir>
-    <TargetName>installerd</TargetName>
+    <TargetName>installer</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
     <OutDir>$(SolutionDir)bin\release\</OutDir>
@@ -60,7 +60,7 @@
       <AdditionalIncludeDirectories>..\components;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
-      <Command>copy D:\\AutoUpate\\QFrameLessWidget_Alime\\bin\\installerd.exe C:\Users\lsaejn\Desktop\pkpmV52\Installer\installerd.exe</Command>
+      <Command>copy D:\\AutoUpate\\QFrameLessWidget_Alime\\bin\\installerd.exe C:\Users\lsaejn\Desktop\pkpmV52\Installer\installer.exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,6 +77,9 @@
     <QtMoc>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </QtMoc>
+    <PostBuildEvent>
+      <Command>copy D:\\AutoUpate\\QFrameLessWidget_Alime\\bin\\release\\installer.exe C:\Users\lsaejn\Desktop\pkpmV52\Installer\installer.exe</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>5.6.3</QtInstall>
