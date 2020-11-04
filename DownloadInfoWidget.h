@@ -39,7 +39,7 @@ signals:
     void notify_timeLabel(QString);
 
     void finishDownload();
-    void finishSetup();
+    void finishSetup(bool);
     void errorDownload();
 public slots:
     void ShowTipsWhenSetupFinished(int);
@@ -48,7 +48,12 @@ public slots:
     
 public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QUrl& url);
-    ~DownloadInfoWidget()=default;
+    ~DownloadInfoWidget()
+    {
+        int x = 3;
+        ++x;
+        disconnect();
+    }
 
     enum class WebFileType
     {
@@ -137,9 +142,12 @@ private:
     int redirectTimes_;
     int retryTimes_=0;
 
-    int isUpdatePack_;
+    bool isUpdatePack_=true;
+    
 
     CheckCallBack autoRuningFunc_;
+public:
+    bool isInWrongPosition_ = false;//!!!!!!!!!!!!!!!!!!!fuck!!!!!
 };
 
 

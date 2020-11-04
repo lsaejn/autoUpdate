@@ -90,11 +90,16 @@ void SetupWidget::SetupAllTask()
                 loopSetup.quit();
             });
         emit installing(i + 1);
-        elem->DoSetup();
+        bool succ=elem->DoSetup();
+        if (!succ)
+        {
+            //真正的安装没有开始，iso文件/用户取消
+            setupFinished = true;
+        }
         if (!setupFinished)
             loopSetup.exec();
         //emit finish(i);//?
-        elem->disconnect(this);
+        //elem->disconnect(this);
     }
 }
 

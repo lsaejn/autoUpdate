@@ -481,6 +481,43 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt,
             auto item = AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(qUrl));
             item->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, wgt));
             item->SetPackFlag(false);
+            if (versionLocal_ != version)
+            {
+                item->isInWrongPosition_ = true;
+                //fix me, use [&]
+                connect(item, &DownloadInfoWidget::finishSetup, [=](bool isUpdatePack) {
+                    if (isUpdatePack == false && updatePkgList_->IsAutoSetupOn())
+                    {
+                        updatePkgList_->clear();
+                        fixPkgList_->clear();
+                        integralFilesPackList_->clear();
+                        ReadLocalVersion();
+                        ReadUpdatePacksInfo();
+                        ReadFixPacksInfo();//fix me
+                        {
+                            auto hwnd = (HWND)window()->winId();
+                            RECT rc;
+                            ::GetWindowRect(hwnd, &rc);
+                            MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
+                            MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
+                        }
+                    }
+                    });
+            }
+            else
+            {
+                connect(item, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
+                    fixPkgList_->clear();
+                    ReadFixPacksInfo();
+                    auto hwnd = (HWND)window()->winId();
+                    RECT rc;
+                    ::GetWindowRect(hwnd, &rc);
+                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
+                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
+                    });
+            }
+                
+            
         }
     }
 }
@@ -556,8 +593,12 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
         auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
         updatePkgList_->setItemWidget(item, itemWidget);
         itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
-        connect(itemWidget, &DownloadInfoWidget::finishSetup, [&]() {
-            if (itemWidget->IsUpdatePackage()&&!updatePkgList_->IsAutoSetupOn())
+        connect(itemWidget, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
+            if (!itemWidget)
+            {
+                int x = 3;//fuck
+            }
+            if ((isUpdatePack &&!updatePkgList_->IsAutoSetupOn()))
             {
                 updatePkgList_->clear();
                 fixPkgList_->clear();
@@ -565,6 +606,13 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
                 ReadLocalVersion();
                 ReadUpdatePacksInfo();
                 ReadFixPacksInfo();//fix me
+                {
+                    auto hwnd = (HWND)window()->winId();
+                    RECT rc;
+                    ::GetWindowRect(hwnd, &rc);
+                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
+                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
+                }
             }
             });
         //10/28, ∫√À¨

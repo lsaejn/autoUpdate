@@ -176,6 +176,11 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         setupBtn->setToolTip(u8"开始安装");
         CHECK_CONNECT_ERROR(connect(setupBtn, &QPushButton::clicked, [this]()
             {
+                if (isInWrongPosition_)
+                {
+                    ShowWarningBox("error", u8"请先安装升级包", u8"确定");
+                    return;
+                }
                 if (IsAutoSetupRunning())
                 {
                     ShowWarningBox("error", u8"正在一键更新", u8"确定");
@@ -549,7 +554,9 @@ bool DownloadInfoWidget::DoSetup()
         return false;
     //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
     checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
-    checker.ShutDownFuzzyMatchApp();
+    ret=checker.ShutDownFuzzyMatchApp();
+    if (!ret)
+        return false;
 
     if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
     {
@@ -570,16 +577,17 @@ bool DownloadInfoWidget::DoSetup()
         }
         else
         {
-            if(!IsAutoSetupRunning())
+            //if(IsAutoSetupRunning())
                 OpenLocalPath(localFilePath_);
+            return false;
         }
         return true;
     }
 
 
     SetupThread* t =new SetupThread(this, localFilePath_);
-    CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted), Qt::QueuedConnection);
-    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, this, &DownloadInfoWidget::SetupFinished), Qt::QueuedConnection);
+    CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
+    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
     //CHECK_CONNECT_ERROR(connect(t, &QThread::finished, [=]() {
     //    bool ret = CheckVersionFileAfterSetup();
     //    if (!ret)
@@ -596,8 +604,11 @@ bool DownloadInfoWidget::DoSetup()
     return true;
 }
 
+//需要改成static
 void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 {
+    if (!this)
+        return;
     Setuping_ = false;
     //调试
     if (!errorCode)
@@ -612,6 +623,12 @@ void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 
 void DownloadInfoWidget::ShowSetupProgress(bool visible)
 {
+    if (!this)
+    {
+        qWarning() << "Fatal error, you know";
+        return;
+    }
+        
     if (visible)
     {
         progressBar_->setVisible(false);
@@ -636,7 +653,7 @@ void  DownloadInfoWidget::SetupFinished()
 {
     Setuping_ = false;
     ShowSetupProgress(false);
-    emit finishSetup();
+    emit finishSetup(isUpdatePack_);
 }
 
 bool DownloadInfoWidget::IsSetuping()
