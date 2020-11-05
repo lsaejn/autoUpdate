@@ -171,7 +171,7 @@ public:
 						//iter.KillProcess(iter->th32ProcessID);
 						auto hwnd=Alime::ProcessIterator::FindMainHwndByPid(iter->th32ProcessID);
 						if(hwnd)
-							SendMessage(hwnd, WM_USER + 7, 0, 0);
+							//SendMessage(hwnd, WM_USER + 7, 0, 0);
 						qDebug() << "notify user to close app";
 						break;//从头检查一次. fix me, or continue
 					}

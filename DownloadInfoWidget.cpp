@@ -588,16 +588,6 @@ bool DownloadInfoWidget::DoSetup()
     SetupThread* t =new SetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
-    //CHECK_CONNECT_ERROR(connect(t, &QThread::finished, [=]() {
-    //    bool ret = CheckVersionFileAfterSetup();
-    //    if (!ret)
-    //    {
-    //        qDebug() << "VersionFile error";
-    //    }
-    //    else {
-    //        //update Ui here
-    //    }
-    //    }));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));
     connect(t, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished,Qt::QueuedConnection);
     t->start();
