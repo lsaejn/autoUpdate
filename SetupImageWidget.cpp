@@ -54,7 +54,7 @@ void SetupWidget::SetupAllTask()
         auto elem = array[i];
         if (!elem)
             continue;
-        //没有时间写状态判断了，先暂定下载再说
+        //没有时间写状态判断了，先暂停下载再说
         while (elem->IsDownLoading())
         {
             elem->PauseDownloadTask();

@@ -1,6 +1,7 @@
 #pragma once
 #include <QThread>
 #include <functional>
+#include "ConfigFileRW.h"
 #include "AppUtility.h"
 
 
@@ -77,11 +78,24 @@ protected:
     {
         QString path(localFilePath_);
         std::wstring u16AppPath = path.toStdWString();
+        std::replace(u16AppPath.begin(), u16AppPath.end(), L'/', L'\\');
 
         auto folder = GetExeFolderW();
-        folder += L"..\\";
-        //folder = L"/S -PATH=\"" + folder + L"\"";
-        folder = L" -PATH=\"" + folder + L"\"";
+        if (folder.size() > 3)
+        {
+            folder = folder.substr(0, folder.length() - 1);
+            auto index = folder.find_last_of(L'\\');
+            folder = folder.substr(0, index);
+        }
+        else {
+            qDebug() << "不应该被安装到根目录";
+        }
+
+        if(ConfigFileReadWriter::Instance().IsSilentInstallationOn())
+            folder = L" /S -PATH=\"" + folder + L"\"";
+        else
+            folder = L" -PATH=\"" + folder + L"\"";
+
         SHELLEXECUTEINFO ShExecInfo = { 0 };
         ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
         ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
@@ -90,7 +104,6 @@ protected:
         ShExecInfo.hInstApp = NULL;
         ShExecInfo.lpFile = u16AppPath.c_str();
         ShExecInfo.lpParameters = folder.c_str();
-        ShExecInfo.lpDirectory = NULL;
         ShExecInfo.nShow = SW_NORMAL;
 
         ShellExecuteExW(&ShExecInfo);

@@ -6,6 +6,7 @@ class ConfigFileReadWriter
 {
 public:
 	static ConfigFileReadWriter& Instance();
+
 	QString GetLogFilePath() const;
 	QString GetDownloadFolder() const;
 	QString GetLocalPackInfoPath() const;
@@ -20,6 +21,7 @@ public:
 	size_t GetMaxTaskNumber() const;
 
 	bool IsLocalPackFileInfoOn() const;
+	bool IsSilentInstallationOn() const;
 
 	void SetDownloadFolder();
 
@@ -36,6 +38,7 @@ private:
 	size_t maxTaskNum_;
 	size_t logFileRollSize_;
 	bool useLocalPackFile_ = false;
+	bool useSilentInstallation_ = false;
 	QString logFilePath_;
 	QString downloadDir_;
 	QString updateInfoUrl_;

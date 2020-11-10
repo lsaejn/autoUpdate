@@ -606,6 +606,7 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
                 ReadLocalVersion();
                 ReadUpdatePacksInfo();
                 ReadFixPacksInfo();//fix me
+                //这个地方看着很难堪~显然Qt应该要做到像wpf一样，updatePkgList_=null, updatePkgList_=...
                 {
                     auto hwnd = (HWND)window()->winId();
                     RECT rc;

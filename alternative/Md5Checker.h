@@ -127,6 +127,7 @@ public:
         bool result = ScanFolder(folder_, checker);
         if (!result)
             return false;
+        return true;
     }
 
 private:

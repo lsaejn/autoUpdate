@@ -85,6 +85,7 @@ void ConfigFileReadWriter::Init()
 		integralImageFilesFolder_= pkgRootFolder_ + json_["IntegralImageFileFolder"].get<std::string>().c_str();
 		useLocalPackFile_= json_["useLocalPackInfo"].get<bool>();
 		localPackInfoName_ = json_["localPackInfo"].get<std::string>().c_str();
+		useSilentInstallation_ = json_["silentInstallation"].get<bool>();
 	}
 	catch (...)
 	{
@@ -101,6 +102,11 @@ QString ConfigFileReadWriter::GetLocalPackInfoPath() const
 bool ConfigFileReadWriter::IsLocalPackFileInfoOn() const
 {
 	return useLocalPackFile_;
+}
+
+bool ConfigFileReadWriter::IsSilentInstallationOn() const
+{
+	return useSilentInstallation_;
 }
 
 void ConfigFileReadWriter::SaveToFile()
