@@ -1,5 +1,7 @@
 #pragma once
 #include <QThread>
+#include <QFile>
+#include <QDir>
 #include <functional>
 #include "ConfigFileRW.h"
 #include "AppUtility.h"
@@ -80,21 +82,43 @@ protected:
         std::wstring u16AppPath = path.toStdWString();
         std::replace(u16AppPath.begin(), u16AppPath.end(), L'/', L'\\');
 
-        auto folder = GetExeFolderW();
-        if (folder.size() > 3)
+        auto targetFolder = GetExeFolderW();
+        std::wstring param;
+        if (targetFolder.size() > 3)
         {
-            folder = folder.substr(0, folder.length() - 1);
-            auto index = folder.find_last_of(L'\\');
-            folder = folder.substr(0, index);
+            targetFolder = targetFolder.substr(0, targetFolder.length() - 1);
+            auto index = targetFolder.find_last_of(L'\\');
+            targetFolder = targetFolder.substr(0, index)+L"\\";
         }
         else {
-            qDebug() << "不应该被安装到根目录";
+            qDebug() << u8"不应该被安装到根目录";
         }
 
-        if(ConfigFileReadWriter::Instance().IsSilentInstallationOn())
-            folder = L" /S -PATH=\"" + folder + L"\"";
+        if (ConfigFileReadWriter::Instance().IsSilentInstallationOn())
+        {
+            //folder = L" /S -PATH=\"" + folder + L"\"";
+            param = L" /S";
+        }
+        if(!ConfigFileReadWriter::Instance().IsDatFileEnabled())
+        {
+            param+= L" -PATH=\"" + targetFolder + L"\"";
+        }
         else
-            folder = L" -PATH=\"" + folder + L"\"";
+        {
+            auto setupFile = GetApplicationDirPath() + "updatepath.dat";
+
+            QFile f(setupFile);
+            bool ret = f.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            if (ret)
+            {
+                f.write(QString::fromStdWString(targetFolder).toLocal8Bit());
+                f.close();
+            }
+            else
+            {
+                param = L" /S -PATH=\"" + targetFolder + L"\"";
+            }
+        }
 
         SHELLEXECUTEINFO ShExecInfo = { 0 };
         ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -103,7 +127,7 @@ protected:
         ShExecInfo.lpVerb = L"open";
         ShExecInfo.hInstApp = NULL;
         ShExecInfo.lpFile = u16AppPath.c_str();
-        ShExecInfo.lpParameters = folder.c_str();
+        ShExecInfo.lpParameters = param.c_str();
         ShExecInfo.nShow = SW_NORMAL;
 
         ShellExecuteExW(&ShExecInfo);

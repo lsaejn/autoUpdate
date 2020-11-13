@@ -86,6 +86,7 @@ void ConfigFileReadWriter::Init()
 		useLocalPackFile_= json_["useLocalPackInfo"].get<bool>();
 		localPackInfoName_ = json_["localPackInfo"].get<std::string>().c_str();
 		useSilentInstallation_ = json_["silentInstallation"].get<bool>();
+		useDatFile_= json_["useDatFile"].get<bool>();
 	}
 	catch (...)
 	{
@@ -107,6 +108,11 @@ bool ConfigFileReadWriter::IsLocalPackFileInfoOn() const
 bool ConfigFileReadWriter::IsSilentInstallationOn() const
 {
 	return useSilentInstallation_;
+}
+
+bool ConfigFileReadWriter::IsDatFileEnabled() const
+{
+	return useDatFile_;
 }
 
 void ConfigFileReadWriter::SaveToFile()

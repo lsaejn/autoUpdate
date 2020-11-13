@@ -22,6 +22,7 @@ public:
 
 	bool IsLocalPackFileInfoOn() const;
 	bool IsSilentInstallationOn() const;
+	bool IsDatFileEnabled() const;
 
 	void SetDownloadFolder();
 
@@ -39,6 +40,7 @@ private:
 	size_t logFileRollSize_;
 	bool useLocalPackFile_ = false;
 	bool useSilentInstallation_ = false;
+	bool useDatFile_ = true;
 	QString logFilePath_;
 	QString downloadDir_;
 	QString updateInfoUrl_;
