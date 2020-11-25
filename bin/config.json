@@ -1,0 +1,17 @@
+{
+  "downloadDir": "download/",
+  "maxTaskNum": 5,
+  "logFilePath": "log/pkpmUpdate_log.txt",
+  "logLever": "Debug",
+  "logFileRollSize": 52428800,
+  "assistantDll": "Alime.dll",
+  "updateInfoUrl": "http://update.pkpm.cn/PKPM2010/Info/pkpmSoft/packsInfo.json",
+  "pkgRootFolder": "http://update.pkpm.cn/PKPM2010/Info/pkpmSoft/",
+  "fixPackFolder": "FixPacks/",
+  "updatePackFolder": "UpdatePacks/",
+  "IntegralImageFileFolder": "IntegralImageFiles/",
+  "useLocalPackInfo": false,
+  "localPackInfo": "packsInfo.json",
+  "silentInstallation": true,
+  "useDatFile": true
+}
