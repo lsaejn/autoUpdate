@@ -76,7 +76,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     leftButtonLayout->setSpacing(0);
     leftButtonLayout->addSpacing(20);
 
-    MAKE_PUSHBUTTON(btn01, u8"当前版本升级到最新", "btnBoard", true, true, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn01, u8"升级到最新版本", "btnBoard", true, true, leftButtonLayout);
     MAKE_PUSHBUTTON(btn02, u8"当前版本补丁", "btnBoard", true, false, leftButtonLayout);
     MAKE_PUSHBUTTON(btn03, u8"最新版光盘", "btnBoard", true, false, leftButtonLayout);
     MAKE_PUSHBUTTON(btn04, u8"差异更新/测试", "btnBoard", true, false, leftButtonLayout);

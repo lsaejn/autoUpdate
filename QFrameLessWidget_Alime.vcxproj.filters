@@ -171,6 +171,7 @@
     <None Include="qss\dark.qss" />
     <None Include="images\microsoft.svg" />
     <None Include="qss\blue.qss" />
+    <None Include="bin\config.json" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="thirdParty\nlohmann\json.hpp">
