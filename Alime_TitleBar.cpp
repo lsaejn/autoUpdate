@@ -144,7 +144,7 @@ bool Alime_TitleBar::eventFilter(QObject* obj, QEvent* event)
         {
             QIcon icon = pWidget->windowIcon();
             iconLabel_->setPixmap(icon.pixmap(iconLabel_->size()));
-            return true;
+            return false;
         }
     }
     case QEvent::WindowStateChange:

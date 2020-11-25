@@ -183,6 +183,7 @@
     <QtMoc Include="Alime_ContentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="WebFileFilter.h" />
     <QtMoc Include="AlimeQLib\QtAlimeStyle.h" />
     <ClInclude Include="AlimeQLib\details\QtAlimeStylePrivate.h" />
@@ -255,6 +256,9 @@
     <Image Include="images\setup.png" />
     <Image Include="images\upLayer.png" />
     <Image Include="images\zip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QFrameLessWidget_Alime.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
