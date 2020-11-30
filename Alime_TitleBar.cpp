@@ -56,7 +56,7 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
 
 #ifdef ALIME_DEVELOP
     //开发版本提供按钮波纹，点击波纹，定制对话框
-    btn_ = new QtAlimeImageButton(QIcon(":/images/PkpmV52.ico"), this);
+    btn_ = new QtAlimeImageButton(QIcon(":/images/Pkpm.png"), this);
     btn_->setColor(QColor(53, 99, 203));
     btn_->setIconSize({30, 30});
     btn_->setFixedSize(height(), height());
@@ -142,8 +142,10 @@ bool Alime_TitleBar::eventFilter(QObject* obj, QEvent* event)
         QWidget* pWidget = qobject_cast<QWidget*>(obj);
         if (pWidget)
         {
-            QIcon icon = pWidget->windowIcon();
-            iconLabel_->setPixmap(icon.pixmap(iconLabel_->size()));
+            //QIcon icon = pWidget->windowIcon();
+            //setIcon(QIcon(":/images/reset.png"));
+            //iconLabel_->setPixmap(icon.pixmap(iconLabel_->size()));
+            iconLabel_->setPixmap(QIcon(":/images/Pkpm.png").pixmap(iconLabel_->size()));
             return false;
         }
     }
