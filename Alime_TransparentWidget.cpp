@@ -12,7 +12,7 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    setWindowIcon(QIcon(":/images/PkpmV52.ico"));
+    //setWindowIcon(QIcon(":/images/PkpmV52.ico"));
     //ÒõÓ°
     QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect(this);
     shadow->setObjectName("border");

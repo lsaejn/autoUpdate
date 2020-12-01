@@ -603,7 +603,8 @@ void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
     //调试
     if (!errorCode)
     {
-        ShowWarningBox(u8"结束", u8"安装程序执行完毕", u8"确定");
+        if(!IsAutoSetupRunning())
+            ShowWarningBox(u8"结束", u8"安装程序执行完毕", u8"确定");
         return;
     }
     else {
