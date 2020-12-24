@@ -6,6 +6,7 @@
 #include "windows.h"
 
 extern HANDLE g_handle;
+extern HWND g_hwnd;
 
 bool IsInstanceOn();
 size_t ToLogLevel(const std::string& level);

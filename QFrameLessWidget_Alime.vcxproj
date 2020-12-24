@@ -78,7 +78,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </QtMoc>
     <PostBuildEvent>
-      <Command>copy D:\AutoUpate\QFrameLessWidget_Alime\bin\release\installer.exe D:\PKPMV521_1102\installer\installer.exe</Command>
+      <Command>copy D:\AutoUpate\QFrameLessWidget_Alime\bin\release\installer.exe D:\PKPMV522_20201130\Installer\installer.exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">

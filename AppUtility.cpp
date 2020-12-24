@@ -13,6 +13,7 @@
 #include "ConfigFileRW.h"
 
 HANDLE g_handle = INVALID_HANDLE_VALUE;
+HWND g_hwnd=0;
 std::mutex g_mutex;
 
 //²»¿¼ÂÇÐ§ÂÊ
