@@ -167,11 +167,11 @@ public:
 				findApp = std::regex_search(fileName, regx);
 				if (findApp)
 				{
-					auto ret = ShowQuestionBox(u8"检测到PKPM启动程序正在工作",
-						u8"更新操作需要关闭所有的PKPM启动程序，请手动关闭后点击\"继续\"，请选择操作",
-						u8"继续",
-						u8"取消");
-					if (ret)
+					//auto ret = ShowQuestionBox(u8"检测到PKPM启动程序正在工作",
+					//	u8"更新操作需要关闭所有的PKPM启动程序，请手动关闭后点击\"继续\"，请选择操作",
+					//	u8"继续",
+					//	u8"取消");
+					if (findApp)
 					{
 						//iter.KillProcess(iter->th32ProcessID);
 						auto hwnd=Alime::ProcessIterator::FindMainHwndByPid(iter->th32ProcessID);
