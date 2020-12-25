@@ -13,6 +13,8 @@ size_t ToLogLevel(const std::string& level);
 
 std::string GetExeFolder();
 std::wstring GetExeFolderW();
+std::wstring GetParentFolderW(const std::wstring&);
+
 QString GetApplicationDirPath();
 
 QString GetPkpmRootPath();

@@ -117,6 +117,21 @@ std::wstring GetExeFolderW()
     return std::wstring(buffer, pos + 1);
 }
 
+std::wstring GetParentFolderW(const std::wstring& path_)
+{
+    auto path = path_;
+    if (path.back() == L'\\' || path.back() == L'/')
+    {
+        path = path.substr(0, path.size() - 1);
+    }
+    auto index = path.find_last_of(L"/\\");
+    if (index != std::wstring::npos)
+    {
+        return path.substr(0, index)+L"\\";
+    }
+    return {};
+}
+
 QString GetApplicationDirPath()
 {
     return QCoreApplication::applicationDirPath() + "/";

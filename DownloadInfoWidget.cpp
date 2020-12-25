@@ -553,6 +553,7 @@ bool DownloadInfoWidget::DoSetup()
     if (!ret)
         return false;
     //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
+    //太恶心了
     checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
     ret=checker.ShutDownFuzzyMatchApp();
     if (!ret)
