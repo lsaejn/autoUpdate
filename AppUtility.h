@@ -8,7 +8,7 @@
 extern HANDLE g_handle;
 extern HWND g_hwnd;
 
-bool IsInstanceOn();
+bool IsMutexNew();
 size_t ToLogLevel(const std::string& level);
 
 std::string GetExeFolder();

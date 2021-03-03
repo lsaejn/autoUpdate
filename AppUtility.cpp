@@ -72,7 +72,7 @@ size_t ToLogLevel(const std::string& level)
     return 0;
 }
 
-bool IsInstanceOn()
+bool IsMutexNew()
 {
     g_handle=::CreateEventW(NULL, FALSE, TRUE, L"updateExe.cn.pkpm.www");
     if (g_handle != INVALID_HANDLE_VALUE && ERROR_ALREADY_EXISTS == GetLastError())

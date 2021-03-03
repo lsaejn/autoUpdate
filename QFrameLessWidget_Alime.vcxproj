@@ -60,7 +60,7 @@
       <AdditionalIncludeDirectories>..\components;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
-      <Command>copy D:\AutoUpate\QFrameLessWidget_Alime\bin\installerd.exe C:\Users\lsaejn\Desktop\pkpmV52\Installer\installerd.exe</Command>
+      <Command>copy D:\Repo\Company\AutoUpate\QFrameLessWidget_Alime\bin\installerd.exe D:\PKPMV523-0222\Installer\installerd.exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,16 +78,16 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </QtMoc>
     <PostBuildEvent>
-      <Command>copy D:\AutoUpate\QFrameLessWidget_Alime\bin\release\installer.exe D:\PKPMV522_20201130\Installer\installer.exe</Command>
+      <Command>copy D:\Repo\Company\AutoUpate\QFrameLessWidget_Alime\bin\release\installer.exe D:\PKPMV523-0222\Installer\installer.exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>5.6.3</QtInstall>
+    <QtInstall>563</QtInstall>
     <QtModules>core;gui;widgets;network</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
-    <QtInstall>5.6.3</QtInstall>
+    <QtInstall>563</QtInstall>
     <QtModules>core;gui;widgets;network</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
     <QtVars>QMAKE_CFLAGS_RELEASE;QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO;QMAKE_CFLAGS_DEBUG;$(QtVars)</QtVars>

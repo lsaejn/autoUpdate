@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
             CloseHandle(g_handle);
     };
 
-    if (!IsInstanceOn())
+    if (!IsMutexNew())
     {
         QMessageBox::critical(NULL, u8"重复打开", u8"程序正在运行");
         return -1;
