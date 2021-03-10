@@ -230,7 +230,8 @@ void QFrameLessWidget_Alime::ReadPkgFileInfo()
         QString version = QSslSocket::sslLibraryVersionString();
         qDebug() << bSupp << buildVersion << version << endl;
     */
-    manager->get(QNetworkRequest(QUrl(ConfigFileReadWriter::Instance().GetUrlOfUpdateInfoFile())));
+    auto url = QUrl(ConfigFileReadWriter::Instance().GetUrlOfUpdateInfoFile());
+    manager->get(QNetworkRequest(url));
 }
 
 void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
@@ -289,13 +290,14 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
 //这个函数不允许出错
 bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 {
-    if (!ReadLocalVersion())
-    {
-        //fix me, show info "无法读取本地版本信息"
-        return false;
-    }
     try
     {
+        if (!ReadLocalVersion())
+        {
+            versionTips_->setText(u8"无法读取本地版本信息");
+            return false;
+        }
+
         json_ = nlohmann::json::parse(str);
         
         fixPkgList_->clear();
@@ -311,6 +313,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
     {
         //fatal, show info and close application
         qWarning() << "can not parse info from webInfo.json";
+        return false;
     }
     return true;
 }
