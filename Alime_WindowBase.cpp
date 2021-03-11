@@ -23,6 +23,8 @@ Alime_WindowBase::Alime_WindowBase(QWidget* parent, QLayout* ownerBox)
 
     //fix me£¬modify shadowWindow or remove installEventFilter
     installEventFilter(titleBar_);
+
+    box_->setMargin(content->GetShadowWidth());
     titleBar_->SysButtonEventRegister([=]() { box_->setMargin(content->GetShadowWidth());}, false);
     titleBar_->SysButtonEventRegister([=]() {box_->setMargin(0);}, true);
 

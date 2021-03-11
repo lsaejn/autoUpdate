@@ -12,21 +12,21 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
 {
     setAttribute(Qt::WA_TranslucentBackground, true);
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    //setWindowIcon(QIcon(":/images/PkpmV52.ico"));
-    //阴影
+    
     QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect(this);
     shadow->setObjectName("border");
     shadow->setOffset(0, 0);
     shadow->setColor(QColor("#FF444444"));
-
     shadow->setBlurRadius(10);
+
     QVBoxLayout* box = new QVBoxLayout(this);
-    Alime_WindowBase* base= new Alime_WindowBase(this, box);
+    Alime_WindowBase* base= new Alime_WindowBase(this, box);//阴影border宽度是从content类里获取
     
     box->addWidget(base);
+    
 
+    //阴影加在base上
     base->setGraphicsEffect(shadow);
-    box->setMargin(5);
 }
 
 bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void* message, long* result)
@@ -38,6 +38,7 @@ bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void*
     case WM_NCHITTEST:
         int xPos = GET_X_LPARAM(msg->lParam) - this->frameGeometry().x();
         int yPos = GET_Y_LPARAM(msg->lParam) - this->frameGeometry().y();
+
         if (xPos < boundaryWidth && yPos < boundaryWidth)
             *result = HTTOPLEFT;
         else if (xPos >= width() - boundaryWidth && yPos < boundaryWidth)

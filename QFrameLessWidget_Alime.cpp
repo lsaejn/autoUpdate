@@ -271,6 +271,7 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
         versionLocal_ = "V" + versionFiles.back();
         mainVersionLocal_ = "V";
         mainVersionLocal_.push_back(versionFiles.back().front());
+        //mainVersionLocal_.push_back(versionFiles.back()[2]);
     }
 
     if (!versionLocal_.empty())
@@ -596,6 +597,7 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
         auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
         updatePkgList_->setItemWidget(item, itemWidget);
         itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
+
         connect(itemWidget, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
             if (!itemWidget)
             {

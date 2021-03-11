@@ -1,8 +1,11 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
+
 #include "thirdParty/nlohmann/json.hpp"
 #include "Alime_ContentWidget.h"
+
+#include "Alime/noncopyable.h"
 
 class DownloadInfoWidget;
 class QListWidget;
@@ -13,24 +16,29 @@ class SetupWidget;
 
 
 
-class QFrameLessWidget_Alime : public Alime_ContentWidget
+class QFrameLessWidget_Alime : public Alime_ContentWidget, noncopyable
 {
     Q_OBJECT
 
 public:
     QFrameLessWidget_Alime(QWidget *parent = Q_NULLPTR);
+
     virtual QString GetTitle() override;
+
     void SetTips(const QString&, bool isWaring = false);
 private:
     void ReadPkgFileInfo();
+
+    /// <summary>
+    /// 读取本地软件版本
+    /// </summary>
+    /// <returns>是否成功读取</returns>
     bool ReadLocalVersion();
     
     void ShowVersionTipsInfo(const QString&);
     void QueryInfoFinish(QNetworkReply* reply);
     bool InitDownloadList(const std::string& pkgFileContent);
-
-    //QWidget* MakeNewListItem();
-    
+ 
     std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
 
     //static

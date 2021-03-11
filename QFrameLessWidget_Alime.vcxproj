@@ -183,6 +183,7 @@
     <QtMoc Include="Alime_ContentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alime\noncopyable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="WebFileFilter.h" />
     <QtMoc Include="AlimeQLib\QtAlimeStyle.h" />
