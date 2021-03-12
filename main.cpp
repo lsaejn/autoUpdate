@@ -1,6 +1,7 @@
 #include "QFrameLessWidget_Alime.h"
 #include "Alime_TransparentWidget.h"
 #include "Alime/ScopeGuard.h"
+#include "Alime/Console.h"
 #include "QssLoader.h"
 #include "AppUtility.h"
 #include "ConfigFileRW.h"
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
     {
         g_hwnd = (HWND)std::stoi(argv[1]);
     }
+    Alime::Console::CreateConsole();
         
     QssLoader loder(GetStyleName(), app);
 

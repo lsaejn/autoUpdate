@@ -130,6 +130,7 @@
     <ClCompile Include="AlimeQLib\QtAlimeOverlayWidget.cpp" />
     <ClCompile Include="AlimeQLib\QtAlimeRipple.cpp" />
     <ClCompile Include="AlimeQLib\QtAlimeRippleOverlay.cpp" />
+    <ClCompile Include="Alime\Console.cpp" />
     <ClCompile Include="alternative\FolderCompare.cpp" />
     <ClCompile Include="alternative\FakePackage.cpp" />
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp" />
@@ -183,6 +184,7 @@
     <QtMoc Include="Alime_ContentWidget.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alime\Console.h" />
     <ClInclude Include="Alime\noncopyable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="WebFileFilter.h" />

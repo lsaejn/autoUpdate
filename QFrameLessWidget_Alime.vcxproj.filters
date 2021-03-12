@@ -119,6 +119,9 @@
     <ClCompile Include="thirdParty\zlib\UnZip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Alime\Console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -250,6 +253,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Alime\noncopyable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Alime\Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

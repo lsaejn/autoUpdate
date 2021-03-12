@@ -18,6 +18,7 @@
 #include "AppVersion.h"
 #include "ConfigFileRW.h"
 #include "SetupImageWidget.h"
+#include "Alime/Console.h"
 
 CLASSREGISTER(QFrameLessWidget_Alime)
 
@@ -35,9 +36,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     : Alime_ContentWidget(parent),
     netAvailable_(false),
     stackWidget_(nullptr),
-    updatePkgList_(nullptr),
-    fixPkgList_(nullptr),
-    imageWidget_(nullptr),
+    pkgList_(nullptr),
     leftContent_(nullptr),
     rightContent_(nullptr),
     versionTips_(nullptr)
@@ -49,7 +48,11 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
+    leftContent_->setObjectName("leftContent");
+    //leftContent_->setVisible(false);
     rightContent_ = new QWidget(this);
+    rightContent_->setObjectName("rightContent");
+
     contentLayout->addWidget(leftContent_);
     contentLayout->addWidget(rightContent_);
     contentLayout->setMargin(0);
@@ -57,77 +60,46 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     contentLayout->setStretch(0, 1);
     contentLayout->setStretch(1, 4);
 
-    leftContent_->setObjectName("leftContent");
-
     QVBoxLayout* leftLayout = new QVBoxLayout(leftContent_);
     leftLayout->setMargin(0); 
     
-    QWidget* leftButtons = new QWidget(this);//按钮在左上
-    leftLayout->addWidget(leftButtons);
-    QWidget* dummy = new QWidget(this);//下面放一个占位
-    leftLayout->addWidget(dummy);
-    leftLayout->setStretch(0, 2);
-    leftLayout->setStretch(1, 3);
+    QWidget* leftButtonsWidget = new QWidget(this);
+    leftLayout->addWidget(leftButtonsWidget);
+    leftLayout->addStretch();
 
-    ///add left
-    ///add left button
-    QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtons);
+    QVBoxLayout* leftButtonLayout = new QVBoxLayout(leftButtonsWidget);
     leftButtonLayout->setMargin(0);
     leftButtonLayout->setSpacing(0);
     leftButtonLayout->addSpacing(20);
 
-    MAKE_PUSHBUTTON(btn01, u8"升级到最新版本", "btnBoard", true, true, leftButtonLayout);
-    MAKE_PUSHBUTTON(btn02, u8"当前版本补丁", "btnBoard", true, false, leftButtonLayout);
-    MAKE_PUSHBUTTON(btn03, u8"最新版光盘", "btnBoard", true, false, leftButtonLayout);
-    MAKE_PUSHBUTTON(btn04, u8"差异更新/测试", "btnBoard", true, false, leftButtonLayout);
-    btn03->setVisible(false);
-    btn04->setVisible(false);
+    MAKE_PUSHBUTTON(btn01, u8"可选升级项", "btnBoard", true, true, leftButtonLayout);
+    MAKE_PUSHBUTTON(btn02, u8"差异更新/测试", "btnBoard", true, false, leftButtonLayout);
 
     QButtonGroup* group = new QButtonGroup(this);
     group->addButton(btn01, 0);
     group->addButton(btn02, 1);
-    group->addButton(btn03, 2);
-    group->addButton(btn04, 3);
 
-    //leftContent->setFixedWidth(240);
-
-    //整个右边就是vbox，加入布局是为了保持一定的灵活性，方便以后加入其他内容(竖条)。
-    rightContent_->setObjectName("rightContent");
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
-
     vbox->addWidget(versionTips_);
 
-    updatePkgList_ = new SetupWidget(this);
-    updatePkgList_->setObjectName("updatePkgList");
-    fixPkgList_ = new SetupWidget(this);
-    fixPkgList_->setObjectName("fixPkgList");
-    imageWidget_ = new SetupWidget(this);
-    integralFilesPackList_ = new QListWidget(this);
-
     stackWidget_ = new QStackedWidget(this);
-    stackWidget_->addWidget(updatePkgList_);
-    stackWidget_->addWidget(fixPkgList_);
-    stackWidget_->addWidget(imageWidget_);
-    stackWidget_->addWidget(integralFilesPackList_);
+    pkgList_ = new PackageListWidget(this);
+
+    stackWidget_->addWidget(pkgList_);
+    stackWidget_->addWidget(new QListWidget(this));
 
     //fix me, 删掉这个连接。
     //每次更新完成后，重新读版本信息文件，然后刷新列表
     connect(group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
         [=](int index) {
+            auto sz = stackWidget_->count();
+            if (index >= sz)
             {
-                for (int i = 0; i != stackWidget_->count(); ++i)
-                {
-                    SetupWidget* stackElem = dynamic_cast<SetupWidget*>(stackWidget_->widget(i));
-                    if (stackElem && stackElem->IsAutoSetupOn()&& i!=index)
-                    {
-                        ShowWarningBox("error", u8"另一个安装正在执行", u8"确定");
-                        auto btn=group->button(i);
-                        btn->setChecked(true);
-                        return;
-                    }
-                }
+                QMessageBox::critical(NULL, "error", "invalid stackwidget index ", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                std::abort();
             }
             stackWidget_->setCurrentIndex(index);
+            return;
 
             LocalVersionFile finder;
             auto newVersion=finder.GetLocalVersion();
@@ -145,10 +117,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             //fix me, 没有测试过这一块
             if (version != versionLocal_.c_str())
             {
-                updatePkgList_->clear();
-                fixPkgList_->clear();
-                integralFilesPackList_->clear();
-
+                pkgList_->clear();
                 ReadLocalVersion();
                 ReadUpdatePacksInfo();
                 ReadFixPacksInfo();//fix me
@@ -156,49 +125,6 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
             }
         });
     vbox->addWidget(stackWidget_);
-
-    QWidget* foot = new  QWidget(this);
-    QHBoxLayout* footBox = new QHBoxLayout(foot);
-    QPushButton* updateBtn = new QPushButton(u8"一键更新", foot);
-
-    connect(updateBtn, &QPushButton::clicked, [=]() {
-        SetupWidget* stackElem=dynamic_cast<SetupWidget*>(stackWidget_->currentWidget());
-        if (!stackElem)
-        {
-            qWarning() << u8"stackWidget switch a index that should not opened to users";
-            return;
-        }
-        else
-        {
-            if (!stackElem->IsAutoSetupOn())
-                stackElem->SetupAllTask();
-            else
-            {
-                ShowWarningBox("error", u8"另一个安装正在执行", u8"确定");
-                return;
-            }
-            connect(stackElem, &SetupWidget::installing, [=](int i) {
-                QString str = QString(u8"正在处理第%1个安装包").arg(i);
-                updateBtn->setText(str);
-                });
-            connect(stackElem, &SetupWidget::finish, [=]() {
-                updateBtn->setText(u8"一键更新");
-                stackElem->clear();
-                ReadLocalVersion();
-                ReadPkgFileInfo();
-                });
-            connect(stackElem, &SetupWidget::error, [=]() {
-                updateBtn->setText(u8"升级失败,重新开始");
-                });
-
-        }
-        });
-
-    updateBtn->setObjectName("updateBtn");
-    footBox->addStretch(0);
-    footBox->addWidget(updateBtn);
-    footBox->addSpacing(50);
-    vbox->addWidget(foot);
     vbox->addSpacing(40);
 
     ReadPkgFileInfo();
@@ -207,40 +133,44 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 void QFrameLessWidget_Alime::ReadPkgFileInfo()
 {
     auto &config=ConfigFileReadWriter::Instance();
+
+    //提供本地packinfo.json测试, 资源必须在网上。oss出现账户不能登录的情况。
     if (config.IsLocalPackFileInfoOn())
     {
         QFile f(config.GetLocalPackInfoPath());
         if (f.open(QIODevice::ReadOnly))
         {
             QString qstr=f.readAll();
-            if(!qstr.isEmpty()&& InitDownloadList(qstr.toStdString()))
+            if(!qstr.isEmpty() && InitDownloadList(qstr.toStdString()))
                 return;
         }
     }
-    //else
+    /*
+    因为绿色化的原因，我们不支持https。
+    这个选择有前提的: 集成诸葛IO时，dll被毙掉了。
+    那么请问，将来openssl的漏洞怎么办？
+    懒得说了。非互联网行业的安全意识堪忧。
+    qDebug() << manager->supportedSchemes();
+    openssl 1.1.1, debug版本默认支持openssl, release版本默认不支持openssl
+    bool bSupp = QSslSocket::supportsSsl();
+    QString buildVersion = QSslSocket::sslLibraryBuildVersionString();
+    QString version = QSslSocket::sslLibraryVersionString();
+    qDebug() << bSupp << buildVersion << version << endl;
+*/
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &QFrameLessWidget_Alime::QueryInfoFinish);
-    //fix me
     connect(manager, &QNetworkAccessManager::finished, manager, &QObject::deleteLater);
-    /*
-        qDebug() << manager->supportedSchemes();
-        openssl 1.1.1, debug版本默认支持openssl, release版本默认不支持openssl
-        bool bSupp = QSslSocket::supportsSsl();
-        QString buildVersion = QSslSocket::sslLibraryBuildVersionString();
-        QString version = QSslSocket::sslLibraryVersionString();
-        qDebug() << bSupp << buildVersion << version << endl;
-    */
+
     auto url = QUrl(ConfigFileReadWriter::Instance().GetUrlOfUpdateInfoFile());
     manager->get(QNetworkRequest(url));
 }
 
 void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
 {
-    auto ret=reply->error();
-    if (ret != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
         qWarning() << "Error Happened";
-        SetTips(u8"无法检查到程序升级信息，请检查网络", true);
+        SetTips(u8"无法检查到程序升级信息，请检查您的网络", true);
         netAvailable_ = false;
     }
     else
@@ -260,7 +190,7 @@ QString QFrameLessWidget_Alime::GetTitle()
 bool QFrameLessWidget_Alime::ReadLocalVersion()
 {
     auto versionFiles = FindSpecificFiles::FindVersionFiles(
-        (QApplication::applicationDirPath()+u8"/../CFG/").toLocal8Bit().data(), "V", "ini");
+        (QApplication::applicationDirPath()+"/../CFG/").toLocal8Bit().data(), "V", "ini");
     if (versionFiles.size() == 0)
     {
         qWarning() << u8"无法找到版本信息文件";
@@ -271,19 +201,19 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
         versionLocal_ = "V" + versionFiles.back();
         mainVersionLocal_ = "V";
         mainVersionLocal_.push_back(versionFiles.back().front());
-        //mainVersionLocal_.push_back(versionFiles.back()[2]);
+        mainVersionLocal_.push_back(versionFiles.back()[2]);
+
+        Alime::Console::WriteLine(L"读取到本地版本:"+QString::fromLocal8Bit(versionLocal_.c_str()).toStdWString());
+        Alime::Console::WriteLine(L"读取到本地版本对应注册表:" + QString::fromLocal8Bit(mainVersionLocal_.c_str()).toStdWString());
     }
 
     if (!versionLocal_.empty())
     {
-        ////fix me
-        versionTips_->setText((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下可升级版本").c_str());
+        SetTips((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下可升级版本").c_str());
     }
     else
     {
-        QString strHTML = QString("<html><head><style> #f{font-size:18px; color: red;} /style></head>\
-                            <body><font id=\"f\">%1</font></body></html>").arg(u8"无法查询本地版本信息, 请从官网重新下载完整程序");
-        ShowVersionTipsInfo(strHTML);
+        SetTips(u8"无法查询本地版本信息, 请从官网重新下载完整程序");
     }
     return true;
 }
@@ -301,14 +231,20 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 
         json_ = nlohmann::json::parse(str);
         
-        fixPkgList_->clear();
-        updatePkgList_->clear();
-        integralFilesPackList_->clear();
-
-        ReadUpdatePacksInfo();
-        ReadFixPacksInfo();
-        ReadInstallationCDInfo();
-        ReadIntegralFilesPackInfo();
+        pkgList_->clear();
+        std::string lastestVer = json_["LatestVersion"];
+        {
+            auto ret = AscendingOrder().Compare(versionLocal_, lastestVer);
+            if (ret >= 0)
+            {
+                Alime::Console::WriteLine(L"已是最新版本");
+            }
+            else
+            {
+                ReadUpdatePacksInfo();
+                ReadFixPacksInfo();
+            }
+        }
     }
     catch (...)
     {
@@ -321,7 +257,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 
 void QFrameLessWidget_Alime::ReadInstallationCDInfo()
 {
-    return ReadInstallationCDInfo(imageWidget_);
+    return ReadInstallationCDInfo(NULL);
 }
 
 void QFrameLessWidget_Alime::ReadIntegralFilesPackInfo()
@@ -379,10 +315,8 @@ bool QFrameLessWidget_Alime::AddItemToComparisonDownloadWidget(const QString& ve
     QListWidgetItem* item = new QListWidgetItem();
     QSize preferSize = item->sizeHint();
     item->setSizeHint(QSize(preferSize.width(), 40));
-    integralFilesPackList_->addItem(item);
 
     ComparisonDownloadInfoWidget* itemWidget = new ComparisonDownloadInfoWidget(this, version);
-    integralFilesPackList_->setItemWidget(item, itemWidget);
     return true;
 }
 
@@ -403,10 +337,10 @@ DownloadInfoWidget* QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidge
 //需要测试
 void QFrameLessWidget_Alime::ReadFixPacksInfo()
 {
-    return ReadFixPacksInfoOfSpecificVersion(fixPkgList_, versionLocal_);
+    return;
 }
 
-void QFrameLessWidget_Alime::ReadInstallationCDInfo(SetupWidget* wgt)
+void QFrameLessWidget_Alime::ReadInstallationCDInfo(PackageListWidget* wgt)
 {
     auto dubugString = json_.dump();
     std::string isoFileUrl = json_["LatestIsoUrl"];
@@ -433,7 +367,7 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo(SetupWidget* wgt)
 
     qint64 pkgSize = var.toLongLong();
     auto itemWidget=AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(url));
-    itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
+    itemWidget->SetCheckCallBack(std::bind(&PackageListWidget::IsAutoSetupOn, pkgList_));
     itemWidget->SetPackFlag(true);
 }
 
@@ -446,7 +380,7 @@ bool IsFileExist(const std::string& filename)
 }
 
 
-void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt, const std::string& version)
+void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(PackageListWidget* wgt, const std::string& version)
 {
     auto debug = json_.dump(4);
     const nlohmann::json& json = json_["FixPacks"];
@@ -483,18 +417,17 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt,
             //auto fullName = qUrl.toString();
             //auto fileApart = GetFilePart(fullName);
             auto item = AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(qUrl));
-            item->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, wgt));
+            item->SetCheckCallBack(std::bind(&PackageListWidget::IsAutoSetupOn, wgt));
             item->SetPackFlag(false);
             if (versionLocal_ != version)
             {
                 item->isInWrongPosition_ = true;
                 //fix me, use [&]
                 connect(item, &DownloadInfoWidget::finishSetup, [=](bool isUpdatePack) {
-                    if (isUpdatePack == false && updatePkgList_->IsAutoSetupOn())
+                    if (isUpdatePack == false && pkgList_->IsAutoSetupOn())
                     {
-                        updatePkgList_->clear();
-                        fixPkgList_->clear();
-                        integralFilesPackList_->clear();
+                        pkgList_->clear();
+
                         ReadLocalVersion();
                         ReadUpdatePacksInfo();
                         ReadFixPacksInfo();//fix me
@@ -511,7 +444,7 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt,
             else
             {
                 connect(item, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
-                    fixPkgList_->clear();
+                    pkgList_->clear();
                     ReadFixPacksInfo();
                     auto hwnd = (HWND)window()->winId();
                     RECT rc;
@@ -527,12 +460,53 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt,
 }
 
 #include <algorithm>
-std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nlohmann::json& json)
+void QFrameLessWidget_Alime::GetUpdatePackUrl(const nlohmann::json& json, 
+    std::string& urlOut, bool& showImage)
 {
-    std::vector<std::string> keys;
-    if (!mainVersionLocal_.empty()&&json.find(mainVersionLocal_) != json.end())
+    std::string ver = json["version"];
+    std::string url = json["url"];
+    //给reg是因为V6可能不需要注册表，相当于一个bool
+    bool hasRegStr = false;
+    std::string regKey = (hasRegStr=json.contains("reg"))? json["reg"] : "";
+
+    //V5之前 和 之后的大版本可能机制不同。f...u...c...k
+    //我怎么预测未来?
+
+    if (mainVersionLocal_.find("V5") != std::string::npos)//因为V5之前没自动更新
     {
-        for (auto iter = json[mainVersionLocal_].begin(); iter != json[mainVersionLocal_].end(); ++iter)
+        //注册表不同，直接给光盘
+        if (mainVersionLocal_ != regKey)
+        {
+            showImage=true;
+            return;
+        }
+        else
+        {
+            Alime::Console::WriteLine(L"注册表不同");
+            auto ret = AscendingOrder().Compare(versionLocal_, ver);
+            if (ret>=0)
+            {
+                Alime::Console::WriteLine(L"已是最新版本");
+                return ;
+            }
+            else
+            {
+                urlOut = url;
+                return;
+            }
+        }
+    }
+    else
+    {
+
+    }
+
+    std::vector<std::string> keys;
+    if (!mainVersionLocal_.empty() &&
+        json.find(mainVersionLocal_) != json.end())
+    {
+        for (auto iter = json[mainVersionLocal_].begin();
+            iter != json[mainVersionLocal_].end(); ++iter)
         {
             std::string key = iter.key();
             //秉承某领导“错了也要能正常工作”的原则
@@ -554,10 +528,11 @@ std::vector<std::string> QFrameLessWidget_Alime::GetFilteredVersionKeys(const nl
         {
             keys.erase(keys.begin(), --keys.end());
         }
-        return keys;
+        return ;
     }
-    else {
-        return {};
+    else
+    {
+        return ;
     }
 
 }
@@ -567,71 +542,68 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
     //
     const nlohmann::json& json = json_["UpdatePacks"];
 
-    std::vector<std::string> keys = GetFilteredVersionKeys(json);
-    QNetworkAccessManager manager;
-    for (const auto& key : keys)
+    bool addImage = false;
+    std::string webUrl;
+    GetUpdatePackUrl(json, webUrl, addImage);
+    if (addImage)
     {
-        std::string webUrl = json[mainVersionLocal_][key];
-        QUrl url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
-        QEventLoop loop;
-        QNetworkReply* reply = manager.head(QNetworkRequest(url));
-        //我们阻塞当前线程,初始化stackWidget内容
-        connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
-        loop.exec();
-
-        QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
-        if (reply->error())
+        ReadInstallationCDInfo(pkgList_);
+        return;
+    }
+    else
+    {
+        QNetworkAccessManager manager;
         {
-            qDebug() << reply->errorString();
+            QUrl url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
+            QEventLoop loop;
+            QNetworkReply* reply = manager.head(QNetworkRequest(url));
+            //我们阻塞当前代码, 初始化stackWidget内容
+            connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
+            loop.exec();
+            QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+            if (reply->error() != QNetworkReply::NoError)
+            {
+                Alime::Console::WriteLine(L"reply error", Alime::Console::RED);
+                qDebug() << reply->errorString();
+            }
             reply->deleteLater();
-            continue;
-        }
-        reply->deleteLater();
 
-        auto pkgSize = var.toLongLong();
-        QListWidgetItem* item = new QListWidgetItem();
-        QSize preferSize = item->sizeHint();
-        item->setSizeHint(QSize(preferSize.width(), 70));
-        updatePkgList_->addItem(item);
+            auto pkgSize = var.toLongLong();
+            QListWidgetItem* item = new QListWidgetItem();
+            QSize preferSize = item->sizeHint();
+            item->setSizeHint(QSize(preferSize.width(), 70));
+            pkgList_->addItem(item);
 
-        auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
-        updatePkgList_->setItemWidget(item, itemWidget);
-        itemWidget->SetCheckCallBack(std::bind(&SetupWidget::IsAutoSetupOn, updatePkgList_));
+            auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
+            pkgList_->setItemWidget(item, itemWidget);
+            itemWidget->SetCheckCallBack(std::bind(&PackageListWidget::IsAutoSetupOn, pkgList_));
 
-        connect(itemWidget, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
-            if (!itemWidget)
-            {
-                int x = 3;//fuck
-            }
-            if ((isUpdatePack &&!updatePkgList_->IsAutoSetupOn()))
-            {
-                updatePkgList_->clear();
-                fixPkgList_->clear();
-                integralFilesPackList_->clear();
-                ReadLocalVersion();
-                ReadUpdatePacksInfo();
-                ReadFixPacksInfo();//fix me
-                //这个地方看着很难堪~显然Qt应该要做到像wpf一样，updatePkgList_=null, updatePkgList_=...
+            connect(itemWidget, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
+                if (!itemWidget)
                 {
-                    auto hwnd = (HWND)window()->winId();
-                    RECT rc;
-                    ::GetWindowRect(hwnd, &rc);
-                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
-                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
+                    int x = 3;//fuck
                 }
-            }
-            });
-        //10/28, 好爽
-        ReadFixPacksInfoOfSpecificVersion(updatePkgList_, key);
+                if ((isUpdatePack && !pkgList_->IsAutoSetupOn()))
+                {
+                    pkgList_->clear();
+                    ReadLocalVersion();
+                    ReadUpdatePacksInfo();
+                    ReadFixPacksInfo();//fix me
+                    //这个地方看着很难堪~显然Qt应该要做到像wpf一样，updatePkgList_=null, updatePkgList_=...
+                    {
+                        auto hwnd = (HWND)window()->winId();
+                        RECT rc;
+                        ::GetWindowRect(hwnd, &rc);
+                        MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
+                        MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
+                    }
+                }
+                });
+            //10/28, 好爽
+            ReadFixPacksInfoOfSpecificVersion(pkgList_, versionLocal_);
+        }
     }
-
-    //10/27 我们留到以后再改这个地方
-    auto num = keys.size();
-    if (num == 0&& json.find(mainVersionLocal_) == json.end())
-    {
-        //光盘
-        ReadInstallationCDInfo(updatePkgList_);
-    }
+        
 }
 
 void QFrameLessWidget_Alime::ShowVersionTipsInfo(const QString& str)

@@ -5,22 +5,23 @@
 #include <QEventLoop>
 #include <QApplication>
 #include "AppUtility.h"
+#include "Alime/ScopeGuard.h"
+#include "TaskThread.h"
 
 //#include <QArray>
 
-SetupWidget::SetupWidget(QWidget* parent)
+PackageListWidget::PackageListWidget(QWidget* parent)
 	:QListWidget(parent),
     isAutoSetupRunning_(false)
 {
-	setObjectName("SetupImageWidget");
+    setObjectName("SetupImageWidget");
 }
 
-#include "Alime/ScopeGuard.h"
-#include "TaskThread.h"
+
 /*
 一键更新按钮是意料之外的需求，我们靠奇技淫巧搞定它
 */
-void SetupWidget::SetupAllTask()
+void PackageListWidget::SetupAllTask()
 {
     ALIME_SCOPE_EXIT{
         isAutoSetupRunning_ = false;
@@ -103,12 +104,12 @@ void SetupWidget::SetupAllTask()
     }
 }
 
-bool SetupWidget::IsAutoSetupOn()
+bool PackageListWidget::IsAutoSetupOn()
 {
     return isAutoSetupRunning_;
 }
 
-bool SetupWidget::HasSetupItem()
+bool PackageListWidget::HasSetupItem()
 {
     int elemNum = count();
     for (int i = 0; i != elemNum; ++i)

@@ -36,7 +36,7 @@ public:
 private:
 	static bool IsValidVersionName(const std::string& str)
 	{
-		if (!isdigit(str.front()))
+		if (!isdigit(str.front()) || str.find("..") != std::string::npos)
 			return false;
 		for (auto elem : str)
 		{
@@ -60,7 +60,7 @@ public:
 			return true;
 		return false;
 	}
-private:
+
 	void CheckPreFix(std::string& lhs, std::string& rhs)
 	{
 		if (lhs.front() == 'V' && rhs.front() == 'V')

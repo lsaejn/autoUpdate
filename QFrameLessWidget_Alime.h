@@ -12,7 +12,7 @@ class QListWidget;
 class QNetworkReply;
 class QLabel;
 class QStackedWidget;
-class SetupWidget;
+class PackageListWidget;
 
 
 
@@ -23,10 +23,18 @@ class QFrameLessWidget_Alime : public Alime_ContentWidget, noncopyable
 public:
     QFrameLessWidget_Alime(QWidget *parent = Q_NULLPTR);
 
+    /// <summary>
+    /// 为基类提供标题
+    /// </summary>
+    /// <returns>标题</returns>
     virtual QString GetTitle() override;
 
     void SetTips(const QString&, bool isWaring = false);
 private:
+
+    /// <summary>
+    /// 读取packinfo.json内容，初始化ListItem
+    /// </summary>
     void ReadPkgFileInfo();
 
     /// <summary>
@@ -39,7 +47,13 @@ private:
     void QueryInfoFinish(QNetworkReply* reply);
     bool InitDownloadList(const std::string& pkgFileContent);
  
-    std::vector<std::string> GetFilteredVersionKeys(const nlohmann::json& info);
+    /// <summary>
+    /// 返回升级包地址
+    /// </summary>
+    /// <param name="info">完整json</param>
+    /// <param name="url">欲得到的地址</param>
+    /// <param name="url">是否需要显示光盘</param>
+    void GetUpdatePackUrl(const nlohmann::json& info, std::string& url, bool& showImage);
 
     //static
     DownloadInfoWidget* AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent,
@@ -53,20 +67,20 @@ private:
     void ReadIntegralFilesPackInfo();
 
     //
-    void ReadInstallationCDInfo(SetupWidget* wgt);
+    void ReadInstallationCDInfo(PackageListWidget* wgt);
     //void ReadFixPacksInfo(SetupWidget* wgt);
-    void ReadFixPacksInfoOfSpecificVersion(SetupWidget* wgt, const std::string& version);
+    void ReadFixPacksInfoOfSpecificVersion(PackageListWidget* wgt, const std::string& version);
 private:
     QStackedWidget* stackWidget_;
-    SetupWidget* updatePkgList_;
-    SetupWidget* fixPkgList_;
-    SetupWidget* imageWidget_;
-    QListWidget* integralFilesPackList_;
+    PackageListWidget* pkgList_;
 
     QWidget* leftContent_;
     QWidget* rightContent_;
+
     QLabel* versionTips_;
-    std::string mainVersionLocal_;
+
+   
+    std::string mainVersionLocal_; //Vxy，历史原因 用于判断注册表键值
     std::string versionLocal_;
 
     bool netAvailable_;

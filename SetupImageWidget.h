@@ -16,7 +16,7 @@
 */
 //而SetupWidget和更新按钮是同级的，这导致了一些交互问题
 //现在SetupWidget
-class SetupWidget : public QListWidget
+class PackageListWidget : public QListWidget
 {
     Q_OBJECT
 signals:
@@ -25,7 +25,7 @@ signals:
     void error();
     void reset();
 public:
-    SetupWidget(QWidget* parent);
+    PackageListWidget(QWidget* parent);
     
     void SetupAllTask();
     bool IsAutoSetupOn();
