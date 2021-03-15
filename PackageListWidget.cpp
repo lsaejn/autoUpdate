@@ -118,6 +118,8 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
     }
     else
     {
+        if (webUrl.empty())
+            return;
         QNetworkAccessManager manager;
         {
             QUrl url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
@@ -177,6 +179,8 @@ bool IsFileExistInCfgFolder(const std::string& filename)
     return f.exists();
 }
 
+#include "QFrameLessWidget_Alime.h"
+
 void PackageListWidget::ReadFixPack(const nlohmann::json& json_)
 {
     auto debug = json_.dump(4);
@@ -224,6 +228,9 @@ void PackageListWidget::ReadFixPack(const nlohmann::json& json_)
                 this->clear();
                 auto c=this->count();
                 Alime::Console::WriteLine(L"cleared");
+
+                mainWidget_->InitDownloadList();
+
                 });
         }
     }

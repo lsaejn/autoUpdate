@@ -36,6 +36,13 @@ public:
     /// <param name="isWaring"></param>
     void SetTips(const QString&, bool isWaring = false);
 
+    /// <summary>
+    /// 填充QListWidget
+    /// </summary>
+    /// <param name="pkgFileContent">packinfo.json</param>
+    /// <returns>是否初始化成功</returns>
+    bool InitDownloadList();
+
 private:
 
     /// <summary>
@@ -60,13 +67,6 @@ private:
     /// </summary>
     /// <param name="reply"></param>
     void QueryInfoFinish(QNetworkReply* reply);
-
-    /// <summary>
-    /// 填充QListWidget
-    /// </summary>
-    /// <param name="pkgFileContent">packinfo.json原始字符</param>
-    /// <returns>是否初始化</returns>
-    bool InitDownloadList(const std::string& pkgFileContent);
 
     /// <summary>
     /// 一个封装，内部实现了差异对比。等待移到DownloadInfoWidget

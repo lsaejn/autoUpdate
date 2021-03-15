@@ -23,6 +23,8 @@
 /// 
 
 class DownloadInfoWidget;
+class QFrameLessWidget_Alime;
+
 class PackageListWidget : public QListWidget
 {
     Q_OBJECT
@@ -53,12 +55,15 @@ public:
     bool HasSetupItem();
 
     void SetVersion(const std::string& mainV, const std::string& localV);
+
+    void SetMainWidget(QFrameLessWidget_Alime* p) { mainWidget_ = p; };
 private:
     void ReadSetupImage(const nlohmann::json& json_);
     //仅仅是为了防止未来维护者开启代码优化。下一版代码我会在另一个线程里下载文件
     //std::atomic<bool> isAutoSetupRunning_;
     std::string mainVersionLocal_; //Vxy，历史原因 用于判断注册表键值
     std::string versionLocal_;
+    QFrameLessWidget_Alime* mainWidget_;
 };
 
 

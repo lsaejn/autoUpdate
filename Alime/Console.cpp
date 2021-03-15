@@ -193,7 +193,7 @@ namespace Alime
 		auto hwnd = GetConsoleWindow();
 		RECT rc;
 		GetWindowRect(hwnd, &rc);
-		MoveWindow(hwnd, left, top, 0, 0, 1);
+		MoveWindow(hwnd, left, top, rc.right-rc.left, rc.bottom-rc.top, 1);
 #elif defined COMPILER_GCC
 
 #endif

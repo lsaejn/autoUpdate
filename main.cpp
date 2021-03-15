@@ -43,6 +43,10 @@ int main(int argc, char *argv[])
         g_hwnd = (HWND)std::stoi(argv[1]);
     }
     Alime::Console::CreateConsole();
+    
+    
+    Alime::Console::SetWindowSize(400, 800);
+    Alime::Console::SetWindowPosition(1500, 0);
         
     QssLoader loder(GetStyleName(), app);
 

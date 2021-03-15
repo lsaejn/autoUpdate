@@ -84,6 +84,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     vbox->addWidget(versionTips_);
 
     pkgList_ = new PackageListWidget(this);
+    pkgList_->SetMainWidget(this);
     stackWidget_ = new QStackedWidget(this);
     stackWidget_->addWidget(pkgList_);
     stackWidget_->addWidget(new QListWidget(this));
@@ -117,9 +118,14 @@ void QFrameLessWidget_Alime::ReadPkgFileInfo()
         QFile f(config.GetLocalPackInfoPath());
         if (f.open(QIODevice::ReadOnly))
         {
-            QString qstr=f.readAll();
-            if(!qstr.isEmpty() && InitDownloadList(qstr.toStdString()))
+            auto jsonStr=f.readAll().toStdString();
+            if (!jsonStr.empty())
+            {
+                json_= nlohmann::json::parse(jsonStr);
+                InitDownloadList();
                 return;
+            }
+                
         }
     }
     /*
@@ -153,7 +159,8 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
         netAvailable_ = true;
         const QByteArray reply_data = reply->readAll();
         QString str(reply_data);
-        bool ret=InitDownloadList(str.toStdString());
+        json_ = nlohmann::json::parse(str.toStdString());
+        bool ret=InitDownloadList();
         if(!ret)
             SetTips(u8"无法检查到程序升级信息，请检查您的网络", true);
     }
@@ -191,7 +198,7 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
     return true;
 }
 
-bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
+bool QFrameLessWidget_Alime::InitDownloadList()
 {
     try
     {
@@ -200,7 +207,7 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
             versionTips_->setText(u8"无法读取本地版本信息");
             return false;
         }
-        json_ = nlohmann::json::parse(str);
+        
         pkgList_->SetVersion(mainVersionLocal_, versionLocal_);
         pkgList_->clear();
 
