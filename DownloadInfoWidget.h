@@ -39,7 +39,7 @@ signals:
     void notify_timeLabel(QString);
 
     void finishDownload();
-    void finishSetup(bool);
+    void finishSetup(bool);//使用压包软件的结果就是我们不知道是不是安装成功
     void errorDownload();
 public slots:
     void ShowTipsWhenSetupFinished(int);
@@ -144,8 +144,8 @@ private:
 
     bool isUpdatePack_=true;
     
-
-    CheckCallBack autoRuningFunc_;
+    //test
+    //QListWidget* parent
 public:
     bool isInWrongPosition_ = false;//!!!!!!!!!!!!!!!!!!!fuck!!!!!
 };

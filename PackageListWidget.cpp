@@ -106,7 +106,6 @@ void PackageListWidget::GetUpdatePackUrl(const nlohmann::json& json,
 
 void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
 {
-    //
     const nlohmann::json& json = json_["UpdatePacks"];
 
     bool addImage = false;
@@ -144,7 +143,7 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
             auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
             setItemWidget(item, itemWidget);
 
-            connect(itemWidget, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
+            connect(itemWidget, &DownloadInfoWidget::finishSetup, [=](bool isUpdatePack) {
                 if (!itemWidget)
                 {
                     int x = 3;//fuck
@@ -152,7 +151,7 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
                 if (isUpdatePack)
                 {
                     clear();
-                    Parse(json_);
+                    //Parse(json_);
                     //ReadLocalVersion();
                     //ReadUpdatePacksInfo();
                     //ReadFixPacksInfo();//fix me
@@ -216,37 +215,16 @@ void PackageListWidget::ReadFixPack(const nlohmann::json& json_)
             //auto fileApart = GetFilePart(fullName);
 
             auto item = AddItem(this, pkgSize, url, GetFilePart(qUrl));
-            if (versionLocal_ != version)
-            {
-                item->isInWrongPosition_ = true;
-                //fix me, use [&]
-                connect(item, &DownloadInfoWidget::finishSetup, [=](bool isUpdatePack) {
-                    if (isUpdatePack == false)
-                    {
-                        clear();
-                        Parse(json_);
-                        {
-                            auto hwnd = (HWND)window()->winId();
-                            RECT rc;
-                            ::GetWindowRect(hwnd, &rc);
-                            MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
-                            MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
-                        }
-                    }
-                    });
-            }
-            else
-            {
-                connect(item, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
-                    clear();
-                    Parse(json_);
-                    auto hwnd = (HWND)window()->winId();
-                    RECT rc;
-                    ::GetWindowRect(hwnd, &rc);
-                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
-                    MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
-                    });
-            }
+            connect(item, &DownloadInfoWidget::finishSetup, [this](bool isUpdatePack) {
+                for (int i = 0; i != this->count(); ++i)
+                {
+                    auto elem=this->item(i);
+                    elem->setHidden(true);
+                }
+                this->clear();
+                auto c=this->count();
+                Alime::Console::WriteLine(L"cleared");
+                });
         }
     }
 }

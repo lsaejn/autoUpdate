@@ -580,6 +580,7 @@ bool DownloadInfoWidget::DoSetup()
         {
             //if(IsAutoSetupRunning())
                 OpenLocalPath(localFilePath_);
+                SetupFinished();
             return false;
         }
         return true;
@@ -641,11 +642,13 @@ void DownloadInfoWidget::SetupStarted()
     ShowSetupProgress(true);
 }
 
+#include <QListWidget>
 void  DownloadInfoWidget::SetupFinished()
 {
     Setuping_ = false;
     ShowSetupProgress(false);
     emit finishSetup(isUpdatePack_);
+    
 }
 
 bool DownloadInfoWidget::IsSetuping()
@@ -858,12 +861,14 @@ void DownloadInfoWidget::SetPackFlag(bool isUpdatePackage)
     isUpdatePack_ = isUpdatePackage;
 }
 
+#include "Alime/Console.h"
 bool DownloadInfoWidget::IsAutoSetupRunning()
 {
-    return autoRuningFunc_();
+    Alime::Console().WriteLine(L"Call DownloadInfoWidget::IsAutoSetupRunning", Alime::Console::RED);
+    return false;
 }
 
 void DownloadInfoWidget::SetCheckCallBack(CheckCallBack f)
 {
-    autoRuningFunc_ = f;
+    Alime::Console().WriteLine(L"Call DownloadInfoWidget::SetCheckCallBack", Alime::Console::RED);
 }

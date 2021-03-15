@@ -7,13 +7,12 @@
 #include "Alime_ContentWidget.h"
 #include "Alime/noncopyable.h"
 
-class DownloadInfoWidget;
+class QLabel;
 class QListWidget;
 class QNetworkReply;
-class QLabel;
 class QStackedWidget;
 class PackageListWidget;
-
+class DownloadInfoWidget;
 
 
 class QFrameLessWidget_Alime :
@@ -68,39 +67,31 @@ private:
     /// <param name="pkgFileContent">packinfo.json原始字符</param>
     /// <returns>是否初始化</returns>
     bool InitDownloadList(const std::string& pkgFileContent);
- 
-    /// <summary>
-    /// 返回升级包地址
-    /// </summary>
-    /// <param name="info">完整json</param>
-    /// <param name="url">欲得到的地址</param>
-    /// <param name="showImage">是否需要显示光盘</param>
-    void GetUpdatePackUrl(const nlohmann::json& info, std::string& url, bool& showImage);
 
+    /// <summary>
+    /// 一个封装，内部实现了差异对比。等待移到DownloadInfoWidget
+    /// </summary>
+    /// <param name="">。。。</param>
+    /// <returns></returns>
     bool AddItemToComparisonDownloadWidget(const QString&);
 
-    void ReadFixPacksInfo();//当前版本的补丁信息
-    void ReadUpdatePacksInfo();//下一个版本的升级信息和补丁信息
-    void ReadInstallationCDInfo();
+    /// <summary>
+    /// 一个封装，内部实现了差异对比。等待移到DownloadInfoWidget
+    /// </summary>
     void ReadIntegralFilesPackInfo();
 
-    //
-    void ReadInstallationCDInfo(PackageListWidget* wgt);
-    void ReadFixPacksInfoOfSpecificVersion(PackageListWidget* wgt, const std::string& version);
-
 private:
-    QStackedWidget* stackWidget_;
-    PackageListWidget* pkgList_;
 
+    PackageListWidget* pkgList_;
+    QStackedWidget* stackWidget_;
+    
+    QLabel* versionTips_;
     QWidget* leftContent_;
     QWidget* rightContent_;
 
-    QLabel* versionTips_;
-
-   
-    std::string mainVersionLocal_; //Vxy，历史原因 用于判断注册表键值
     std::string versionLocal_;
-
+    std::string mainVersionLocal_; //Vxy，历史原因 用于判断注册表键值
+    
     bool netAvailable_;
     nlohmann::json json_;//packinfo.json
 };
