@@ -41,13 +41,16 @@ signals:
     void finishDownload();
     void finishSetup(bool);//使用压包软件的结果就是我们不知道是不是安装成功
     void errorDownload();
+
 public slots:
     void ShowTipsWhenSetupFinished(int);
     void SetupStarted();
     void SetupFinished();
     
 public:
-    DownloadInfoWidget(QWidget* parent, const QString& fileName, qint64 fileSize, const QUrl& url);
+    DownloadInfoWidget(QWidget* parent, const QString& fileName,
+        qint64 fileSize, const QUrl& url);
+    
     ~DownloadInfoWidget()
     {
         int x = 3;
@@ -144,10 +147,6 @@ private:
 
     bool isUpdatePack_=true;
     
-    //test
-    //QListWidget* parent
-public:
-    bool isInWrongPosition_ = false;//!!!!!!!!!!!!!!!!!!!fuck!!!!!
 };
 
 

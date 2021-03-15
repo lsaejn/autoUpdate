@@ -21,8 +21,6 @@
 #include "AppUtility.h"
 
 
-//我们不使用grid，以便做精细布局
-//子widget的parent我设得有点随意，这可能导致一些内存占用问题，我不确定
 DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, qint64 _fileSize, const QUrl& _url)
     :QWidget(_parent),
     url_(_url),
@@ -37,13 +35,12 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     fileName_ (_fileName),
     reply_(nullptr),
     isBreakPointTranSupported_(true),
-    redirectTimes_{0},
-    retryTimes_{0}
+    redirectTimes_(0),
+    retryTimes_(0)
 {
     localFilePath_ = GetDownloadFolder()+fileName_;
     setContextMenuPolicy(Qt::CustomContextMenu);
 
-    //右键菜单
     AddMenuItems();
 
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
@@ -51,7 +48,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     mainLayout->addSpacing(5);
     mainLayout->setSpacing(0);
 
-    //debug 调试用
+    //for debug
     setAttribute(Qt::WA_StyledBackground, true);
     //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
 
@@ -159,9 +156,11 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
                 PauseDownloadTask();
             }));
 
+        //删除按钮被去掉
         QPushButton* deleteLocalFile = new QPushButton(this);
         deleteLocalFile->setObjectName("ItemDelete");
         deleteLocalFile->setToolTip(u8"删除文件");
+        deleteLocalFile->setVisible(false);
         CHECK_CONNECT_ERROR(connect(deleteLocalFile, &QPushButton::clicked, [this]() {
             if (IsAutoSetupRunning())
             {
@@ -174,13 +173,9 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         QPushButton* setupBtn = new QPushButton(this);
         setupBtn->setObjectName("ItemSetup");
         setupBtn->setToolTip(u8"开始安装");
+        setupBtn->setVisible(false);
         CHECK_CONNECT_ERROR(connect(setupBtn, &QPushButton::clicked, [this]()
             {
-                if (isInWrongPosition_)
-                {
-                    ShowWarningBox("error", u8"请先安装升级包", u8"确定");
-                    return;
-                }
                 if (IsAutoSetupRunning())
                 {
                     ShowWarningBox("error", u8"正在一键更新", u8"确定");
@@ -189,20 +184,27 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
                 this->DoSetup();
             }));
 
-        //testButton
-        //QPushButton* testBtn = new QPushButton("test", this);
-        //connect(testBtn, &QPushButton::clicked, [=]() {
-        //    reply_->abort();
-        //    });
-        //mainLayout->addWidget(testBtn);
+        QPushButton* instructionBtn = new QPushButton(this);
+        instructionBtn->setObjectName("instructionButton");
+        instructionBtn->setText(u8"说明");
+        CHECK_CONNECT_ERROR(connect(instructionBtn, &QPushButton::clicked, [this]()
+            {
+                ShowWarningBox("test", u8"说明文件", u8"确定");
+            }));
 
-        mainLayout->addWidget(downloadButton_);
-        mainLayout->addWidget(pauseButton_);
+
+
         mainLayout->addSpacing(15);
-        mainLayout->addWidget(deleteLocalFile);
+        mainLayout->addWidget(instructionBtn);
         mainLayout->addSpacing(15);
-        mainLayout->addWidget(setupBtn);
-        mainLayout->addSpacing(15);
+
+        //mainLayout->addWidget(downloadButton_);
+        //mainLayout->addWidget(pauseButton_);
+        //mainLayout->addSpacing(15);
+        //mainLayout->addWidget(deleteLocalFile);
+        //mainLayout->addSpacing(15);
+        //mainLayout->addWidget(setupBtn);
+        //mainLayout->addSpacing(15);
     }
 }
 
@@ -315,7 +317,7 @@ void DownloadInfoWidget::StartRequest(const QUrl& requestedUrl)
     CHECK_CONNECT_ERROR(connect(reply_, &QIODevice::readyRead, this, &DownloadInfoWidget::httpReadyRead));
     CHECK_CONNECT_ERROR(connect(reply_, &QNetworkReply::downloadProgress, this, &DownloadInfoWidget::UpdateChildWidgets));
 
-    //主动发信号是因为下载将来会丢到单独的线程
+    //主动发信号是因为下载将来会丢到单独的线程，到时直接一粘...
     CHECK_CONNECT_ERROR(connect(this, &DownloadInfoWidget::notify_progressInfo, progressBar_, &QProgressBar::setValue));
     CHECK_CONNECT_ERROR(connect(this, &DownloadInfoWidget::notify_sizeInfo, fileDownloadHeadway_, &QLabel::setText));
     CHECK_CONNECT_ERROR(connect(this, &DownloadInfoWidget::notify_stateLabel, downloadStatusLabel_, &QLabel::setText));
@@ -807,11 +809,7 @@ bool DownloadInfoWidget::CheckVersionFileAfterSetup()
 void DownloadInfoWidget::AddMenuItems()
 {
     QMenu* lableMenu = new QMenu(this);
-    //lableMenu->addAction(QIcon(":/images/play.png"), u8"开始");
-    //lableMenu->addSeparator();
-    //lableMenu->addAction(QIcon(":/images/pause.png"), u8"暂停");
-    //lableMenu->addSeparator();
-    lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除");
+    lableMenu->addAction(QIcon(":/images/close-gray.png"), u8"删除已下载文件");
     lableMenu->addSeparator();
     lableMenu->addAction(QIcon(":/images/folder.png"), u8"打开所在文件夹");
     CHECK_CONNECT_ERROR(connect(this, &QWidget::customContextMenuRequested,
@@ -820,11 +818,7 @@ void DownloadInfoWidget::AddMenuItems()
         }));
     CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
         QString str = action->text();
-        if (str == u8"开始")
-            StartDownloadTask();
-        else if (str == u8"暂停")
-            PauseDownloadTask();
-        else if (str == u8"删除")
+        if (str == u8"删除")
             CancelDownloadTask();
         else if (str == u8"打开所在文件夹")
         {
