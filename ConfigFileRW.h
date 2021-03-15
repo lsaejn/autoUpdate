@@ -113,9 +113,11 @@ private:
 	size_t logLever_;
 	size_t maxTaskNum_;
 	size_t logFileRollSize_;
+
+	bool useDatFile_ = true;
 	bool useLocalPackFile_ = false;
 	bool useSilentInstallation_ = false;
-	bool useDatFile_ = true;
+	
 	QString logFilePath_;
 	QString downloadDir_;
 	QString updateInfoUrl_;

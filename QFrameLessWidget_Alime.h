@@ -16,7 +16,8 @@ class PackageListWidget;
 
 
 
-class QFrameLessWidget_Alime : public Alime_ContentWidget, noncopyable
+class QFrameLessWidget_Alime :
+    public Alime_ContentWidget, noncopyable
 {
     Q_OBJECT
 
@@ -50,22 +51,22 @@ private:
     bool ReadLocalVersion();
     
     /// <summary>
-    /// 
+    /// 辅助函数
     /// </summary>
-    /// <param name=""></param>
-    void ShowVersionTipsInfo(const QString&);
+    /// <param name="tipInfo">字符串或富文本</param>
+    virtual void ShowVersionTipsInfo(const QString& tipInfo);
 
     /// <summary>
-    /// 
+    ///  slot, 处理packinfo.json下载完成信号
     /// </summary>
     /// <param name="reply"></param>
     void QueryInfoFinish(QNetworkReply* reply);
 
     /// <summary>
-    /// 
+    /// 填充QListWidget
     /// </summary>
-    /// <param name="pkgFileContent"></param>
-    /// <returns></returns>
+    /// <param name="pkgFileContent">packinfo.json原始字符</param>
+    /// <returns>是否初始化</returns>
     bool InitDownloadList(const std::string& pkgFileContent);
  
     /// <summary>
@@ -101,5 +102,5 @@ private:
     std::string versionLocal_;
 
     bool netAvailable_;
-    nlohmann::json json_;//网络文件对应的json
+    nlohmann::json json_;//packinfo.json
 };

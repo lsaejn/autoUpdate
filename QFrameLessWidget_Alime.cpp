@@ -12,6 +12,8 @@
 #include "QtNetwork/qnetworkrequest.h"
 #include "QtNetwork/qnetworkreply.h"
 
+#include <algorithm>
+
 #include "DownloadInfoWidget.h"
 #include "QFrameLessWidget_Alime.h"
 #include "VersionFileFinder.h"
@@ -84,6 +86,7 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     stackWidget_ = new QStackedWidget(this);
     pkgList_ = new PackageListWidget(this);
+    
 
     stackWidget_->addWidget(pkgList_);
     stackWidget_->addWidget(new QListWidget(this));
@@ -103,25 +106,10 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
             LocalVersionFile finder;
             auto newVersion=finder.GetLocalVersion();
-            if (newVersion.empty())
-                return;
-            QString version = QString("V")+ newVersion.c_str();
-            //versionTips_->setText(u8"检查到当前版本:" + version);
-            if (netAvailable_)
+            if (!newVersion.empty()&& netAvailable_)
             {
-                QString tips= version+ u8"   找到以下可用信息";
-                versionTips_->setText(u8"检查到当前版本:" + tips);
-            }
-            else
-                return;
-            //fix me, 没有测试过这一块
-            if (version != versionLocal_.c_str())
-            {
-                pkgList_->clear();
-                ReadLocalVersion();
-                ReadUpdatePacksInfo();
-                ReadFixPacksInfo();//fix me
-                ReadIntegralFilesPackInfo();
+                QString version = QString("V") + newVersion.c_str();
+                SetTips(u8"检查到当前版本: " + version + u8"   找到以下可用信息");
             }
         });
     vbox->addWidget(stackWidget_);
@@ -146,17 +134,15 @@ void QFrameLessWidget_Alime::ReadPkgFileInfo()
         }
     }
     /*
-    因为绿色化的原因，我们不支持https。
-    这个选择有前提的: 集成诸葛IO时，dll被毙掉了。
-    那么请问，将来openssl的漏洞怎么办？
-    懒得说了。非互联网行业的安全意识堪忧。
-    qDebug() << manager->supportedSchemes();
-    openssl 1.1.1, debug版本默认支持openssl, release版本默认不支持openssl
-    bool bSupp = QSslSocket::supportsSsl();
-    QString buildVersion = QSslSocket::sslLibraryBuildVersionString();
-    QString version = QSslSocket::sslLibraryVersionString();
-    qDebug() << bSupp << buildVersion << version << endl;
-*/
+        因为绿色化的原因，我们选择不支持https。这个选择有前提的: 集成诸葛IO时，dll被毙掉了。
+        那么请问，将来openssl发现漏洞怎么办？非互联网行业的安全意识真的是一言难尽
+        qDebug() << manager->supportedSchemes();
+        openssl 1.1.1, debug版本默认支持openssl, release版本默认不支持openssl
+        bool bSupp = QSslSocket::supportsSsl();
+        QString buildVersion = QSslSocket::sslLibraryBuildVersionString();
+        QString version = QSslSocket::sslLibraryVersionString();
+        qDebug() << bSupp << buildVersion << version << endl;
+    */
     QNetworkAccessManager* manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &QFrameLessWidget_Alime::QueryInfoFinish);
     connect(manager, &QNetworkAccessManager::finished, manager, &QObject::deleteLater);
@@ -178,7 +164,9 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
         netAvailable_ = true;
         const QByteArray reply_data = reply->readAll();
         QString str(reply_data);
-        InitDownloadList(str.toStdString());
+        bool ret=InitDownloadList(str.toStdString());
+        if(!ret)
+            SetTips(u8"无法检查到程序升级信息，请检查您的网络", true);
     }
 }
 
@@ -202,7 +190,7 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
         mainVersionLocal_ = "V";
         mainVersionLocal_.push_back(versionFiles.back().front());
         mainVersionLocal_.push_back(versionFiles.back()[2]);
-
+        
         Alime::Console::WriteLine(L"读取到本地版本:"+QString::fromLocal8Bit(versionLocal_.c_str()).toStdWString());
         Alime::Console::WriteLine(L"读取到本地版本对应注册表:" + QString::fromLocal8Bit(mainVersionLocal_.c_str()).toStdWString());
     }
@@ -218,7 +206,6 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
     return true;
 }
 
-//这个函数不允许出错
 bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
 {
     try
@@ -228,10 +215,12 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
             versionTips_->setText(u8"无法读取本地版本信息");
             return false;
         }
-
+        
         json_ = nlohmann::json::parse(str);
         
+        pkgList_->SetVersion(mainVersionLocal_, versionLocal_);
         pkgList_->clear();
+
         std::string lastestVer = json_["LatestVersion"];
         {
             auto ret = AscendingOrder().Compare(versionLocal_, lastestVer);
@@ -241,8 +230,10 @@ bool QFrameLessWidget_Alime::InitDownloadList(const std::string& str)
             }
             else
             {
-                ReadUpdatePacksInfo();
-                ReadFixPacksInfo();
+                pkgList_->Parse(json_);
+                //fix me , kill here
+                //ReadUpdatePacksInfo();
+                //ReadFixPacksInfo();
             }
         }
     }
@@ -445,7 +436,7 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(PackageListWidget
     }
 }
 
-#include <algorithm>
+
 void QFrameLessWidget_Alime::GetUpdatePackUrl(const nlohmann::json& json, 
     std::string& urlOut, bool& showImage)
 {

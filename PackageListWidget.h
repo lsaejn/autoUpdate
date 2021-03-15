@@ -1,6 +1,8 @@
 #pragma once
 #include <QListWidget>
 #include <atomic>
+
+#include "thirdParty/nlohmann/json.hpp"
 //fix me
 
 /*
@@ -36,17 +38,27 @@ public:
         qint64 _fileSize, const QUrl& _url, const QString& filename);
     
     void SetupAllTask();
-    void ReadUpdatePack();
-    void ReadFixPack();
-    void ReadSetupImage();
+
+
+    void Parse(const nlohmann::json& json_);
+    void PackageListWidget::GetUpdatePackUrl(const nlohmann::json& json,
+        std::string& urlOut, bool& showImage);
+
+    void ReadUpdatePack(const nlohmann::json& json_);
+    void ReadFixPack(const nlohmann::json& json_);
+    
     //bool IsAutoSetupOn();
 
     //本widget下是否有item正在下载
     bool HasSetupItem();
 
+    void SetVersion(const std::string& mainV, const std::string& localV);
 private:
+    void ReadSetupImage(const nlohmann::json& json_);
     //仅仅是为了防止未来维护者开启代码优化。下一版代码我会在另一个线程里下载文件
     //std::atomic<bool> isAutoSetupRunning_;
+    std::string mainVersionLocal_; //Vxy，历史原因 用于判断注册表键值
+    std::string versionLocal_;
 };
 
 

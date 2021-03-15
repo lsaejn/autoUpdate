@@ -6,7 +6,7 @@
 #include "VersionFileFinder.h"
 #include "AppUtility.h"
 
-//返回一个类似 "5.1.1" 的结果
+
 
 class LocalVersionFile
 {
@@ -23,6 +23,7 @@ public:
         folder_ = folder;
     }
 
+    //返回一个类似 "5.1.1" 的结果
     std::string GetLocalVersion()
     {
         auto versionFiles = FindSpecificFiles::FindVersionFiles(folder_.c_str(), "V", "ini");
