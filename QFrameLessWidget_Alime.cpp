@@ -17,7 +17,7 @@
 #include "VersionFileFinder.h"
 #include "AppVersion.h"
 #include "ConfigFileRW.h"
-#include "SetupImageWidget.h"
+#include "PackageListWidget.h"
 #include "Alime/Console.h"
 
 CLASSREGISTER(QFrameLessWidget_Alime)
@@ -320,23 +320,11 @@ bool QFrameLessWidget_Alime::AddItemToComparisonDownloadWidget(const QString& ve
     return true;
 }
 
-DownloadInfoWidget* QFrameLessWidget_Alime::AddNewItemAndWidgetToList(QListWidget* target, QWidget* /*_parent*/,
-    qint64 _fileSize, const QUrl& _url, const QString& fileName)
-{
-    QListWidgetItem* item = new QListWidgetItem();
-    QSize preferSize = item->sizeHint();
-    item->setSizeHint(QSize(preferSize.width(), 70));
-    target->addItem(item);
-    //auto index = _url.lastIndexOf("/");
-    auto itemWidget = new DownloadInfoWidget(this, fileName, _fileSize, _url);
-    target->setItemWidget(item, itemWidget);
-    return itemWidget;
-}
-
 //copy了代码，带来不好的味道。
 //需要测试
 void QFrameLessWidget_Alime::ReadFixPacksInfo()
 {
+    ReadFixPacksInfoOfSpecificVersion(pkgList_, versionLocal_);
     return;
 }
 
@@ -366,12 +354,11 @@ void QFrameLessWidget_Alime::ReadInstallationCDInfo(PackageListWidget* wgt)
     reply->deleteLater();
 
     qint64 pkgSize = var.toLongLong();
-    auto itemWidget=AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(url));
-    itemWidget->SetCheckCallBack(std::bind(&PackageListWidget::IsAutoSetupOn, pkgList_));
-    itemWidget->SetPackFlag(true);
+    wgt->AddItem(this, pkgSize, url, GetFilePart(url));
+
 }
 
-//无比保证这个版本文件是英文
+//menu文件保证这个版本文件是英文
 bool IsFileExist(const std::string& filename)
 {
     auto str= GetApplicationDirPath() + "../CFG/" + filename.c_str();
@@ -416,15 +403,14 @@ void QFrameLessWidget_Alime::ReadFixPacksInfoOfSpecificVersion(PackageListWidget
             int pkgSize = var.toInt();
             //auto fullName = qUrl.toString();
             //auto fileApart = GetFilePart(fullName);
-            auto item = AddNewItemAndWidgetToList(wgt, this, pkgSize, url, GetFilePart(qUrl));
-            item->SetCheckCallBack(std::bind(&PackageListWidget::IsAutoSetupOn, wgt));
-            item->SetPackFlag(false);
+            
+            auto item = wgt->AddItem(this, pkgSize, url, GetFilePart(qUrl));
             if (versionLocal_ != version)
             {
                 item->isInWrongPosition_ = true;
                 //fix me, use [&]
                 connect(item, &DownloadInfoWidget::finishSetup, [=](bool isUpdatePack) {
-                    if (isUpdatePack == false && pkgList_->IsAutoSetupOn())
+                    if (isUpdatePack == false)
                     {
                         pkgList_->clear();
 
@@ -576,14 +562,13 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
 
             auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
             pkgList_->setItemWidget(item, itemWidget);
-            itemWidget->SetCheckCallBack(std::bind(&PackageListWidget::IsAutoSetupOn, pkgList_));
 
             connect(itemWidget, &DownloadInfoWidget::finishSetup, [&](bool isUpdatePack) {
                 if (!itemWidget)
                 {
                     int x = 3;//fuck
                 }
-                if ((isUpdatePack && !pkgList_->IsAutoSetupOn()))
+                if (isUpdatePack)
                 {
                     pkgList_->clear();
                     ReadLocalVersion();
@@ -599,8 +584,6 @@ void QFrameLessWidget_Alime::ReadUpdatePacksInfo()
                     }
                 }
                 });
-            //10/28, 好爽
-            ReadFixPacksInfoOfSpecificVersion(pkgList_, versionLocal_);
         }
     }
         

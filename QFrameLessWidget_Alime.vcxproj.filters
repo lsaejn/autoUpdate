@@ -71,7 +71,7 @@
     <ClCompile Include="String_utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SetupImageWidget.cpp">
+    <ClCompile Include="PackageListWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TaskThread.cpp">
@@ -142,7 +142,7 @@
     <QtMoc Include="TaskThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="SetupImageWidget.h">
+    <QtMoc Include="PackageListWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="alternative\FolderDownloadInfoWidget.h">

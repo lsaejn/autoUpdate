@@ -135,7 +135,7 @@
     <ClCompile Include="alternative\FakePackage.cpp" />
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp" />
     <ClCompile Include="AlimeQLib\QtAlimeRippleHelper.cpp" />
-    <ClCompile Include="SetupImageWidget.cpp" />
+    <ClCompile Include="PackageListWidget.cpp" />
     <ClCompile Include="String_utility.cpp" />
     <ClCompile Include="TaskThread.cpp" />
     <ClCompile Include="alternative\WebFiles.cpp" />
@@ -213,7 +213,7 @@
     <QtMoc Include="alternative\FolderDownloadInfoWidget.h" />
     <ClInclude Include="alternative\Md5Checker.h" />
     <QtMoc Include="QssLoader.h" />
-    <QtMoc Include="SetupImageWidget.h" />
+    <QtMoc Include="PackageListWidget.h" />
     <ClInclude Include="AlimeQLib\QtAlimeRippleHelper.h" />
     <ClInclude Include="SetupHelper.h" />
     <ClInclude Include="String_utility.h" />

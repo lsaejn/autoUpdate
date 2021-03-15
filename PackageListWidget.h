@@ -16,6 +16,11 @@
 */
 //而SetupWidget和更新按钮是同级的，这导致了一些交互问题
 //现在SetupWidget
+///好吧，到了三月份，PackageListWidget包含升级包/光盘 补丁包
+///因为要在一个页面显示。
+/// 
+
+class DownloadInfoWidget;
 class PackageListWidget : public QListWidget
 {
     Q_OBJECT
@@ -26,16 +31,22 @@ signals:
     void reset();
 public:
     PackageListWidget(QWidget* parent);
+
+    DownloadInfoWidget* AddItem(QWidget* _parent,
+        qint64 _fileSize, const QUrl& _url, const QString& filename);
     
     void SetupAllTask();
-    bool IsAutoSetupOn();
+    void ReadUpdatePack();
+    void ReadFixPack();
+    void ReadSetupImage();
+    //bool IsAutoSetupOn();
 
     //本widget下是否有item正在下载
     bool HasSetupItem();
 
 private:
     //仅仅是为了防止未来维护者开启代码优化。下一版代码我会在另一个线程里下载文件
-    std::atomic<bool> isAutoSetupRunning_;
+    //std::atomic<bool> isAutoSetupRunning_;
 };
 
 

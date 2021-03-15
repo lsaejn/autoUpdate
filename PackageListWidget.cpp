@@ -1,4 +1,4 @@
-#include "SetupImageWidget.h"
+#include "PackageListWidget.h"
 #include "DownloadInfoWidget.h"
 #include <QLayout>
 #include <QLabel>
@@ -11,10 +11,24 @@
 //#include <QArray>
 
 PackageListWidget::PackageListWidget(QWidget* parent)
-	:QListWidget(parent),
-    isAutoSetupRunning_(false)
+	:QListWidget(parent)
 {
     setObjectName("SetupImageWidget");
+}
+
+void PackageListWidget::ReadUpdatePack()
+{
+
+}
+
+void PackageListWidget::ReadFixPack()
+{
+
+}
+
+void PackageListWidget::ReadSetupImage()
+{
+
 }
 
 
@@ -24,7 +38,6 @@ PackageListWidget::PackageListWidget(QWidget* parent)
 void PackageListWidget::SetupAllTask()
 {
     ALIME_SCOPE_EXIT{
-        isAutoSetupRunning_ = false;
         emit finish(2);//fix me, new signal replace this
         disconnect();
     };
@@ -49,7 +62,6 @@ void PackageListWidget::SetupAllTask()
         }
     }
     //fuuuuuuuuuuuuuuuuuuuuuuck
-    isAutoSetupRunning_ = true;
     for(int i=0; i!= array.size(); ++i)
     {
         auto elem = array[i];
@@ -104,10 +116,10 @@ void PackageListWidget::SetupAllTask()
     }
 }
 
-bool PackageListWidget::IsAutoSetupOn()
-{
-    return isAutoSetupRunning_;
-}
+//bool PackageListWidget::IsAutoSetupOn()
+//{
+//    return isAutoSetupRunning_;
+//}
 
 bool PackageListWidget::HasSetupItem()
 {
@@ -122,4 +134,17 @@ bool PackageListWidget::HasSetupItem()
         }
     }
     return false;
+}
+
+DownloadInfoWidget* PackageListWidget::AddItem(QWidget* _parent,
+    qint64 _fileSize, const QUrl& _url, const QString& filename)
+{
+    QListWidgetItem* item = new QListWidgetItem();
+    QSize preferSize = item->sizeHint();
+    item->setSizeHint(QSize(preferSize.width(), 70));
+    addItem(item);
+    //auto index = _url.lastIndexOf("/");
+    auto itemWidget = new DownloadInfoWidget(this, filename, _fileSize, _url);
+    setItemWidget(item, itemWidget);
+    return itemWidget;
 }

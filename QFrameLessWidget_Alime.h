@@ -3,8 +3,8 @@
 #include <QtWidgets/QWidget>
 
 #include "thirdParty/nlohmann/json.hpp"
-#include "Alime_ContentWidget.h"
 
+#include "Alime_ContentWidget.h"
 #include "Alime/noncopyable.h"
 
 class DownloadInfoWidget;
@@ -29,7 +29,13 @@ public:
     /// <returns>标题</returns>
     virtual QString GetTitle() override;
 
+    /// <summary>
+    /// 设置提示
+    /// </summary>
+    /// <param name=""></param>
+    /// <param name="isWaring"></param>
     void SetTips(const QString&, bool isWaring = false);
+
 private:
 
     /// <summary>
@@ -43,8 +49,23 @@ private:
     /// <returns>是否成功读取</returns>
     bool ReadLocalVersion();
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name=""></param>
     void ShowVersionTipsInfo(const QString&);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="reply"></param>
     void QueryInfoFinish(QNetworkReply* reply);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pkgFileContent"></param>
+    /// <returns></returns>
     bool InitDownloadList(const std::string& pkgFileContent);
  
     /// <summary>
@@ -52,12 +73,8 @@ private:
     /// </summary>
     /// <param name="info">完整json</param>
     /// <param name="url">欲得到的地址</param>
-    /// <param name="url">是否需要显示光盘</param>
+    /// <param name="showImage">是否需要显示光盘</param>
     void GetUpdatePackUrl(const nlohmann::json& info, std::string& url, bool& showImage);
-
-    //static
-    DownloadInfoWidget* AddNewItemAndWidgetToList(QListWidget* target, QWidget* _parent,
-        qint64 _fileSize, const QUrl& _url, const QString& filename);
 
     bool AddItemToComparisonDownloadWidget(const QString&);
 
@@ -68,8 +85,8 @@ private:
 
     //
     void ReadInstallationCDInfo(PackageListWidget* wgt);
-    //void ReadFixPacksInfo(SetupWidget* wgt);
     void ReadFixPacksInfoOfSpecificVersion(PackageListWidget* wgt, const std::string& version);
+
 private:
     QStackedWidget* stackWidget_;
     PackageListWidget* pkgList_;

@@ -26,7 +26,7 @@ downloadState_
 downloadStatusLabel_
 */
 
-//Widget as a item in QListWidget
+//Widget as a ListItem in QListWidget
 class DownloadInfoWidget : public QWidget
 {
     Q_OBJECT
