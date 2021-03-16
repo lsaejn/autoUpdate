@@ -38,8 +38,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     reply_(nullptr),
     isBreakPointTranSupported_(true),
     isUpdatePack_(isUpdatePack),
-    Setuping_(false),
-    retryTimes_(0)
+    Setuping_(false)
 {
     localFilePath_ = GetDownloadFolder()+fileName_;
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -279,18 +278,6 @@ bool DownloadInfoWidget::StartDownloadTask()
         {
             DoSetup();
             return true;
-            //auto ret = ShowQuestionBox(u8"警告", 
-            //    QString(u8"重新下载该文件？已下载的文件%1将被删除。" " 确认重下?").arg(fileName),
-            //    u8"确定", u8"取消");
-            //if (!ret)
-            //{
-            //    return false;
-            //}
-            //else
-            //{
-            //    file_.reset();
-            //    QFile::remove(localFilePath_);
-            //}
         }
     }
 
@@ -536,8 +523,7 @@ bool DownloadInfoWidget::PauseDownloadTask()
     {
         downloadState_ = DownloadState::Paused;
         reply_->abort();
-        //fix me, notify UpdatePlayButton by state
-        UpdatePlayButton(true);
+        //UpdatePlayButton(true);
         return true;
     }
     else
@@ -833,8 +819,12 @@ void DownloadInfoWidget::AddMenuItems()
         }));
     CHECK_CONNECT_ERROR(connect(lableMenu, &QMenu::triggered, [=](QAction* action) {
         QString str = action->text();
-        if (str == u8"删除")
+        if (str == u8"删除已下载文件")
+        {
+            //if(Se)
             CancelDownloadTask();
+        }
+            
         else if (str == u8"打开所在文件夹")
         {
             if(QFile::exists(localFilePath_))

@@ -70,9 +70,6 @@ public:
         Other
     };
 
-    //调试用,时间比较吃紧，我们改成单线程跑状态机
-    //NotStarted，Finished是常态;Downloading是二者的中间状态；另外四个是中间状态转常态的顺时状态，方便更新控件
-    //
     enum class DownloadState
     {
         NotStarted,
@@ -86,36 +83,161 @@ public:
 
 //用户操作设为public，方便记忆
 public:
+
+    /// <summary>
+    /// 开始下载并安装
+    /// </summary>
+    /// <returns>是否成功进入下载状态</returns>
     bool StartDownloadTask();
+
+    /// <summary>
+    /// 停止下载
+    /// </summary>
+    /// <returns>状态是否有逻辑错误</returns>
     bool PauseDownloadTask();
+
+    /// <summary>
+    /// 退出下载。非下载状态将删除文件，并进入Cancel
+    /// </summary>
+    /// <returns></returns>
     bool CancelDownloadTask();
+
+    /// <summary>
+    /// 开始安装
+    /// </summary>
+    /// <returns>是否有状态错误</returns>
     bool DoSetup();
+
+    /// <summary>
+    ///  判断安装包类型是升级包/光盘
+    /// </summary>
+    /// <returns>bool</returns>
     bool IsUpdatePackage();
+
+    /// <summary>
+    /// 下载结束
+    /// </summary>
+    /// <returns></returns>
     bool IsFinished();//download
+
+    /// <summary>
+    /// 判断是否在执行安装。这个过程和结果不受本程序控制。
+    /// </summary>
+    /// <returns>bool</returns>
     bool IsSetuping();
+
+    /// <summary>
+    /// 是否处于下载状态
+    /// </summary>
+    /// <returns></returns>
     bool IsDownLoading();
+
+    /// <summary>
+    /// 废弃
+    /// </summary>
+    /// <param name="f"></param>
     void SetCheckCallBack(CheckCallBack f);
+
+    /// <summary>
+    /// 废弃
+    /// </summary>
+    /// <param name="isUpdatePackage"></param>
     void SetPackFlag(bool isUpdatePackage);
 private:
+
+    /// <summary>
+    /// 下载中止的槽函数
+    /// </summary>
     void httpFinished();
+
+    /// <summary>
+    /// 数据回调函数
+    /// </summary>
     void httpReadyRead();
+
+    /// <summary>
+    /// 增加右键菜单
+    /// </summary>
     void AddMenuItems();
     
+    /// <summary>
+    /// 废弃
+    /// </summary>
+    /// <returns></returns>
     bool IsAutoSetupRunning();
+
+    /// <summary>
+    /// 进度条进入安装状态。安装不收控制，因此无法显示百分比
+    /// </summary>
+    /// <param name=""></param>
     void ShowSetupProgress(bool);
+
+    /// <summary>
+    /// 废弃
+    /// </summary>
     void UpdateUiAccordingToState();
+
+    /// <summary>
+    /// 废弃
+    /// </summary>
     bool CheckVersionFileAfterSetup();
+
+    /// <summary>
+    /// 辅助函数。开始请求。
+    /// </summary>
+    /// <param name="url"></param>
     void StartRequest(const QUrl& url);
+
+    /// <summary>
+    /// 更新控件的间隔
+    /// </summary>
+    /// <param name="second"></param>
+    /// <returns></returns>
     bool isTimeToUpdate(double& second);
+
+    /// <summary>
+    /// 准备废弃
+    /// </summary>
+    /// <param name=""></param>
     void httpError(QNetworkReply::NetworkError);
 
+    /// <summary>
+    /// 拼接下载大小进度字符串
+    /// </summary>
+    /// <returns></returns>
     QString MakeDownloadHeadway();
     QString MakeDownloadHeadway(int64_t reader, int64_t total);
+
+    /// <summary>
+    /// 转换标准DateTime
+    /// </summary>
+    /// <param name="seconds"></param>
+    /// <returns>DateTime</returns>
     QString MakeDurationToString(int seconds);
 
+    /// <summary>
+    /// 加载进度条
+    /// </summary>
     void LoadingProgressForBreakPoint();
+
+    /// <summary>
+    /// 根据进度更新控件
+    /// </summary>
+    /// <param name="bytesReceived"></param>
+    /// <param name="bytesTotal"></param>
     void UpdateChildWidgets(qint64 bytesReceived, qint64 bytesTotal);
+
+    /// <summary>
+    /// 准备废弃。开始/暂停状态显示不同的按钮
+    /// </summary>
+    /// <param name="stopped"></param>
     void UpdatePlayButton(bool stopped=true);
+
+    /// <summary>
+    /// 辅助函数。打开一个文件
+    /// </summary>
+    /// <param name="fileName">文件名</param>
+    /// <returns>句柄</returns>
     std::unique_ptr<QFile> openFileForWrite(const QString& fileName);
     
 private:
@@ -147,8 +269,6 @@ private:
     bool Setuping_;
     bool isUpdatePack_;
     bool isBreakPointTranSupported_;
-    
-    int retryTimes_;
 };
 
 
