@@ -1,4 +1,4 @@
- Alime_WindowBase{
+Alime_TransparentWidget{
      min-height:600px;
      min-width: 900px;
  }
@@ -25,19 +25,19 @@ Alime_TitleBar> QPushButton:hover{
 }
 
 QWidget#leftContent{
-background-color: rgb(245,245,245);
+    background-color: rgb(245,245,245);
+    border-right: 2px solid rgba(160,160,160,70);
 }
 
 QWidget#rightContent{
-background-color: rgb(255,255,255);
-border-left:2px solid rgba(160,160,160,70);
+    background-color: rgb(255,255,255);
 }
 
 QPushButton#btnBoard{
-background-color: transparent;
-font-size:22px;
-color:rgb(6,168,255);
-border-left:8px solid rgba(68,68,68,0);
+    background-color: transparent;
+    font-size:22px;
+    color:rgb(6,168,255);
+    border-left:8px solid rgba(68,68,68,0);
 }
 
 QPushButton#btnBoard:hover{
@@ -82,15 +82,21 @@ QLabel#versionTips{
 QLabel#grayLabel{
     color: rgb(160,160,160);
     font-size:14px;
-    padding: 0px,0px,0px,0px;
+    padding: 0px 0px 0px 0px;
 }
 
-QPushButton#ItemPlay{
-    min-width: 22px;
-    max-width: 22px;
-    min-height:22px;
-    max-height:22px;
-    image: url(:/images/play.png);
+ QLabel#PackLabel{
+    color: rgb(109,146,173);
+    font-size:18px;
+    padding: 0px 0px 0px 0px;
+ }
+
+QLabel#speedLabel{
+    max-width: 100px;
+}
+
+QLabel#filePackLabel{
+    max-width: 80px;
 }
 
 QPushButton#ItemPlay{
@@ -109,10 +115,6 @@ QPushButton#instructionButton{
     margin:2px;
     padding:5px 5px 5px 5px;
     border-radius:1px
-}
-
-QPushButton#ItemPlay:hover{
-    image: url(:/images/play-blue.png);
 }
 
 QPushButton#ItemPlayPause{
@@ -152,26 +154,26 @@ QPushButton#ItemSetup:hover{
 }
 
 QLabel#exeIconLabel{
-    min-width: 30px;
-    max-width: 30px;
+    min-width:  50px;
+    max-width: 50px;
     image: url(:/images/exe.png);
 }
 
 QLabel#isoIconLabel{
-    min-width: 30px;
-    max-width: 30px;
+    min-width: 50px;
+    max-width:50px;
     image: url(:/images/iso.png);
 }
 
 QLabel#itemIconLabel{
-    min-width: 30px;
-    max-width: 30px;
+    min-width: 50px;
+    max-width: 50px;
     image: url(:/images/zip.png);
 }
 
 QLabel#folderIconLabel{
-    min-width: 48px;
-    max-width: 48px;
+    min-width: 50px;
+    max-width: 50px;
     image: url(:/images/directory.png);
 }
 
@@ -202,19 +204,28 @@ QListWidget#fixPkgList{
     border:none;
 }
 
+QListWidget#SetupImageWidget{
+    background: rgba(6, 168, 255,0);
+    border:none;
+}
+
 QMenu {
-    icon-size: 12px;
+    icon-size: 16px;
 }
 
 QMenu::item
 {
     background: transparent;
-    padding:2px 16px;
+    padding:2px 26px;
 }
 
 QMenu::item:selected {
     border-color: darkblue;
     background: rgb(237, 248, 248);
+}
+
+QFrame#horiLine{
+    border-top: 1px solid rgba(6,168,255,255); 
 }
 
 
