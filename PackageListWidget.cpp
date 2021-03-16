@@ -8,6 +8,7 @@
 #include "Alime/ScopeGuard.h"
 #include "Alime/Console.h"
 
+#include "QFrameLessWidget_Alime.h"
 #include "VersionFileFinder.h"
 #include "TaskThread.h"
 
@@ -27,10 +28,11 @@ void PackageListWidget::Parse(const nlohmann::json& json_)
 
 
 void PackageListWidget::GetUpdatePackUrl(const nlohmann::json& json,
-    std::string& urlOut, bool& showImage)
+    std::string& urlOut, std::string& instructionUrl, bool& showImage)
 {
     std::string ver = json["version"];
     std::string url = json["url"];
+    std::string insUrl = json["update_description"];
     //给reg是因为V6可能不需要注册表，相当于一个bool
     bool hasRegStr = false;
     std::string regKey = (hasRegStr = json.contains("reg")) ? json["reg"] : "";
@@ -48,7 +50,7 @@ void PackageListWidget::GetUpdatePackUrl(const nlohmann::json& json,
         }
         else
         {
-            Alime::Console::WriteLine(L"注册表不同");
+            Alime::Console::WriteLine(L"注册表相同，寻找升级包");
             auto ret = AscendingOrder().Compare(versionLocal_, ver);
             if (ret >= 0)
             {
@@ -58,6 +60,7 @@ void PackageListWidget::GetUpdatePackUrl(const nlohmann::json& json,
             else
             {
                 urlOut = url;
+                instructionUrl = insUrl;
                 return;
             }
         }
@@ -109,8 +112,9 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
     const nlohmann::json& json = json_["UpdatePacks"];
 
     bool addImage = false;
+    std::string instructionUrl;
     std::string webUrl;
-    GetUpdatePackUrl(json, webUrl, addImage);
+    GetUpdatePackUrl(json, webUrl, instructionUrl, addImage);
     if (addImage)
     {
         ReadSetupImage(json_);
@@ -123,6 +127,7 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
         QNetworkAccessManager manager;
         {
             QUrl url = ConfigFileReadWriter::Instance().GetUrlOfUpdatePackFolder() + webUrl.c_str();
+            QUrl insUrl(instructionUrl.c_str());
             QEventLoop loop;
             QNetworkReply* reply = manager.head(QNetworkRequest(url));
             //我们阻塞当前代码, 初始化stackWidget内容
@@ -142,30 +147,20 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
             item->setSizeHint(QSize(preferSize.width(), 70));
             addItem(item);
 
-            auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url);
+            auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url, insUrl);
             setItemWidget(item, itemWidget);
 
             connect(itemWidget, &DownloadInfoWidget::finishSetup, [=](bool isUpdatePack) {
-                if (!itemWidget)
+                for (int i = 0; i != this->count(); ++i)
                 {
-                    int x = 3;//fuck
+                    auto elem = this->item(i);
+                    elem->setHidden(true);
                 }
-                if (isUpdatePack)
-                {
-                    clear();
-                    //Parse(json_);
-                    //ReadLocalVersion();
-                    //ReadUpdatePacksInfo();
-                    //ReadFixPacksInfo();//fix me
-                    //这个地方看着很难堪~显然Qt应该要做到像wpf一样，updatePkgList_=null, updatePkgList_=...
-                    {
-                        auto hwnd = (HWND)window()->winId();
-                        RECT rc;
-                        ::GetWindowRect(hwnd, &rc);
-                        MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, 1);
-                        MoveWindow(hwnd, rc.left, rc.top, rc.right - rc.left + 1, rc.bottom - rc.top + 1, 1);
-                    }
-                }
+                this->clear();
+                auto c = this->count();
+                Alime::Console::WriteLine(L"cleared");
+
+                mainWidget_->InitDownloadList();
                 });
         }
     }
@@ -218,7 +213,8 @@ void PackageListWidget::ReadFixPack(const nlohmann::json& json_)
             //auto fullName = qUrl.toString();
             //auto fileApart = GetFilePart(fullName);
 
-            auto item = AddItem(this, pkgSize, url, GetFilePart(qUrl));
+            auto item = AddItem(this, pkgSize, url, QUrl(array["update_description"].get<std::string>().c_str()), GetFilePart(qUrl), false);
+
             connect(item, &DownloadInfoWidget::finishSetup, [this](bool isUpdatePack) {
                 for (int i = 0; i != this->count(); ++i)
                 {
@@ -262,7 +258,7 @@ void PackageListWidget::ReadSetupImage(const nlohmann::json& json_)
     reply->deleteLater();
 
     qint64 pkgSize = var.toLongLong();
-    AddItem(this, pkgSize, url, GetFilePart(url));
+    AddItem(this, pkgSize, url, QUrl(json_["update_description"].get<std::string>().c_str()), GetFilePart(url), true);
 }
 
 /*
@@ -370,14 +366,13 @@ bool PackageListWidget::HasSetupItem()
 }
 
 DownloadInfoWidget* PackageListWidget::AddItem(QWidget* _parent,
-    qint64 _fileSize, const QUrl& _url, const QString& filename)
+    qint64 _fileSize, const QUrl& _url, const QUrl& ins_url, const QString& filename, bool isUpdatePack)
 {
     QListWidgetItem* item = new QListWidgetItem();
     QSize preferSize = item->sizeHint();
     item->setSizeHint(QSize(preferSize.width(), 70));
     addItem(item);
-    //auto index = _url.lastIndexOf("/");
-    auto itemWidget = new DownloadInfoWidget(this, filename, _fileSize, _url);
+    auto itemWidget = new DownloadInfoWidget(this, filename, _fileSize, _url, ins_url, isUpdatePack);
     setItemWidget(item, itemWidget);
     return itemWidget;
 }
@@ -386,4 +381,22 @@ void PackageListWidget::SetVersion(const std::string& mainV, const std::string& 
 {
     mainVersionLocal_ = mainV;
     versionLocal_ = localV;
+}
+
+void PackageListWidget::ReReadPacks(bool isUpdatePack)
+{
+    for (int i = 0; i != this->count(); ++i)
+    {
+        auto elem = this->item(i);
+        elem->setHidden(true);
+    }
+    this->clear();
+
+    //delete these
+    {
+        auto c = this->count();
+        Alime::Console::WriteLine(L"cleared");
+    }
+
+    mainWidget_->InitDownloadList();
 }

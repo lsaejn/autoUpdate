@@ -21,9 +21,11 @@
 #include "AppUtility.h"
 
 
-DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, qint64 _fileSize, const QUrl& _url)
+DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, 
+    qint64 _fileSize, const QUrl& _url, const QUrl& instructionUrl, bool isUpdatePack)
     :QWidget(_parent),
     url_(_url),
+    instructionUrl_(instructionUrl),
     fileDownloadHeadway_(nullptr),
     leftTimeEstimated_(nullptr),
     downloadStatusLabel_(nullptr),
@@ -35,7 +37,8 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     fileName_ (_fileName),
     reply_(nullptr),
     isBreakPointTranSupported_(true),
-    redirectTimes_(0),
+    isUpdatePack_(isUpdatePack),
+    Setuping_(false),
     retryTimes_(0)
 {
     localFilePath_ = GetDownloadFolder()+fileName_;
@@ -51,6 +54,22 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     //for debug
     setAttribute(Qt::WA_StyledBackground, true);
     //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
+
+    {
+        QLabel* typeLabel = new QLabel(this);
+        if (isUpdatePack_)
+        {
+            typeLabel->setObjectName("PackLabel");
+            typeLabel->setText(u8"升级包");
+        }
+        else
+        {
+            typeLabel->setObjectName("PackLabel");
+            typeLabel->setText(u8"补丁包");
+        }
+        mainLayout->addWidget(typeLabel);
+        mainLayout->addSpacing(10);
+    }
 
     ///图标
     {
@@ -132,19 +151,23 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     {
         downloadButton_ = new QPushButton(this);
         downloadButton_->setObjectName("ItemPlay");
-        downloadButton_->setToolTip(u8"开始");
+        downloadButton_->setText(u8"一键升级");
         (connect(downloadButton_, &QPushButton::clicked, [this] {
             if (IsAutoSetupRunning())
             {
                 ShowWarningBox("error", u8"正在一键更新", u8"确定");
                 return;
             }
+            //if (downloadState_)
+            //    ;
             StartDownloadTask();
             }));
 
+        //暂停按钮, 新版本被去掉
         pauseButton_= new QPushButton(this);
         pauseButton_->setObjectName("ItemPlayPause");
         pauseButton_->setToolTip(u8"暂停");
+        pauseButton_->setText(u8"一键更新");
         pauseButton_->hide();
         CHECK_CONNECT_ERROR(connect(pauseButton_, &QPushButton::clicked, [this]()
             {
@@ -156,7 +179,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
                 PauseDownloadTask();
             }));
 
-        //删除按钮被去掉
+        //fix,me 删除按钮, 新版本被去掉
         QPushButton* deleteLocalFile = new QPushButton(this);
         deleteLocalFile->setObjectName("ItemDelete");
         deleteLocalFile->setToolTip(u8"删除文件");
@@ -170,6 +193,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
             CancelDownloadTask();
             }));
 
+        //更新按钮，新版本被去掉
         QPushButton* setupBtn = new QPushButton(this);
         setupBtn->setObjectName("ItemSetup");
         setupBtn->setToolTip(u8"开始安装");
@@ -184,27 +208,20 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
                 this->DoSetup();
             }));
 
+        //升级说明按钮
         QPushButton* instructionBtn = new QPushButton(this);
         instructionBtn->setObjectName("instructionButton");
-        instructionBtn->setText(u8"说明");
-        CHECK_CONNECT_ERROR(connect(instructionBtn, &QPushButton::clicked, [this]()
-            {
-                ShowWarningBox("test", u8"说明文件", u8"确定");
-            }));
+        instructionBtn->setText(u8"更新说明");
+        connect(instructionBtn, &QPushButton::clicked, [this](){
+                auto url=instructionUrl_.toString().toStdWString();
+                if(!url.empty())
+                    ShellExecute(NULL, L"open", url.c_str(), L"", L"", SW_SHOW);
+            });
 
-
-
+        mainLayout->addWidget(downloadButton_);
         mainLayout->addSpacing(15);
         mainLayout->addWidget(instructionBtn);
         mainLayout->addSpacing(15);
-
-        //mainLayout->addWidget(downloadButton_);
-        //mainLayout->addWidget(pauseButton_);
-        //mainLayout->addSpacing(15);
-        //mainLayout->addWidget(deleteLocalFile);
-        //mainLayout->addSpacing(15);
-        //mainLayout->addWidget(setupBtn);
-        //mainLayout->addSpacing(15);
     }
 }
 
@@ -224,24 +241,17 @@ std::unique_ptr<QFile> DownloadInfoWidget::openFileForWrite(const QString& fileP
 
 bool DownloadInfoWidget::StartDownloadTask()
 {
-    if(downloadState_!= DownloadState::NotStarted&&
-        downloadState_ != DownloadState::Finished)
+    if(downloadState_!= DownloadState::NotStarted && downloadState_ != DownloadState::Finished )
     {
         qCritical() << u8"状态错误,检查代码逻辑";
     }
-    
-    if (url_.isEmpty())
-    {
-        qCritical() << "empty url";
-        return false;//fix me, 提示无法下载
-    }  
-    //for for file protocol
-    //url_ = "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
+    //file protocol "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
     QUrl newUrl = url_;//for local debug
     
-    if (!newUrl.isValid())
+    if (url_.isEmpty() || !newUrl.isValid())
     {
         qCritical() << QString("Invalid URL: %1: %2").arg(url_.toString(), newUrl.errorString());
+        downloadStatusLabel_->setText(u8"无法下载");
         return false;//维护人员上传的文件错误
     }
 
@@ -256,27 +266,31 @@ bool DownloadInfoWidget::StartDownloadTask()
     {
         QFileInfo fileInfo(localFilePath_);
         auto fileSize=fileInfo.size();
-        if (fileSize == totalSize_)//我不确定是不是要支持断点传输
-        {
-            auto ret = ShowQuestionBox(u8"操作警告", 
-                QString(u8"重新下载该文件？已下载的文件%1将被删除。" " 确认重下?").arg(fileName),
-                u8"确定", u8"取消");
-            if (!ret)
-            {
-                return false;
-            }
-            else
-            {
-                file_.reset();
-                QFile::remove(localFilePath_);
-                //LoadingProgressForBreakPoint();
-            }
-        }
-        else if(fileSize > totalSize_)
+
+        if (fileSize > totalSize_)
         {
             qDebug() << u8"Invalid local file size, should not larger than targetSize";
             file_.reset();
             QFile::remove(localFilePath_);
+            fileInfo = QFileInfo(localFilePath_);
+            fileSize = fileInfo.size();
+        }
+        if (fileSize == totalSize_)//else 我们没有办法验证已下载文件的有效性
+        {
+            DoSetup();
+            return true;
+            //auto ret = ShowQuestionBox(u8"警告", 
+            //    QString(u8"重新下载该文件？已下载的文件%1将被删除。" " 确认重下?").arg(fileName),
+            //    u8"确定", u8"取消");
+            //if (!ret)
+            //{
+            //    return false;
+            //}
+            //else
+            //{
+            //    file_.reset();
+            //    QFile::remove(localFilePath_);
+            //}
         }
     }
 
@@ -289,10 +303,11 @@ bool DownloadInfoWidget::StartDownloadTask()
         return false;
     }
            
-    StartRequest(newUrl);
     downloadState_ = DownloadState::Downloading;
     downloadStatusLabel_->setText(u8"正在连接...");
-    UpdatePlayButton(false);
+    StartRequest(newUrl);
+
+    //UpdatePlayButton(false);
     return true;
 }
 
@@ -380,7 +395,7 @@ void DownloadInfoWidget::httpFinished()
         redirected = true;
         const QUrl redirectedUrl = redirectionTarget.toUrl();
         int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        ShowWarningBox(u8"不要大惊小怪", u8"重定向"+redirectedUrl.toString(), u8"确定");
+        qDebug() << "redirected " << statusCode;
         qDebug() << "status code is " << statusCode;
         file_ = openFileForWrite(localFilePath_);
         if (!file_)

@@ -93,6 +93,24 @@ QPushButton#ItemPlay{
     image: url(:/images/play.png);
 }
 
+QPushButton#ItemPlay{
+    border: 1px solid rgb(6,168,255);
+    font-size:14px;
+    color: rgb(6,168,255);
+    margin:2px;
+    padding:5px 5px 5px 5px;
+    border-radius:1px
+}
+
+QPushButton#instructionButton{
+    border: 1px solid rgb(6,168,255);
+    font-size:14px;
+    color: rgb(6,168,255);
+    margin:2px;
+    padding:5px 5px 5px 5px;
+    border-radius:1px
+}
+
 QPushButton#ItemPlay:hover{
     image: url(:/images/play-blue.png);
 }

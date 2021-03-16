@@ -8,6 +8,7 @@
 #include <QStackedWidget>
 #include <QButtonGroup>
 
+
 #include "QtNetwork/qnetworkaccessmanager.h"
 #include "QtNetwork/qnetworkrequest.h"
 #include "QtNetwork/qnetworkreply.h"
@@ -50,7 +51,8 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
     QHBoxLayout* contentLayout = new QHBoxLayout(this);
     leftContent_ = new QWidget(this);
     leftContent_->setObjectName("leftContent");
-    //leftContent_->setVisible(false);
+    leftContent_->setVisible(false);
+
     rightContent_ = new QWidget(this);
     rightContent_->setObjectName("rightContent");
 
@@ -82,6 +84,13 @@ QFrameLessWidget_Alime::QFrameLessWidget_Alime(QWidget* parent)
 
     QVBoxLayout* vbox = new QVBoxLayout(rightContent_);
     vbox->addWidget(versionTips_);
+
+    {
+        //QFrame* line = new QFrame(this);
+        //line->setObjectName("horiLine");
+        //line->setFrameShape(QFrame::HLine);
+        //vbox->addWidget(line);
+    }
 
     pkgList_ = new PackageListWidget(this);
     pkgList_->SetMainWidget(this);
@@ -212,9 +221,13 @@ bool QFrameLessWidget_Alime::InitDownloadList()
         pkgList_->clear();
 
         std::string lastestVer = json_["LatestVersion"];
+        Alime::Console::WriteLine((L"网络最新版本:" + QString(lastestVer.c_str()).toStdWString()).c_str());
 
         if (AscendingOrder().Compare(versionLocal_, lastestVer) >= 0)
+        {
             Alime::Console::WriteLine(L"已是最新版本");
+            SetTips(u8"已是最新版本");
+        }
         else
             pkgList_->Parse(json_);
     }

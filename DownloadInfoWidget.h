@@ -11,6 +11,9 @@
 #include <atomic>
 #include <memory>
 #include <functional>
+#include <string>
+
+#include "Alime/Console.h"
 
 class QLabel;
 class QProgressBar;
@@ -49,19 +52,21 @@ public slots:
     
 public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName,
-        qint64 fileSize, const QUrl& url);
+        qint64 fileSize, const QUrl& url, const QUrl& instructionUrl, bool isUpdatePack=true);
     
     ~DownloadInfoWidget()
     {
-        int x = 3;
-        ++x;
+        std::wstring show;
+        show = std::to_wstring((int)this);
+        Alime::Console::WriteLine(L"DownloadInfo's address is " + show);
         disconnect();
     }
 
     enum class WebFileType
     {
-        Exe = 0,//补丁
+        Exe = 0,//exe
         Iso =1,//光盘
+        Zip=2,//zip
         Other
     };
 
@@ -85,8 +90,6 @@ public:
     bool PauseDownloadTask();
     bool CancelDownloadTask();
     bool DoSetup();
-
-public:
     bool IsUpdatePackage();
     bool IsFinished();//download
     bool IsSetuping();
@@ -115,15 +118,15 @@ private:
     void UpdatePlayButton(bool stopped=true);
     std::unique_ptr<QFile> openFileForWrite(const QString& fileName);
     
-
 private:
     QUrl url_;
+    QUrl instructionUrl_;
     QString fileName_;
     QString localFilePath_;
 
-    QLabel* fileNameLabel_;//我有点混乱，更新文件名应该是包名还是应该和版本一样?
+    QLabel* fileNameLabel_;//文件名
     QLabel* leftTimeEstimated_;
-    QLabel* downloadStatusLabel_;
+    QLabel* downloadStatusLabel_;//显示下载/安装状态
     QLabel* fileDownloadHeadway_;
 
     QProgressBar* progressBar_;
@@ -139,14 +142,13 @@ private:
     std::unique_ptr<QFile> file_;
     //fix me, use function instead
     DownloadState downloadState_;
-    bool isBreakPointTranSupported_;
-    bool Setuping_=false;
     QNetworkAccessManager QNAManager_;
-    int redirectTimes_;
-    int retryTimes_=0;
 
-    bool isUpdatePack_=true;
+    bool Setuping_;
+    bool isUpdatePack_;
+    bool isBreakPointTranSupported_;
     
+    int retryTimes_;
 };
 
 

@@ -4,7 +4,7 @@ namespace string_utility
 {
 	std::vector<std::string> string_split(const std::string& s1, const std::string& c)
 	{
-		std::string s;
+		std::string s=s1;
 		if (startsWith(s1.c_str(), "V") || startsWith(s1.c_str(), "v"))
 			s = s1.substr(1);
 		std::vector<std::string> result;
