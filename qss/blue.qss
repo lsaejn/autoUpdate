@@ -189,11 +189,12 @@ QToolTip {
 }
 
 QProgressBar{
-    border: none;
+    border: 1px solid rgb(229,230,234);
     color: black;
     text-align: center;
     background: rgb(229,230,234);
 }
+
 QProgressBar::chunk {
     border: none;
     background: rgb(6, 168, 255);

@@ -2,6 +2,9 @@
 #include <stdint.h>
 #include <string>
 #include "windows.h"
+
+//#define NoConsole
+
 namespace Alime
 {
 	class Console

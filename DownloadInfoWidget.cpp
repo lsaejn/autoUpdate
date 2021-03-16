@@ -152,13 +152,8 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         downloadButton_->setObjectName("ItemPlay");
         downloadButton_->setText(u8"一键升级");
         (connect(downloadButton_, &QPushButton::clicked, [this] {
-            if (IsAutoSetupRunning())
-            {
-                ShowWarningBox("error", u8"正在一键更新", u8"确定");
+            if (IsDownLoading() || IsSetuping())
                 return;
-            }
-            //if (downloadState_)
-            //    ;
             StartDownloadTask();
             }));
 
@@ -240,25 +235,19 @@ std::unique_ptr<QFile> DownloadInfoWidget::openFileForWrite(const QString& fileP
 
 bool DownloadInfoWidget::StartDownloadTask()
 {
-    if(downloadState_!= DownloadState::NotStarted && downloadState_ != DownloadState::Finished )
+    if(downloadState_!= DownloadState::NotStarted
+        && downloadState_ != DownloadState::Finished )
     {
         qCritical() << u8"状态错误,检查代码逻辑";
+        return false;
     }
-    //file protocol "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
     QUrl newUrl = url_;//for local debug
     
-    if (url_.isEmpty() || !newUrl.isValid())
+    if (newUrl.isEmpty() || !newUrl.isValid() || newUrl.fileName().isEmpty())
     {
-        qCritical() << QString("Invalid URL: %1: %2").arg(url_.toString(), newUrl.errorString());
+        qCritical() << QString("Invalid URL: %1: %2").arg(newUrl.toString(), newUrl.errorString());
         downloadStatusLabel_->setText(u8"无法下载");
-        return false;//维护人员上传的文件错误
-    }
-
-    QString fileName = newUrl.fileName();
-    if (fileName.isEmpty())
-    {
-        qCritical() << QString("Invalid URL: %1: %2").arg(url_.toString(), newUrl.errorString());
-        return false;
+        return false;//维护人员上传的文件错误,url无效
     }
 
     if (QFile::exists(localFilePath_))
@@ -274,7 +263,7 @@ bool DownloadInfoWidget::StartDownloadTask()
             fileInfo = QFileInfo(localFilePath_);
             fileSize = fileInfo.size();
         }
-        if (fileSize == totalSize_)//else 我们没有办法验证已下载文件的有效性
+        else if (fileSize == totalSize_)//我们没有办法验证已下载文件的有效性,字节数到了，即为成功
         {
             DoSetup();
             return true;
@@ -293,8 +282,6 @@ bool DownloadInfoWidget::StartDownloadTask()
     downloadState_ = DownloadState::Downloading;
     downloadStatusLabel_->setText(u8"正在连接...");
     StartRequest(newUrl);
-
-    //UpdatePlayButton(false);
     return true;
 }
 
@@ -342,76 +329,47 @@ void DownloadInfoWidget::httpFinished()
             reply_ = nullptr;
         }
     };
-    QFileInfo fi;
-    if (file_)
     {
-        fi.setFile(file_->fileName());
-    }
-    {//fix me, 移除
         file_->flush();
         file_->close();
         file_.reset();
     }
-    //if (reply_->error())
-    //{//we process timeout error here
-    //    QNetworkReply::NetworkError ec = reply_->error();
-    //    qDebug() << "specific network error is:" << ec;
-    //    if (ec < 100 && ec == QNetworkReply::TimeoutError)
-    //    {
-    //        downloadStatusLabel_->setText(u8"下载超时");
-    //        leftTimeEstimated_->setText("--");
-    //    }
-    //    else if(ec!= QNetworkReply::OperationCanceledError) {
-    //        downloadStatusLabel_->setText(u8"下载出错");
-    //        leftTimeEstimated_->setText("--");
-    //    }
 
-    //    //QFile::remove(fi.absoluteFilePath());
-    //    downloadState_ = DownloadState::Interrupted;
-    //    UpdatePlayButton();
-    //    return;
-    //}
-
-    //不想支持重定向。
-    //打乱了正常的逻辑, 主要是某些内网喜欢搞这种恶心的东西
-    QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    //http://203.187.160.133:9011/update.pkpm.cn/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe
-    //redirectionTarget = "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
-    if (!redirectionTarget.isNull())
+    //暂时不支持重定向
+    /*
     {
-        redirected = true;
-        const QUrl redirectedUrl = redirectionTarget.toUrl();
-        int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        qDebug() << "redirected " << statusCode;
-        qDebug() << "status code is " << statusCode;
-        file_ = openFileForWrite(localFilePath_);
-        if (!file_)
+        QVariant redirectionTarget = reply_->attribute(QNetworkRequest::RedirectionTargetAttribute);
+        //http://203.187.160.133:9011/update.pkpm.cn/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe
+        //redirectionTarget = "http://203.187.160.133:9011/update.pkpm.cn/c3pr90ntc0td/PKPM2010/Info/pkpmSoft/UpdatePacks/V5.2.1Setup.exe";
+        if (!redirectionTarget.isNull())
         {
-            qWarning() << "could not open file";
+            redirected = true;
+            const QUrl redirectedUrl = redirectionTarget.toUrl();
+            int statusCode = reply_->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << "redirected " << statusCode;
+            qDebug() << "status code is " << statusCode;
+            file_ = openFileForWrite(localFilePath_);
+            if (!file_)
+            {
+                qWarning() << "could not open file";
+                reply_->deleteLater();
+                reply_ = NULL;
+                return;
+            }
             reply_->deleteLater();
             reply_ = NULL;
+            //fix me, 支持重定向
+            StartRequest(redirectedUrl);
             return;
         }
-        reply_->deleteLater();
-        reply_ = NULL;
-        //fix me, 支持重定向
-        StartRequest(redirectedUrl);
-        return;
     }
-    
+    */
+
     if (bytesDown_ == totalSize_)
     {
         downloadState_ = DownloadState::Finished;
         downloadStatusLabel_->setText(u8"已完成");
-        UpdatePlayButton();
-        emit finishDownload();
-        //QMessageBox::information(NULL, "Tip", QString(u8"下载完成"));
-        if (!IsAutoSetupRunning())
-        {
-            auto ret = ShowQuestionBox(u8"下载完成", u8"下载完成, 是否立即安装", u8"确定", u8"取消");
-            if (ret)
-                DoSetup();
-        }
+        DoSetup();
     }
     else if (bytesDown_ < totalSize_ )//we retry connecting here
     {
@@ -443,7 +401,6 @@ void DownloadInfoWidget::httpFinished()
                 qDebug(u8"状态逻辑错误");
             }
             UpdatePlayButton();
-            emit errorDownload();
         }
     }
     else
@@ -476,6 +433,7 @@ bool DownloadInfoWidget::isTimeToUpdate(double& second)
 {
     //fix me, 我们统一在readCallback里更新，所以可以这么做
     //这也导致多个任务的时候，刚启动的任务计算是错误的。
+    //但根据需求，我们同时只能更新一个文件
     static Alime::Timestamp lastUpdate = Alime::Timestamp::Now();
     Alime::Timestamp now = Alime::Timestamp::Now();
     if (now - lastUpdate >= Alime::Duration::Seconds(1))
@@ -489,31 +447,29 @@ bool DownloadInfoWidget::isTimeToUpdate(double& second)
 
 bool DownloadInfoWidget::CancelDownloadTask()
 {
-    if (downloadState_ == DownloadState::NotStarted)
-    {
-        QFile::remove(localFilePath_);
-        LoadingProgressForBreakPoint();
-        return true;
-    }
-    else if (downloadState_ == DownloadState::Downloading)
-    {
-        //we updateState in requestFinish as file was writing
-        downloadState_ = DownloadState::Cancel;
-        reply_->abort();
-        return true;
-    }
-    else if (downloadState_ == DownloadState::Finished)
+    if (downloadState_ == DownloadState::NotStarted 
+        || downloadState_ == DownloadState::Finished)
     {
         QFile::remove(localFilePath_);
         LoadingProgressForBreakPoint();
         downloadState_ = DownloadState::NotStarted;
+        downloadStatusLabel_->setText(u8"暂停中...");
+        UpdatePlayButton(true);
+        return true;
+    }
+    else if (downloadState_ == DownloadState::Downloading)
+    {
+        //we update State in httpFinish as file was writing
+        downloadState_ = DownloadState::Cancel;
+        reply_->abort();
+        return true;
     }
     else
     {
         qWarning() << "bad logic error in CancelDownloadTask";
+        //UpdatePlayButton(true); or not
+        return false;
     }
-    downloadStatusLabel_->setText(u8"暂停中...");
-    UpdatePlayButton(true);
     return true;
 }
 
@@ -821,7 +777,7 @@ void DownloadInfoWidget::AddMenuItems()
         QString str = action->text();
         if (str == u8"删除已下载文件")
         {
-            //if(Se)
+            //删除功能我们不作为常规功能
             CancelDownloadTask();
         }
             

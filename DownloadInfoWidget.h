@@ -41,9 +41,7 @@ signals:
     void notify_stateLabel(QString);
     void notify_timeLabel(QString);
 
-    void finishDownload();
-    void finishSetup(bool);//使用压包软件的结果就是我们不知道是不是安装成功
-    void errorDownload();
+    void finishSetup(bool);//使用压包软件的结果就是我们不知道是不是安装成功。但我们通知QlistWidget
 
 public slots:
     void ShowTipsWhenSetupFinished(int);
@@ -70,6 +68,14 @@ public:
         Other
     };
 
+    //fix me。备用。不用继承了。
+    enum class PackType
+    {
+        UpdatePack =0,
+        FixPack,
+        Image
+    };
+
     enum class DownloadState
     {
         NotStarted,
@@ -81,7 +87,6 @@ public:
         Finished
     };
 
-//用户操作设为public，方便记忆
 public:
 
     /// <summary>

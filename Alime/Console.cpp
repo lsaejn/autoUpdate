@@ -10,6 +10,10 @@ namespace Alime
 {
 	void Console::CreateConsole()
 	{
+#ifdef NoConsole
+		return;
+#endif
+
 		HANDLE outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (NULL == outHandle)
 		{
@@ -24,6 +28,9 @@ namespace Alime
 
 	void Console::Write(const wchar_t* string, int32_t length)
 	{
+#ifdef NoConsole
+		return;
+#endif
 #if defined ALIME_MSVC
 		HANDLE outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 		DWORD fileMode = 0;
@@ -80,6 +87,9 @@ namespace Alime
 
 	std::wstring Console::Read()
 	{
+#ifdef NoConsole
+		return L"";
+#endif
 #if defined ALIME_MSVC
 		std::wstring result;
 		DWORD count;
@@ -109,6 +119,9 @@ namespace Alime
 
 	std::wstring Console::ReadLine()
 	{
+#ifdef NoConsole
+		return L"";
+#endif
 #if defined ALIME_MSVC
 		std::wstring result;
 		DWORD count;
@@ -142,6 +155,9 @@ namespace Alime
 
 	void Console::SetColor(bool red, bool green, bool blue, bool light)
 	{
+#ifdef NoConsole
+		return;
+#endif
 #if defined ALIME_MSVC
 		WORD attribute = 0;
 		if (red)attribute |= FOREGROUND_RED;
@@ -161,11 +177,17 @@ namespace Alime
 
 	void Console::SetColor(WORD colorType)
 	{
+#ifdef NoConsole
+		return;
+#endif
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorType);
 	}
 
 	void Console::SetTitle(const std::wstring& string)
 	{
+#ifdef NoConsole
+		return;
+#endif
 #if defined ALIME_MSVC
 		SetConsoleTitle(string.data());
 #endif
@@ -173,6 +195,9 @@ namespace Alime
 
 	void Console::Clear()
 	{
+#ifdef NoConsole
+		return;
+#endif
 #if defined ALIME_MSVC
 		CONSOLE_SCREEN_BUFFER_INFO info;
 		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
@@ -188,6 +213,9 @@ namespace Alime
 
 	void Console::SetWindowPosition(int left, int top)
 	{
+#ifdef NoConsole
+		return;
+#endif
 #if defined ALIME_MSVC
 		//check handle first
 		auto hwnd = GetConsoleWindow();
@@ -201,6 +229,9 @@ namespace Alime
 
 	void Console::SetWindowSize(int width, int height)
 	{
+#ifdef NoConsole
+		return;
+#endif
 #if defined ALIME_MSVC
 		auto hwnd = GetConsoleWindow();
 		RECT rc;
