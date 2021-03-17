@@ -494,29 +494,50 @@ bool DownloadInfoWidget::DoSetup()
 {
     if (DownloadState::Finished != downloadState_)
     {
-        //fix me, 好像逻辑有哪里不对
-        if (!IsAutoSetupRunning())
-            ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
+        ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
+        //std::abort();
         return false;
     }
-
     if (SetupThread::HasInstance())
     {
         ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
         return false;
     }
 
+    //我们关闭主程序和启动器
     ProcessManager checker;
     checker.SetMatchReg(L"PKPMMAIN.EXE");
     bool ret = checker.AssurePkpmmainClosed();
     if (!ret)
         return false;
-    //fix me, 这个按理说也要关闭，但是不怎么紧急，就算了
-    //太恶心了
     checker.SetMatchReg(L"PKPM[\\d]{4}V[\\d]+.EXE");
     ret=checker.ShutDownFuzzyMatchApp();
     if (!ret)
         return false;
+
+    SetupThread* setuper = nullptr;
+    if (localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
+    {
+        setuper = new ExeSetupThread(this, localFilePath_);
+    }
+    else if (localFilePath_.endsWith(".zip", Qt::CaseInsensitive))
+    {
+        setuper = new ZipSetupThread(this, localFilePath_);
+    }
+    else
+    {
+        OpenLocalPath(localFilePath_);
+        SetupFinished();
+        return false;
+    }
+    //SetupThread* t = new ExeSetupThread(this, localFilePath_);
+    assert(setuper);
+    CHECK_CONNECT_ERROR(connect(setuper, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
+    CHECK_CONNECT_ERROR(connect(setuper, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
+    CHECK_CONNECT_ERROR(connect(setuper, &QThread::finished, setuper, &QObject::deleteLater));
+    connect(setuper, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished, Qt::QueuedConnection);
+    setuper->start();
+    return true;
 
     if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
     {
@@ -527,7 +548,10 @@ bool DownloadInfoWidget::DoSetup()
             //UnZipFileTo();
             SetupStarted();
             UnZipper uzp;
-            uzp.SetResource(localFilePath_.toStdWString());
+            if (!uzp.SetResource(localFilePath_.toStdWString()))
+            {
+                ShowWarningBox(u8"发生错误", u8"解压失败", u8"退出");
+            }
             uzp.SetTargetPath(GetPkpmRootPath().toStdWString());
             uzp.SetBackupRootPath(L"");
             bool ret=uzp.UnZip();
@@ -537,16 +561,15 @@ bool DownloadInfoWidget::DoSetup()
         }
         else
         {
-            //if(IsAutoSetupRunning())
-                OpenLocalPath(localFilePath_);
-                SetupFinished();
+            OpenLocalPath(localFilePath_);
+            SetupFinished();
             return false;
         }
         return true;
     }
 
 
-    SetupThread* t =new SetupThread(this, localFilePath_);
+    SetupThread* t =new ExeSetupThread(this, localFilePath_);
     CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
     CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));

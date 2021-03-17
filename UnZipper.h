@@ -77,7 +77,6 @@ public:
 		return hz_;
 	}
 
-	//fuckkkkkkk
 	void SetTargetPath(std::wstring&& path)
 	{
 		if (path.empty())
@@ -96,13 +95,16 @@ public:
 			if (!ret)
 			{
 				//fix me
+				return false;
 			}
-			ret=dir.mkdir(QString::fromStdWString(backupPath_));
+			ret=dir.mkpath(QString::fromStdWString(backupPath_));
 			return BackupTo(backupPath_);
 		}
 		else
 		{
-			bool ret=dir.mkdir(QString::fromStdWString(backupPath_));
+			bool ret=dir.mkpath(QString::fromStdWString(backupPath_));
+			if (!ret)
+				return false;
 			return BackupTo(backupPath_);
 		}
 	}
@@ -147,7 +149,6 @@ private:
 		QString root= QString::fromStdWString(desPath_);
 		for (int i=0; i!=files.size(); ++i)
 		{
-			qApp->processEvents();
 			const QString& file = files[i];
 			if (file.endsWith("/"))
 			{
@@ -204,7 +205,6 @@ private:
 		ZIPENTRY ze;
 		for (int i = 0; i < numitems; i++)
 		{
-			qApp->processEvents();
 			if (ZR_OK != GetZipItem(hz_, i, &ze))
 			{
 				qDebug() << "GetZipItem error when trying to unzip to local path";

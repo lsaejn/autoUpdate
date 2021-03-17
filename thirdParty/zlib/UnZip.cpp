@@ -3483,7 +3483,13 @@ int unzReadCurrentFile  (unzFile file, voidp buf, unsigned len, bool *reached_eo
   if (pfile_in_zip_read_info==NULL) return UNZ_PARAMERROR;
   if ((pfile_in_zip_read_info->read_buffer == NULL)) return UNZ_END_OF_LIST_OF_FILE;
   if (len==0) return 0;
-
+  //https://stackoverflow.com/questions/7445732/c-error-zr-flate-when-unzipping-a-file-of-0-bytes-unzip-source-zip-utils/8700739
+  if (pfile_in_zip_read_info->rest_read_uncompressed == 0)
+  {
+      if (reached_eof != 0)
+          *reached_eof = true;
+      return UNZ_EOF;
+  };
   pfile_in_zip_read_info->stream.next_out = (Byte*)buf;
   pfile_in_zip_read_info->stream.avail_out = (uInt)len;
 
@@ -3830,6 +3836,7 @@ ZRESULT TUnzip::Get(int index,ZIPENTRY *ze)
   ze->index=uf->num_file;
   TCHAR tfn[MAX_PATH];
 #ifdef UNICODE
+  //为了避免压缩宝错误，我们默认gbk。使用360压缩, 默认编码即可
 #ifdef _WIN32
   MultiByteToWideChar(CP_ACP, 0, fn, -1, tfn, MAX_PATH);//
 #else

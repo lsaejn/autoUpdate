@@ -7,7 +7,8 @@
 #include "AppUtility.h"
 
 
-
+//fix me
+/*
 class TaskThread : public QThread
 {
     Q_OBJECT
@@ -39,19 +40,16 @@ protected:
 private:
     TaskFunc func_;
 };
+*/
 
 
 #include <atomic>
 
-/*
-* 关闭所有程序是因为可能控件正在被使用
-*/
 class SetupThread : public QThread
 {
     Q_OBJECT
 public:
     using TaskFunc = std::function<void()>;
-
     SetupThread(QObject* parent, const QString& path)
         :QThread(parent),
         localFilePath_(path)
@@ -60,7 +58,7 @@ public:
         qDebug() << "TaskThread  constructed";
     }
 
-    ~SetupThread()
+    virtual ~SetupThread()
     {
         requestInterruption();
         quit();
@@ -71,10 +69,32 @@ public:
         hasInstance = false;
     }
 
-    static bool HasInstance() { return hasInstance; }
-
 signals:
     void TaskFinished(int exitCode);
+
+public:
+    bool static HasInstance() { return hasInstance; }
+
+protected:
+    static std::atomic<bool> hasInstance;
+    TaskFunc func_;
+    QString localFilePath_;
+};
+
+/*
+* 关闭所有程序是因为可能控件正在被使用
+*/
+class ExeSetupThread : public SetupThread
+{
+    Q_OBJECT
+public:
+    ExeSetupThread(QObject* parent, const QString& path)
+        :SetupThread(parent, path)
+    {     
+    }
+
+    ~ExeSetupThread() = default;
+
 protected:
     virtual void run()
     {
@@ -167,8 +187,33 @@ protected:
             emit TaskFinished(2);
         }
     }
-private:
-    TaskFunc func_;
-    QString localFilePath_;
-    static std::atomic<bool> hasInstance;
+};
+
+
+#include "UnZipper.h"
+class ZipSetupThread : public SetupThread
+{
+    Q_OBJECT
+public:
+    ZipSetupThread(QObject* parent, const QString& path)
+        :SetupThread(parent, path)
+    {
+    }
+
+    ~ZipSetupThread() = default;
+
+    virtual void run()
+    {
+        UnZipper uzp;
+        if (!uzp.SetResource(localFilePath_.toStdWString()))
+        {
+            ShowWarningBox(u8"发生错误", u8"解压失败", u8"退出");
+        }
+        uzp.SetTargetPath(GetPkpmRootPath().toStdWString());
+        uzp.SetBackupRootPath(L"");
+        bool ret = uzp.UnZip();
+        if (!ret)
+            uzp.Recover();
+    }
+
 };

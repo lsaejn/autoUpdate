@@ -71,8 +71,15 @@ public:
 	}
 
 	//@return -1 when lhs<rhs , 0 when lhs==rhs, 1 when lhs>rhs
-	int Compare(const std::string& lhs, const std::string& rhs)
+	int Compare(const std::string& _lhs, const std::string& _rhs)
 	{
+		std::string lhs = _lhs;
+		std::string rhs = _rhs;
+		//fix me, CheckPreFix
+		if (string_utility::startsWith(lhs.c_str(), "V") || string_utility::startsWith(lhs.c_str(), "v"))
+			lhs = lhs.substr(1);
+		if (string_utility::startsWith(rhs.c_str(), "V") || string_utility::startsWith(rhs.c_str(), "v"))
+			rhs = rhs.substr(1);
 		auto lhsElems = StringsToIntegers(string_utility::string_split(lhs, "."));
 		auto rhsElems = StringsToIntegers(string_utility::string_split(rhs, "."));
 		TrimTailZeros(lhsElems); TrimTailZeros(rhsElems);
