@@ -122,6 +122,9 @@
     <ClCompile Include="Alime\Console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CustomWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Alime_WindowBase.h">
@@ -167,6 +170,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="QssLoader.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

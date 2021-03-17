@@ -135,6 +135,7 @@
     <ClCompile Include="alternative\FakePackage.cpp" />
     <ClCompile Include="alternative\FolderDownLoadInfoWidget.cpp" />
     <ClCompile Include="AlimeQLib\QtAlimeRippleHelper.cpp" />
+    <ClCompile Include="CustomWidget.cpp" />
     <ClCompile Include="PackageListWidget.cpp" />
     <ClCompile Include="String_utility.cpp" />
     <ClCompile Include="TaskThread.cpp" />
@@ -186,6 +187,7 @@
   <ItemGroup>
     <ClInclude Include="Alime\Console.h" />
     <ClInclude Include="Alime\noncopyable.h" />
+    <QtMoc Include="CustomWidget.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="TypeDefine.h" />
     <ClInclude Include="WebFileFilter.h" />

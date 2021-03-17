@@ -20,6 +20,7 @@
 #include "Alime/time/Timestamp.h"
 #include "Alime/time/Duration.h"
 #include "AppUtility.h"
+#include "CustomWidget.h"
 
 
 std::atomic_bool  DownloadInfoWidget::Setuping_ = false;
@@ -154,6 +155,8 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         downloadButton_->setObjectName("ItemPlay");
         downloadButton_->setText(u8"一键升级");
         connect(downloadButton_, &QPushButton::clicked, [this, _parent] {
+            CustomWidget wid(this);
+            wid.exec();
             if (IsDownLoading() || IsSetuping())
                 return;
             //fix me, 扔一个闭包过来
