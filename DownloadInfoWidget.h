@@ -29,6 +29,10 @@ downloadState_
 downloadStatusLabel_
 */
 
+/*
+没有将下载和widget分离，导致后面维护有点困难
+差异更新的话需要重写一个类
+*/
 //Widget as a ListItem in QListWidget
 class DownloadInfoWidget : public QWidget
 {

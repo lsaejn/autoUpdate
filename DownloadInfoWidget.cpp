@@ -495,12 +495,13 @@ bool DownloadInfoWidget::DoSetup()
     if (DownloadState::Finished != downloadState_)
     {
         ShowWarningBox(u8"发生错误", u8"请先下载文件", u8"退出");
-        //std::abort();
+        //std::abort(); or not
         return false;
     }
     if (SetupThread::HasInstance())
     {
         ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
+        //std::abort(); or not
         return false;
     }
 
@@ -530,7 +531,7 @@ bool DownloadInfoWidget::DoSetup()
         SetupFinished();
         return false;
     }
-    //SetupThread* t = new ExeSetupThread(this, localFilePath_);
+
     assert(setuper);
     CHECK_CONNECT_ERROR(connect(setuper, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
     CHECK_CONNECT_ERROR(connect(setuper, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
@@ -538,53 +539,11 @@ bool DownloadInfoWidget::DoSetup()
     connect(setuper, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished, Qt::QueuedConnection);
     setuper->start();
     return true;
-
-    if (!localFilePath_.endsWith(".exe", Qt::CaseInsensitive))
-    {
-        qDebug() << u8"正在安装的并非应用程序";
-        if (localFilePath_.endsWith(".zip", Qt::CaseInsensitive))
-        {
-            //fix me
-            //UnZipFileTo();
-            SetupStarted();
-            UnZipper uzp;
-            if (!uzp.SetResource(localFilePath_.toStdWString()))
-            {
-                ShowWarningBox(u8"发生错误", u8"解压失败", u8"退出");
-            }
-            uzp.SetTargetPath(GetPkpmRootPath().toStdWString());
-            uzp.SetBackupRootPath(L"");
-            bool ret=uzp.UnZip();
-            if(!ret)
-                uzp.Recover();
-            SetupFinished();
-        }
-        else
-        {
-            OpenLocalPath(localFilePath_);
-            SetupFinished();
-            return false;
-        }
-        return true;
-    }
-
-
-    SetupThread* t =new ExeSetupThread(this, localFilePath_);
-    CHECK_CONNECT_ERROR(connect(t, &QThread::started, this, &DownloadInfoWidget::SetupStarted));
-    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, this, &DownloadInfoWidget::SetupFinished));
-    CHECK_CONNECT_ERROR(connect(t, &QThread::finished, t, &QObject::deleteLater));
-    connect(t, &SetupThread::TaskFinished, this, &DownloadInfoWidget::ShowTipsWhenSetupFinished,Qt::QueuedConnection);
-    t->start();
-    return true;
 }
 
 //需要改成static
 void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 {
-    if (!this)
-        return;
-    Setuping_ = false;
-    //调试
     if (!errorCode)
     {
         if(!IsAutoSetupRunning())

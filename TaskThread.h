@@ -171,6 +171,7 @@ protected:
                 else if (WAIT_TIMEOUT == ret)
                 {
                     qDebug() << "time out";
+                    emit TaskFinished(1);
                 }
                 else if (WAIT_ABANDONED == ret)
                 {
@@ -207,13 +208,18 @@ public:
         UnZipper uzp;
         if (!uzp.SetResource(localFilePath_.toStdWString()))
         {
+            emit TaskFinished(1);
             ShowWarningBox(u8"发生错误", u8"解压失败", u8"退出");
+            return;
         }
         uzp.SetTargetPath(GetPkpmRootPath().toStdWString());
         uzp.SetBackupRootPath(L"");
         bool ret = uzp.UnZip();
         if (!ret)
+        {
+            emit TaskFinished(1);
             uzp.Recover();
+        } 
     }
 
 };

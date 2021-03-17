@@ -135,12 +135,14 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
             connect(reply, SIGNAL(finished()), &loop, SLOT(quit()), Qt::DirectConnection);
             loop.exec();
             QVariant var = reply->header(QNetworkRequest::ContentLengthHeader);
+            reply->deleteLater();
             if (reply->error() != QNetworkReply::NoError)
             {
                 Alime::Console::WriteLine(L"reply error", Alime::Console::RED);
                 qDebug() << reply->errorString();
+                return;
             }
-            reply->deleteLater();
+            
 
             auto pkgSize = var.toLongLong();
             QListWidgetItem* item = new QListWidgetItem();
