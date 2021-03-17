@@ -13,6 +13,7 @@
 #include <thread>
 
 #include "DownloadInfoWidget.h"
+#include "PackageListWidget.h"
 #include "TaskThread.h"
 #include "SetupHelper.h"
 #include "Alime/ScopeGuard.h"
@@ -21,8 +22,10 @@
 #include "AppUtility.h"
 
 
+std::atomic_bool  DownloadInfoWidget::Setuping_ = false;
+
 DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileName, 
-    qint64 _fileSize, const QUrl& _url, const QUrl& instructionUrl, bool isUpdatePack)
+    qint64 _fileSize, const QUrl& _url, const QUrl& instructionUrl, PackType ty)
     :QWidget(_parent),
     url_(_url),
     instructionUrl_(instructionUrl),
@@ -37,8 +40,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     fileName_ (_fileName),
     reply_(nullptr),
     isBreakPointTranSupported_(true),
-    isUpdatePack_(isUpdatePack),
-    Setuping_(false)
+    packType_(ty)
 {
     localFilePath_ = GetDownloadFolder()+fileName_;
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -56,7 +58,8 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
 
     {
         QLabel* typeLabel = new QLabel(this);
-        if (isUpdatePack_)
+        if (packType_==PackType::UpdatePack
+            || packType_ ==PackType::Image)
         {
             typeLabel->setObjectName("PackLabel");
             typeLabel->setText(u8"升级包");
@@ -146,16 +149,23 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     if (isBreakPointTranSupported_)
         LoadingProgressForBreakPoint();
 
-    /// 按钮
     {
         downloadButton_ = new QPushButton(this);
         downloadButton_->setObjectName("ItemPlay");
         downloadButton_->setText(u8"一键升级");
-        (connect(downloadButton_, &QPushButton::clicked, [this] {
+        connect(downloadButton_, &QPushButton::clicked, [this, _parent] {
             if (IsDownLoading() || IsSetuping())
                 return;
+            //fix me, 扔一个闭包过来
+            auto pptr = dynamic_cast<PackageListWidget*>(_parent);
+            if (pptr->HasSetupItem())
+            {
+                downloadStatusLabel_->setText(u8"另一个安装正在执行");
+                ShowWarningBox(u8"发生错误", u8"另一个安装正在执行", u8"确定");
+                return;
+            }
             StartDownloadTask();
-            }));
+            });
 
         //暂停按钮, 新版本被去掉
         pauseButton_= new QPushButton(this);
@@ -165,11 +175,6 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         pauseButton_->hide();
         CHECK_CONNECT_ERROR(connect(pauseButton_, &QPushButton::clicked, [this]()
             {
-                if (IsAutoSetupRunning())
-                {
-                    ShowWarningBox("error", u8"正在一键更新", u8"确定");
-                    return;
-                }
                 PauseDownloadTask();
             }));
 
@@ -394,7 +399,7 @@ void DownloadInfoWidget::httpFinished()
             {
                 downloadStatusLabel_->setText(u8"下载出错");
                 qDebug(u8"对端关闭连接/网络中断");
-                downloadState_ = DownloadState::Error;
+                downloadState_ = DownloadState::NotStarted;
             }
             else
             {
@@ -406,7 +411,7 @@ void DownloadInfoWidget::httpFinished()
     else
     {
         qDebug(u8"文件大小错误, 用户手动修改了文件名称或者下载的内容错误");
-        downloadState_ = DownloadState::Error;
+        downloadState_ = DownloadState::NotStarted;
         downloadStatusLabel_->setText(u8"发生错误");
         UpdatePlayButton();
     }
@@ -500,7 +505,8 @@ bool DownloadInfoWidget::DoSetup()
     }
     if (SetupThread::HasInstance())
     {
-        ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
+        downloadStatusLabel_->setText(u8"另一个安装正在执行");
+        //ShowWarningBox(u8"发生错误", u8"正在执行另一个安装", u8"退出");
         //std::abort(); or not
         return false;
     }
@@ -588,7 +594,7 @@ void  DownloadInfoWidget::SetupFinished()
 {
     Setuping_ = false;
     ShowSetupProgress(false);
-    emit finishSetup(isUpdatePack_);
+    emit finishSetup();
     
 }
 
@@ -777,15 +783,14 @@ void DownloadInfoWidget::AddMenuItems()
         }));
 }
 
-bool DownloadInfoWidget::IsUpdatePackage()
+PackType DownloadInfoWidget::GetPackType()
 {
-    //fix me, fuck!
-    return isUpdatePack_;
+    return packType_;
 }
 
 bool DownloadInfoWidget::IsFinished()
 {
-    return  bytesDown_ ==totalSize_;
+    return  bytesDown_ ==totalSize_ /*&& DownloadState::Finished*/;
 }
 
 bool DownloadInfoWidget::IsDownLoading()
@@ -793,9 +798,9 @@ bool DownloadInfoWidget::IsDownLoading()
     return downloadState_ == DownloadState::Downloading;
 }
 
-void DownloadInfoWidget::SetPackFlag(bool isUpdatePackage)
+void DownloadInfoWidget::SetPackFlag(PackType ty)
 {
-    isUpdatePack_ = isUpdatePackage;
+    packType_ = ty;
 }
 
 #include "Alime/Console.h"

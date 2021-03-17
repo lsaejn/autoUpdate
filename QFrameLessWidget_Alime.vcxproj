@@ -187,6 +187,7 @@
     <ClInclude Include="Alime\Console.h" />
     <ClInclude Include="Alime\noncopyable.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="TypeDefine.h" />
     <ClInclude Include="WebFileFilter.h" />
     <QtMoc Include="AlimeQLib\QtAlimeStyle.h" />
     <ClInclude Include="AlimeQLib\details\QtAlimeStylePrivate.h" />

@@ -3,6 +3,7 @@
 #include <atomic>
 
 #include "thirdParty/nlohmann/json.hpp"
+#include "TypeDefine.h"
 //fix me
 
 /*
@@ -25,6 +26,7 @@
 class DownloadInfoWidget;
 class QFrameLessWidget_Alime;
 
+
 class PackageListWidget : public QListWidget
 {
     Q_OBJECT
@@ -38,24 +40,23 @@ public:
     PackageListWidget(QWidget* parent);
 
     DownloadInfoWidget* AddItem(QWidget* _parent,qint64 _fileSize, const QUrl& _url, const QUrl& ins_url, const QString& filename,
-        bool isUpdatePack=true);
-    void SetupAllTask();
+        PackType ty);
+
     void Parse(const nlohmann::json& json_);
     void GetUpdatePackUrl(const nlohmann::json& json, std::string& urlOut, std::string& instructionUrl, bool& showImage);
     void ReadUpdatePack(const nlohmann::json& json_);
     void ReadFixPack(const nlohmann::json& json_);
     
-    //bool IsAutoSetupOn();
 
-    //本widget下是否有item正在下载
-    //不允许补丁包和升级包同时安装
+    //本widget下是否有item正在下载/安装
+    //不允许补丁包和升级包同时进行
     bool HasSetupItem();
 
     void SetVersion(const std::string& mainV, const std::string& localV);
 
     void SetMainWidget(QFrameLessWidget_Alime* p) { mainWidget_ = p; };
 private:
-    void ReReadPacks(bool isUpdatePack);
+    void ReReadPacks();
     void ReadSetupImage(const nlohmann::json& json_);
 
     std::string mainVersionLocal_; //Vx.y，历史原因 用于判断注册表键值

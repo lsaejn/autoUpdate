@@ -142,24 +142,13 @@ void PackageListWidget::ReadUpdatePack(const nlohmann::json& json_)
                 qDebug() << reply->errorString();
                 return;
             }
-            
-
             auto pkgSize = var.toLongLong();
-            QListWidgetItem* item = new QListWidgetItem();
-            QSize preferSize = item->sizeHint();
-            item->setSizeHint(QSize(preferSize.width(), 70));
-            addItem(item);
+            auto item = AddItem(this, pkgSize, url, insUrl, GetFilePart(url), PackType::UpdatePack);
 
-            auto itemWidget = new DownloadInfoWidget(this, GetFilePart(url), pkgSize, url, insUrl);
-            setItemWidget(item, itemWidget);
-
-            connect(itemWidget, &DownloadInfoWidget::finishSetup, [this](bool isUpdatePack) {
-                ReReadPacks(false);
-                });
+            connect(item, &DownloadInfoWidget::finishSetup, this, &PackageListWidget::ReReadPacks);
         }
     }
 }
-
 
 bool IsFileExistInCfgFolder(const std::string& filename)
 {
@@ -175,9 +164,10 @@ void PackageListWidget::ReadFixPack(const nlohmann::json& json_)
     std::string version = versionLocal_;
     if (!version.empty() && json.find(version) != json.end())
     {
+        // not an array in fact
         nlohmann::json array = json_["FixPacks"][version];
-        auto sz = array.size();//sz must equals 1, 由于逻辑大改
-        QNetworkAccessManager manager;//网上的意思是最多5个请求
+        auto sz = array.size();
+        QNetworkAccessManager manager;
         if (true)
         {
             if (IsFileExistInCfgFolder(array["patchName"]))
@@ -202,14 +192,9 @@ void PackageListWidget::ReadFixPack(const nlohmann::json& json_)
             reply->deleteLater();
 
             int pkgSize = var.toInt();
-            //auto fullName = qUrl.toString();
-            //auto fileApart = GetFilePart(fullName);
+            auto item = AddItem(this, pkgSize, url, QUrl(array["update_description"].get<std::string>().c_str()), GetFilePart(qUrl), PackType::FixPack);
 
-            auto item = AddItem(this, pkgSize, url, QUrl(array["update_description"].get<std::string>().c_str()), GetFilePart(qUrl), false);
-
-            connect(item, &DownloadInfoWidget::finishSetup, [this](bool isUpdatePack) {
-                ReReadPacks(false);
-                });
+            connect(item, &DownloadInfoWidget::finishSetup, this, &PackageListWidget::ReReadPacks);
         }
     }
 }
@@ -240,7 +225,8 @@ void PackageListWidget::ReadSetupImage(const nlohmann::json& json_)
     reply->deleteLater();
 
     qint64 pkgSize = var.toLongLong();
-    AddItem(this, pkgSize, url, QUrl(json_["update_description"].get<std::string>().c_str()), GetFilePart(url), true);
+    auto item=AddItem(this, pkgSize, url, QUrl(json_["update_description"].get<std::string>().c_str()), GetFilePart(url), PackType::Image);
+    connect(item, &DownloadInfoWidget::finishSetup, this, &PackageListWidget::ReReadPacks);
 }
 
 bool PackageListWidget::HasSetupItem()
@@ -250,7 +236,7 @@ bool PackageListWidget::HasSetupItem()
     {
         auto elem = item(i);
         DownloadInfoWidget* item = dynamic_cast<DownloadInfoWidget*>(itemWidget(elem));
-        if (item && item->IsSetuping())
+        if (item && (item->IsSetuping() || item->IsDownLoading()))
         {
             return true;
         }
@@ -259,13 +245,13 @@ bool PackageListWidget::HasSetupItem()
 }
 
 DownloadInfoWidget* PackageListWidget::AddItem(QWidget* _parent,
-    qint64 _fileSize, const QUrl& _url, const QUrl& ins_url, const QString& filename, bool isUpdatePack)
+    qint64 _fileSize, const QUrl& _url, const QUrl& ins_url, const QString& filename, PackType ty)
 {
     QListWidgetItem* item = new QListWidgetItem();
     QSize preferSize = item->sizeHint();
     item->setSizeHint(QSize(preferSize.width(), 70));
     addItem(item);
-    auto itemWidget = new DownloadInfoWidget(this, filename, _fileSize, _url, ins_url, isUpdatePack);
+    auto itemWidget = new DownloadInfoWidget(this, filename, _fileSize, _url, ins_url, ty);
     setItemWidget(item, itemWidget);
     return itemWidget;
 }
@@ -276,7 +262,7 @@ void PackageListWidget::SetVersion(const std::string& mainV, const std::string& 
     versionLocal_ = localV;
 }
 
-void PackageListWidget::ReReadPacks(bool isUpdatePack)
+void PackageListWidget::ReReadPacks()
 {
     for (int i = 0; i != this->count(); ++i)
     {

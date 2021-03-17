@@ -14,6 +14,7 @@
 #include <string>
 
 #include "Alime/Console.h"
+#include "TypeDefine.h"
 
 class QLabel;
 class QProgressBar;
@@ -45,7 +46,7 @@ signals:
     void notify_stateLabel(QString);
     void notify_timeLabel(QString);
 
-    void finishSetup(bool);//使用压包软件的结果就是我们不知道是不是安装成功。但我们通知QlistWidget
+    void finishSetup();//使用压包软件的结果就是我们不知道是不是安装成功。但我们通知QlistWidget
 
 public slots:
     void ShowTipsWhenSetupFinished(int);
@@ -54,7 +55,7 @@ public slots:
     
 public:
     DownloadInfoWidget(QWidget* parent, const QString& fileName,
-        qint64 fileSize, const QUrl& url, const QUrl& instructionUrl, bool isUpdatePack=true);
+        qint64 fileSize, const QUrl& url, const QUrl& instructionUrl, PackType ty);
     
     ~DownloadInfoWidget()
     {
@@ -72,22 +73,13 @@ public:
         Other
     };
 
-    //fix me。备用。不用继承了。
-    enum class PackType
-    {
-        UpdatePack =0,
-        FixPack,
-        Image
-    };
-
+    //用户发起Paused / Cancel
     enum class DownloadState
     {
         NotStarted,
         Downloading,
         Paused,
         Cancel,
-        Interrupted,
-        Error,
         Finished
     };
 
@@ -118,10 +110,10 @@ public:
     bool DoSetup();
 
     /// <summary>
-    ///  判断安装包类型是升级包/光盘
+    ///  判断安装包类型
     /// </summary>
-    /// <returns>bool</returns>
-    bool IsUpdatePackage();
+    /// <returns>PackType</returns>
+    PackType GetPackType();
 
     /// <summary>
     /// 下载结束
@@ -151,7 +143,7 @@ public:
     /// 废弃
     /// </summary>
     /// <param name="isUpdatePackage"></param>
-    void SetPackFlag(bool isUpdatePackage);
+    void SetPackFlag(PackType ty);
 private:
 
     /// <summary>
@@ -275,8 +267,8 @@ private:
     DownloadState downloadState_;
     QNetworkAccessManager QNAManager_;
 
-    bool Setuping_;
-    bool isUpdatePack_;
+    static std::atomic_bool Setuping_;
+    PackType packType_;
     bool isBreakPointTranSupported_;
 };
 

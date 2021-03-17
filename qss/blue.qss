@@ -30,7 +30,7 @@ QWidget#leftContent{
 }
 
 QWidget#rightContent{
-    background-color: rgb(246,246,246);
+    background-color: white;
 }
 
 QPushButton#btnBoard{

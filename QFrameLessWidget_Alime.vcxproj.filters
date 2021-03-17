@@ -258,6 +258,9 @@
     <ClInclude Include="Alime\Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TypeDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\close.png">
