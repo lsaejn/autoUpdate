@@ -187,11 +187,6 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         deleteLocalFile->setToolTip(u8"删除文件");
         deleteLocalFile->setVisible(false);
         CHECK_CONNECT_ERROR(connect(deleteLocalFile, &QPushButton::clicked, [this]() {
-            if (IsAutoSetupRunning())
-            {
-                ShowWarningBox("error", u8"正在一键更新", u8"确定");
-                return;
-            }
             CancelDownloadTask();
             }));
 
@@ -202,11 +197,6 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         setupBtn->setVisible(false);
         CHECK_CONNECT_ERROR(connect(setupBtn, &QPushButton::clicked, [this]()
             {
-                if (IsAutoSetupRunning())
-                {
-                    ShowWarningBox("error", u8"正在一键更新", u8"确定");
-                    return;
-                }
                 this->DoSetup();
             }));
 
@@ -555,8 +545,7 @@ void DownloadInfoWidget::ShowTipsWhenSetupFinished(int errorCode)
 {
     if (!errorCode)
     {
-        if(!IsAutoSetupRunning())
-            ShowWarningBox(u8"结束", u8"安装程序执行完毕", u8"确定");
+        qWarning() << "in function ShowTipsWhenSetupFinished, error Code is"<< errorCode;
         return;
     }
     else {
@@ -804,16 +793,4 @@ bool DownloadInfoWidget::IsDownLoading()
 void DownloadInfoWidget::SetPackFlag(PackType ty)
 {
     packType_ = ty;
-}
-
-#include "Alime/Console.h"
-bool DownloadInfoWidget::IsAutoSetupRunning()
-{
-    Alime::Console().WriteLine(L"Call DownloadInfoWidget::IsAutoSetupRunning", Alime::Console::RED);
-    return false;
-}
-
-void DownloadInfoWidget::SetCheckCallBack(CheckCallBack f)
-{
-    Alime::Console().WriteLine(L"Call DownloadInfoWidget::SetCheckCallBack", Alime::Console::RED);
 }

@@ -162,12 +162,6 @@ private:
     void AddMenuItems();
     
     /// <summary>
-    /// 废弃
-    /// </summary>
-    /// <returns></returns>
-    bool IsAutoSetupRunning();
-
-    /// <summary>
     /// 进度条进入安装状态。安装不收控制，因此无法显示百分比
     /// </summary>
     /// <param name=""></param>
