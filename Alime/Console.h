@@ -3,7 +3,7 @@
 #include <string>
 #include "windows.h"
 
-//#define NoConsole
+#define NoConsole
 
 namespace Alime
 {
