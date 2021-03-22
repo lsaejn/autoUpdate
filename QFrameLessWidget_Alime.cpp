@@ -177,7 +177,11 @@ void QFrameLessWidget_Alime::QueryInfoFinish(QNetworkReply* reply)
 
 QString QFrameLessWidget_Alime::GetTitle()
 {
-    return u8"Pkpm升级程序";
+    auto title=ConfigFileReadWriter::Instance().GetWindowTitle();
+    if (title.isEmpty())
+        return u8"Pkpm升级程序";
+    else
+        return title;
 }
 
 bool QFrameLessWidget_Alime::ReadLocalVersion()

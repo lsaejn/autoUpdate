@@ -87,6 +87,10 @@ void ConfigFileReadWriter::Init()
 		localPackInfoName_ = json_["localPackInfo"].get<std::string>().c_str();
 		useSilentInstallation_ = json_["silentInstallation"].get<bool>();
 		useDatFile_= json_["useDatFile"].get<bool>();
+		if (json_.contains("winText"))
+		{
+			windowText_ = json_["winText"].get<std::string>().c_str();
+		}
 	}
 	catch (...)
 	{
@@ -119,6 +123,11 @@ void ConfigFileReadWriter::SaveToFile()
 {
 	auto ctn=json_.dump();
 	//fix me
+}
+
+QString ConfigFileReadWriter::GetWindowTitle()
+{
+	return windowText_;
 }
 
 QString ConfigFileReadWriter::GetUrlOfFixPackFolder() const

@@ -103,6 +103,8 @@ public:
 	/// </summary>
 	void SaveToFile();
 
+	QString GetWindowTitle();
+
 private:
 	ConfigFileReadWriter();
 	~ConfigFileReadWriter();
@@ -119,14 +121,15 @@ private:
 	bool useSilentInstallation_ = false;
 	
 	QString logFilePath_;
+	QString windowText_;
 	QString downloadDir_;
+	QString fixPackFolder_;
 	QString updateInfoUrl_;
 	QString pkgRootFolder_;
-	QString fixPackFolder_;
 	QString updatePackFolder_;
-	QString integralImageFilesFolder_;
 	QString localPackInfoName_;
-	
+	QString integralImageFilesFolder_;
+
 	nlohmann::json json_;
 };
 
