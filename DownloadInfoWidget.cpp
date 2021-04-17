@@ -155,8 +155,9 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         downloadButton_->setObjectName("ItemPlay");
         downloadButton_->setText(u8"一键升级");
         connect(downloadButton_, &QPushButton::clicked, [this, _parent] {
-            CustomWidget wid(this);
-            wid.exec();
+            //测试自定义模态对话框
+            //CustomWidget wid(this);
+            //wid.exec();
             if (IsDownLoading() || IsSetuping())
                 return;
             //fix me, 扔一个闭包过来

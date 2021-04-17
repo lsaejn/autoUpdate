@@ -134,7 +134,6 @@ void QFrameLessWidget_Alime::ReadPkgFileInfo()
                 InitDownloadList();
                 return;
             }
-                
         }
     }
     /*

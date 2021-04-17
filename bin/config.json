@@ -10,7 +10,7 @@
   "fixPackFolder": "FixPacks/",
   "updatePackFolder": "UpdatePacks/",
   "IntegralImageFileFolder": "IntegralImageFiles/",
-  "useLocalPackInfo": false,
+  "useLocalPackInfo": true,
   "localPackInfo": "packsInfo.json",
   "silentInstallation": true,
   "useDatFile": true
