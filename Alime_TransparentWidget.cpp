@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <QIcon>
+#include <QScreen>
+#include <QGuiApplication>
 
 Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
 	:QWidget(parent),
@@ -32,13 +34,24 @@ Alime_TransparentWidget::Alime_TransparentWidget(QWidget* parent)
 bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void* message, long* result)
 {
     MSG* msg = (MSG*)message;
-    const int boundaryWidth = boundaryWidth_;
+    int boundaryWidth = boundaryWidth_;
+    HDC desktopDc = GetDC(NULL);
+    // Get native resolution
+    float horizontalDPI = GetDeviceCaps(desktopDc, LOGPIXELSX);
+    float verticalDPI = GetDeviceCaps(desktopDc, LOGPIXELSY);
+    double dpi = (horizontalDPI + verticalDPI) / 2/96;
+
+    boundaryWidth *= dpi;
+    auto left = this->geometry().x();
+    auto top = this->geometry().y();
+    //auto gxy = this->mapToParent({ left, top });
     switch (msg->message)
     {
     case WM_NCHITTEST:
-        int xPos = GET_X_LPARAM(msg->lParam) - this->frameGeometry().x();
-        int yPos = GET_Y_LPARAM(msg->lParam) - this->frameGeometry().y();
-
+        QPoint qp = QCursor::pos();
+        int xPos = qp.x() - this->frameGeometry().x();
+        int yPos = qp.y() - this->frameGeometry().y();
+        
         if (xPos < boundaryWidth && yPos < boundaryWidth)
             *result = HTTOPLEFT;
         else if (xPos >= width() - boundaryWidth && yPos < boundaryWidth)

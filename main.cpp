@@ -37,6 +37,9 @@ ps:还需要一个过滤列表，指明执行差异更新时应执行哪些exe(用于注册)，哪些是配置文件
 
 int main(int argc, char *argv[])
 {
+    qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
     QApplication app(argc, argv);
     if (argc == 2)
     {
