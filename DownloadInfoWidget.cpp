@@ -118,6 +118,7 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
         QVBoxLayout* downloadStateBox = new QVBoxLayout(stateBox);
         progressBar_ = new QProgressBar(this);
         progressBar_->setFixedWidth(240);
+        //progressBar_->setFixedHeight(20);
         progressBar_->setRange(0, 100);
 
         setupProgressBar_ = new QProgressBar(this);

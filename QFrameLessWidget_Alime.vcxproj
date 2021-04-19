@@ -60,8 +60,7 @@
       <AdditionalIncludeDirectories>..\components;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy D:\Work\Company\AutoUpdate\QFrameLessWidget_Alime\bin\installer.exe D:\PkpmSoft\PKPMV523Develop\Installer\installer.exe</Command>
     </PostBuildEvent>
     <Link>
       <AdditionalLibraryDirectories>D:\软件\openssl\lib\VC\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -82,12 +81,11 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </QtMoc>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy D:\Work\Company\AutoUpdate\QFrameLessWidget_Alime\bin\release\installer.exe D:\PkpmSoft\PKPMV523Develop\Installer\installer.exe</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>QT5.15.2.static_QT</QtInstall>
+    <QtInstall>5.6.3_msvc2015</QtInstall>
     <QtModules>core;gui;widgets;network</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
@@ -106,7 +104,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,7 +121,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

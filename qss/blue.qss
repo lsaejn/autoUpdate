@@ -202,6 +202,7 @@ QProgressBar{
     color: black;
     text-align: center;
     background: rgb(229,230,234);
+    font-size:12px;
 }
 
 QProgressBar::chunk {

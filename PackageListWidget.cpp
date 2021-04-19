@@ -249,7 +249,7 @@ DownloadInfoWidget* PackageListWidget::AddItem(QWidget* _parent,
 {
     QListWidgetItem* item = new QListWidgetItem();
     QSize preferSize = item->sizeHint();
-    item->setSizeHint(QSize(preferSize.width(), 70));
+    item->setSizeHint(QSize(400, 80));
     addItem(item);
     auto itemWidget = new DownloadInfoWidget(this, filename, _fileSize, _url, ins_url, ty);
     setItemWidget(item, itemWidget);
