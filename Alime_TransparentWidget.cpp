@@ -36,6 +36,9 @@ bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void*
     MSG* msg = (MSG*)message;
     int boundaryWidth = boundaryWidth_;
     HDC desktopDc = GetDC(NULL);
+
+    //
+
     // Get native resolution
     float horizontalDPI = GetDeviceCaps(desktopDc, LOGPIXELSX);
     float verticalDPI = GetDeviceCaps(desktopDc, LOGPIXELSY);
@@ -46,9 +49,17 @@ bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void*
     switch (msg->message)
     {
     case WM_NCHITTEST:
+        //和GetCursorPos()函数结果一样，是屏幕坐标;
+        int xScreen = GET_X_LPARAM(msg->lParam);
+        int yScreen = GET_Y_LPARAM(msg->lParam);
+
+        //使用QCursor::pos()，可以省得计算dpiScale
         QPoint qp = QCursor::pos();
-        int xPos = qp.x() - this->frameGeometry().x();
-        int yPos = qp.y() - this->frameGeometry().y();
+
+        QPoint pos = this->mapFromGlobal(qp);
+
+        int xPos = pos.x();
+        int yPos = pos.y();
         
         if (xPos < boundaryWidth && yPos < boundaryWidth)
             *result = HTTOPLEFT;
