@@ -42,8 +42,6 @@ bool Alime_TransparentWidget::nativeEvent(const QByteArray& /*eventType*/, void*
     double dpi = (horizontalDPI + verticalDPI) / 2/96;
 
     boundaryWidth *= dpi;
-    auto left = this->geometry().x();
-    auto top = this->geometry().y();
     //auto gxy = this->mapToParent({ left, top });
     switch (msg->message)
     {
