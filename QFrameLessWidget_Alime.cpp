@@ -204,7 +204,7 @@ bool QFrameLessWidget_Alime::ReadLocalVersion()
     }
 
     if (!versionLocal_.empty())
-        SetTips((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下可升级版本").c_str());
+        SetTips((u8"检查到当前版本:" + versionLocal_ + "   " + u8"找到以下安装文件").c_str());
     else
         SetTips(u8"无法查询本地版本信息, 请从官网重新下载完整程序");
     return true;

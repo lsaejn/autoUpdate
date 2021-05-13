@@ -63,13 +63,14 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
             || packType_ ==PackType::Image)
         {
             typeLabel->setObjectName("PackLabel");
-            typeLabel->setText(u8"升级包");
+            typeLabel->setText(u8"升级到最新版本");
         }
         else
         {
             typeLabel->setObjectName("PackLabel");
-            typeLabel->setText(u8"补丁包");
+            typeLabel->setText(u8"当前版本打补丁");
         }
+        typeLabel->setFixedWidth(140);
         mainLayout->addWidget(typeLabel);
         mainLayout->addSpacing(10);
     }
