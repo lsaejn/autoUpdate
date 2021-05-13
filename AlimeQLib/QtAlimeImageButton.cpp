@@ -143,15 +143,17 @@ void QtAlimeImageButton::paintEvent(QPaintEvent* event)
 
     QPainter painter(this);
 
+    auto isz = iconSize();
+    //fix me, 高分辨下的显示
     QPixmap pixmap = icon().pixmap(iconSize());
     QPainter icon(&pixmap);
     icon.setCompositionMode(QPainter::CompositionMode_SourceIn);
     icon.fillRect(pixmap.rect(), isEnabled() ? color() : disabledColor());
 
-    QRect r(rect());
-    const qreal w = pixmap.width();
-    const qreal h = pixmap.height();
-    //image{ anchors.fill: parent}
-    QRect rc((r.width() - w) / 2, (r.height() - h) / 2, w, h);
+    //QRect r(rect());
+    //const qreal w = pixmap.width();
+    //const qreal h = pixmap.height();
+    //QRect rc((r.width() - w) / 2, (r.height() - h) / 2, w, h);
+    QRect rc = { 0,0,isz.width(), isz.height()};
     painter.drawPixmap(rc, pixmap);
 }

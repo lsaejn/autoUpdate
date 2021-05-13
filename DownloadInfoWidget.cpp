@@ -43,6 +43,8 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
     isBreakPointTranSupported_(true),
     packType_(ty)
 {
+    //fix me
+    setObjectName("DownloadInfoWidget");
     localFilePath_ = GetDownloadFolder()+fileName_;
     setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -50,12 +52,12 @@ DownloadInfoWidget::DownloadInfoWidget(QWidget* _parent, const QString& _fileNam
 
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(0);
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(0);
     mainLayout->setSpacing(0);
 
     //for debug
     setAttribute(Qt::WA_StyledBackground, true);
-    //setStyleSheet("border:2px solid #014F84; background-color:rgb(255,0,0)");
+    //setStyleSheet("border:1px solid #014F84; background-color:rgba(255,0,0,255)");
 
     {
         QLabel* typeLabel = new QLabel(this);

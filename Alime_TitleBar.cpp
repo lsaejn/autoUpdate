@@ -54,6 +54,7 @@ Alime_TitleBar::Alime_TitleBar(QWidget* parent)
 
     QHBoxLayout* pLayout = new QHBoxLayout(this);
 
+#define ALIME_DEVELOP 1
 #ifdef ALIME_DEVELOP
     //开发版本提供按钮波纹，点击波纹，定制对话框
     btn_ = new QtAlimeImageButton(QIcon(":/images/Pkpm.png"), this);
