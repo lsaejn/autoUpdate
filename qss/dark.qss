@@ -87,8 +87,9 @@ QLabel#grayLabel{
 
  QLabel#PackLabel{
     color: rgb(109,146,173);
-    font-size:18px;
+    font-size:16px;
     padding: 0px 0px 0px 0px;
+    width:160;
  }
 
 QLabel#speedLabel{
