@@ -46,7 +46,7 @@ public:
     void GetUpdatePackUrl(const nlohmann::json& json, std::string& urlOut, std::string& instructionUrl, bool& showImage);
     void ReadUpdatePack(const nlohmann::json& json_);
     void ReadFixPack(const nlohmann::json& json_);
-    
+    void ReadUpdateFolder(const nlohmann::json& json_);
 
     //本widget下是否有item正在下载/安装
     //不允许补丁包和升级包同时进行
